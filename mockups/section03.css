@@ -1,0 +1,266 @@
+/* ============================================================
+   03 — The Proof This Is Possible
+   Editorial luxury, skinned to the FitWithSanobar theme.
+   Palette: cream #F0E5D8 · oxblood ink #260000 · warm brown #5C2E26 · gold #B8893E
+   Type: Jost (heavy title + labels + body) · Bodoni Moda (serif name + quote)
+   No cards, shadows, gradients. Type and whitespace do the work.
+   ============================================================ */
+
+:root {
+  --cream: #F0E5D8;
+  --cream-lift: #F4EDE1;   /* airy content band */
+  --cream-panel: #EADCC8;  /* quote + final bands */
+  --ink: #260000;          /* oxblood, display */
+  --ink-2: #5C2E26;        /* warm brown, body */
+  --ink-muted: #7E5240;    /* muted labels */
+  --gold: #B8893E;
+  --line: rgba(38, 0, 0, 0.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--cream);
+  color: var(--ink-2);
+  font-family: "Jost", system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.band { width: 100%; }
+.band--hero { background: var(--cream); padding: clamp(56px, 9vw, 128px) 0 clamp(40px, 6vw, 72px); }
+.band--main { background: var(--cream-lift); border-top: 1px solid var(--line); padding: clamp(48px, 8vw, 104px) 0; }
+.band--quote { background: var(--cream-panel); padding: clamp(56px, 9vw, 112px) 0; }
+.band--final { background: var(--cream); border-top: 1px solid var(--line); padding: clamp(40px, 6vw, 80px) 0; }
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 6vw, 80px);
+}
+
+/* ---------- HERO ---------- */
+.proof-index {
+  display: block;
+  font-family: "Jost", sans-serif;
+  font-weight: 700;
+  font-size: clamp(40px, 6vw, 76px);
+  line-height: 1;
+  color: var(--gold);
+  letter-spacing: -0.01em;
+  margin-bottom: clamp(14px, 2vw, 22px);
+}
+.proof-eyebrow {
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  color: var(--gold);
+  margin-bottom: clamp(20px, 3vw, 30px);
+}
+.proof-title {
+  font-family: "Jost", sans-serif;
+  font-weight: 700;
+  font-size: clamp(38px, 7vw, 86px);
+  line-height: 1.04;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: clamp(22px, 3vw, 34px);
+}
+.proof-sub {
+  max-width: 60ch;
+  font-size: clamp(15px, 1.4vw, 17px);
+  line-height: 1.75;
+  color: var(--ink-2);
+}
+
+/* ---------- TWO-COLUMN ---------- */
+.proof-grid {
+  display: grid;
+  grid-template-columns: 35fr 65fr;
+  gap: clamp(36px, 6vw, 92px);
+  align-items: start;
+}
+
+/* LEFT — portrait frame */
+.portrait {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--line);
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: clamp(20px, 2.6vw, 30px);
+}
+.corner { position: absolute; width: 15px; height: 15px; border: 0 solid var(--ink-muted); opacity: 0.55; }
+.c-tl { top: 10px; left: 10px; border-top-width: 1px; border-left-width: 1px; }
+.c-tr { top: 10px; right: 10px; border-top-width: 1px; border-right-width: 1px; }
+.c-bl { bottom: 10px; left: 10px; border-bottom-width: 1px; border-left-width: 1px; }
+.c-br { bottom: 10px; right: 10px; border-bottom-width: 1px; border-right-width: 1px; }
+
+.portrait-art {
+  position: absolute;
+  top: 8%; left: 0; right: 0; bottom: 26%;
+  display: flex; align-items: center; justify-content: center;
+}
+.portrait-art svg { width: 62%; height: 100%; }
+
+.portrait-meta { text-align: center; }
+.portrait-name {
+  display: block;
+  font-size: clamp(13px, 1.4vw, 15px);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ink);
+}
+.portrait-type {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--gold);
+  margin-top: 8px;
+}
+.portrait-pending {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+  color: var(--ink-muted);
+  opacity: 0.7;
+  margin-top: clamp(14px, 2vw, 20px);
+}
+
+/* RIGHT — information */
+.info-eyebrow {
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: var(--gold);
+  margin-bottom: clamp(12px, 1.6vw, 16px);
+}
+.info-name {
+  font-family: "Bodoni Moda", serif;
+  font-weight: 400;
+  font-size: clamp(32px, 4.6vw, 56px);
+  line-height: 1.04;
+  color: var(--ink);
+  margin-bottom: clamp(10px, 1.4vw, 14px);
+}
+.info-shape {
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+  color: var(--gold);
+  margin-bottom: clamp(22px, 3vw, 32px);
+}
+.info-intro {
+  max-width: 54ch;
+  font-size: clamp(15px, 1.4vw, 16px);
+  line-height: 1.8;
+  color: var(--ink-2);
+  margin-bottom: clamp(34px, 4.5vw, 52px);
+  padding-bottom: clamp(34px, 4.5vw, 52px);
+  border-bottom: 1px solid var(--line);
+}
+
+/* feature rows */
+.features { list-style: none; }
+.feature {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(18px, 2.4vw, 30px);
+  align-items: start;
+  padding: clamp(26px, 3.4vw, 40px) 0;
+}
+.feature:first-child { padding-top: 0; }
+.feature:last-child { padding-bottom: 0; }
+.feature + .feature { border-top: 1px solid var(--line); }
+
+.feature-ic {
+  width: clamp(44px, 5vw, 54px);
+  height: clamp(44px, 5vw, 54px);
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.feature-ic svg { width: 46%; height: 46%; }
+
+.feature h4 {
+  font-family: "Jost", sans-serif;
+  font-weight: 600;
+  font-size: clamp(16px, 1.7vw, 19px);
+  line-height: 1.35;
+  color: var(--ink);
+  margin-bottom: clamp(6px, 1vw, 9px);
+}
+.feature p {
+  max-width: 48ch;
+  font-size: clamp(14px, 1.3vw, 15.5px);
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+
+/* ---------- QUOTE ---------- */
+.proof-quote {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 6vw, 80px);
+  text-align: center;
+}
+.quote-mark {
+  display: block;
+  font-family: "Bodoni Moda", serif;
+  font-size: clamp(66px, 9vw, 110px);
+  line-height: 0.5;
+  color: var(--gold);
+  margin-bottom: clamp(20px, 3vw, 34px);
+}
+.proof-quote p {
+  font-family: "Bodoni Moda", serif;
+  font-weight: 400;
+  font-size: clamp(21px, 2.8vw, 34px);
+  line-height: 1.36;
+  letter-spacing: -0.004em;
+  color: var(--ink);
+}
+.quote-line { display: block; width: 60px; height: 1px; background: var(--gold); margin: clamp(26px, 4vw, 40px) auto 0; }
+
+/* ---------- FINAL NOTE ---------- */
+.proof-final {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.6vw, 30px);
+}
+.final-icon { width: clamp(30px, 3.4vw, 38px); height: auto; flex: 0 0 auto; }
+.final-rule { width: 1px; align-self: stretch; min-height: 44px; background: var(--line); flex: 0 0 auto; }
+.final-text {
+  font-size: clamp(14px, 1.4vw, 17px);
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+.final-text em {
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.88em;
+  color: var(--gold);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 820px) {
+  .proof-grid { grid-template-columns: 1fr; gap: clamp(40px, 8vw, 56px); }
+  .portrait { max-width: 340px; }
+  .proof-final { flex-direction: column; align-items: flex-start; gap: clamp(16px, 4vw, 22px); text-align: left; }
+  .final-rule { display: none; }
+}

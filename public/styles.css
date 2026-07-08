@@ -1326,60 +1326,36 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
   .hi-sub{margin-inline:auto}
 }
 
-/* ---- [2] THE REAL PROBLEM — redesigned as editorial "moments" (cream ground) ----
-   one idea per screen; recognition, not education. Type + whitespace do the work. */
-.hi-problem.pr{padding-block:0}
-.pr-moment{max-width:980px;margin:0 auto;min-height:clamp(360px,64vh,720px);
-  padding:clamp(56px,11vh,120px) 0;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;text-align:center}
-.pr-moment + .pr-moment{border-top:1px solid var(--hair)}
+/* ---- [2] THE REAL PROBLEM — built entirely from the funnel's standard components:
+   .r-head + .r-panels (gap) + .r-h2 at the standard type scale. Centred like hi-call. */
+.hi-problem .r-inner{display:flex;flex-direction:column;align-items:center}
+.hi-problem .r-head{align-items:center;text-align:center}
+.hi-problem .r-h2{max-width:22ch;text-align:center}
 
-/* moment 1 — hero statement */
-.pr-num{font-family:var(--f-display);font-weight:600;font-size:clamp(30px,4.6vw,60px);line-height:.8;
-  letter-spacing:-.03em;color:var(--hair);margin-bottom:clamp(20px,3.2vh,34px)}
-.pr-h{font-family:var(--f-display);font-weight:600;letter-spacing:-.015em;text-transform:none;
-  font-size:clamp(30px,5.6vw,66px);line-height:1.05;color:var(--ink);margin:0;text-wrap:balance}
-.pr-h-accent{color:#B8893E}
-.pr-support{font-family:var(--f-body);font-weight:400;font-size:clamp(15px,1.9vw,21px);line-height:1.55;
-  color:var(--ink-2);max-width:32ch;margin:clamp(24px,3.6vh,40px) auto 0;text-wrap:balance}
+/* word lists inside the standard before/after panels (in place of the paragraph body) */
+.pr-words{list-style:none;margin:clamp(12px,1.8vh,16px) 0 0;padding:0;display:flex;flex-direction:column;
+  gap:clamp(8px,1.3vh,12px)}
+.pr-words li{font-family:var(--f-display);font-weight:500;font-size:clamp(18px,2.2vw,24px);line-height:1.2;
+  letter-spacing:-.005em;color:var(--ink)}
+.pr-words-punch{color:#B8893E}
+.r-panel--dark .pr-words li{color:var(--cream)}
+.r-panel--dark .pr-words-punch{color:#CFA35C}
 
-/* moment 2 — the comparison */
-.pr-compare{flex-direction:row;align-items:stretch;justify-content:center;gap:0;max-width:1000px}
-.pr-col{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:clamp(16px,2.6vh,26px);padding:clamp(10px,3vw,48px)}
-.pr-col-eyebrow{font-family:var(--f-mono);font-size:clamp(10px,1.1vw,12px);font-weight:600;
-  letter-spacing:.22em;text-transform:uppercase;color:var(--ink-muted)}
-.pr-list{list-style:none;margin:clamp(6px,1.2vh,14px) 0 0;padding:0;display:flex;flex-direction:column;
-  gap:clamp(12px,2vh,20px)}
-.pr-list li{font-family:var(--f-display);font-weight:500;font-size:clamp(21px,2.9vw,36px);line-height:1.08;
-  letter-spacing:-.01em;color:var(--ink-muted)}
-.pr-col--to .pr-list li{color:var(--ink)}
-.pr-punch{font-weight:600;color:var(--ink)}
-.pr-col--to .pr-punch{color:#B8893E}
-.pr-divide{flex:0 0 1px;align-self:stretch;background:var(--hair)}
+/* the question beat (centred, standard scale) */
+.pr-ask{display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(12px,2vh,18px);
+  margin:clamp(44px,7vh,90px) auto 0;max-width:640px}
+.pr-ask-lead{font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-muted)}
+.pr-ask-q{margin:0}
+.pr-ask-foot{font-family:var(--f-display);font-weight:500;font-size:clamp(16px,1.8vw,20px);color:#B8893E}
 
-/* moment 3 — the question */
-.pr-q-lead{font-family:var(--f-mono);font-size:clamp(11px,1.2vw,13px);letter-spacing:.16em;
-  text-transform:uppercase;color:var(--ink-muted);margin:0;max-width:28ch}
-.pr-q-main{font-family:var(--f-display);font-weight:600;font-size:clamp(30px,5.4vw,60px);line-height:1.06;
-  letter-spacing:-.015em;color:var(--ink);margin:clamp(22px,3.4vh,38px) 0;max-width:15ch}
-.pr-q-foot{font-family:var(--f-display);font-weight:400;font-size:clamp(18px,2.5vw,30px);line-height:1.2;
-  color:#B8893E;margin:0}
-
-/* moment 4 — closing + transition */
-.pr-close-h{font-family:var(--f-display);font-weight:600;font-size:clamp(26px,4.8vw,54px);line-height:1.08;
-  letter-spacing:-.015em;color:var(--ink);margin:0;text-wrap:balance;max-width:20ch}
-.pr-close-note{display:block;font-family:var(--f-mono);font-size:clamp(10.5px,1.1vw,12.5px);
-  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted);
-  margin-top:clamp(26px,3.8vh,44px);max-width:42ch}
-
-/* mobile: the comparison splits into two stacked full-height moments */
-@media(max-width:720px){
-  .pr-compare{flex-direction:column;gap:0;min-height:0;padding-block:0}
-  .pr-col{min-height:clamp(340px,60vh,600px);padding-inline:0}
-  .pr-col + .pr-col{border-top:0}
-  .pr-divide{flex-basis:1px;width:100%;height:1px;align-self:stretch}
-}
+/* the close + bridge to the consultation */
+.pr-final{display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(14px,2.2vh,20px);
+  margin:clamp(44px,7vh,90px) auto 0;max-width:640px}
+.pr-bridge{position:relative;font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-muted);max-width:44ch;padding-top:clamp(16px,2.4vh,22px)}
+.pr-bridge::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:26px;height:1px;
+  background:#B8893E}
 
 /* ---- [4] CALL STRUCTURE meta chip (near-square, hairline) ---- */
 .call-meta-chip{display:inline-flex;align-items:center;gap:.55em;margin:0 auto clamp(22px,3.4vh,36px);
@@ -1432,4 +1408,139 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 }
 @media(prefers-reduced-motion:reduce){
   .hi-sticky{transition:none}
+}
+
+/* ============================================================
+   /book — the Instant Image Upgrade booking page. Dark oxblood stage,
+   cream text, gold accent, hairlines + corner ticks. Cal.com embed framed
+   on a cream inset (the brand frames the widget, never restyles it).
+   ============================================================ */
+.bk-page{background:var(--stage);color:var(--cream);min-height:100vh;
+  padding-bottom:clamp(40px,7vh,80px);
+  --bk-hair:rgba(240,229,216,.16);--bk-hair-2:rgba(240,229,216,.28)}
+
+/* status strip */
+.bk-strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(8px,1.4vw,14px);
+  padding:11px clamp(16px,4vw,28px);border-bottom:1px solid var(--bk-hair);
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cream)}
+.bk-strip-item{display:inline-flex;align-items:center;gap:7px;opacity:.72}
+.bk-strip-item.ok{opacity:1;color:#B8893E}
+.bk-tick{display:inline-flex;width:16px;height:16px;border:1px solid rgba(184,137,62,.5);border-radius:50%;
+  align-items:center;justify-content:center;color:#B8893E}
+.bk-strip-sep{opacity:.4}
+
+/* progress */
+.bk-progress{display:flex;align-items:center;justify-content:center;gap:clamp(10px,2vw,18px);
+  padding:clamp(16px,2.6vh,24px) 20px;border-bottom:1px solid var(--bk-hair)}
+.bk-step{display:inline-flex;align-items:center;gap:9px;font-family:var(--f-mono);font-size:11px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--cream);opacity:.5}
+.bk-step.active{opacity:1;color:#B8893E}
+.bk-step.done{opacity:.85}
+.bk-step-n{display:inline-flex;width:22px;height:22px;border:1px solid var(--bk-hair-2);border-radius:50%;
+  align-items:center;justify-content:center;font-size:10px}
+.bk-step.active .bk-step-n{border-color:#B8893E;color:#B8893E}
+.bk-step.done .bk-step-n{border-color:rgba(184,137,62,.5);color:#B8893E}
+.bk-rail{width:clamp(26px,6vw,64px);height:1px;background:var(--bk-hair-2)}
+
+.bk-wrap{max-width:760px;margin:0 auto;padding:clamp(36px,6vh,72px) clamp(20px,5vw,40px) 0}
+
+/* hero */
+.bk-head{text-align:center;margin-bottom:clamp(30px,5vh,52px)}
+.bk-eyebrow{color:#B8893E}
+.bk-h1{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.01em;
+  font-size:clamp(28px,4vw,50px);line-height:1.1;color:var(--cream);margin:0;text-wrap:balance}
+.bk-h1 em{font-style:normal;color:#B8893E}
+.bk-sub{font-family:var(--f-body);font-weight:400;font-size:clamp(15px,1.7vw,18px);line-height:1.62;
+  color:rgba(240,229,216,.82);max-width:52ch;margin:clamp(16px,2.4vh,22px) auto 0;text-wrap:balance}
+
+/* cards */
+.bk-card{position:relative;border:1px solid var(--bk-hair);padding:clamp(22px,3.4vw,40px);
+  margin-top:clamp(20px,3.2vh,30px);background:rgba(240,229,216,.02)}
+.bk-card-head{text-align:center;margin-bottom:clamp(20px,3vh,28px)}
+.bk-card-title{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.012em;
+  font-size:clamp(20px,2.6vw,30px);line-height:1.15;color:var(--cream);margin:clamp(8px,1.2vh,12px) 0 0}
+.bk-card-sub{font-family:var(--f-body);font-size:clamp(13px,1.4vw,15px);line-height:1.5;
+  color:rgba(240,229,216,.6);margin:clamp(8px,1.2vh,10px) 0 0}
+.bk-card .sec-eyebrow{color:#B8893E;margin-bottom:0}
+
+/* corner ticks on the calendar card */
+.bk-corner{position:absolute;width:15px;height:15px;border:0 solid rgba(184,137,62,.55);z-index:2}
+.bk-corner.tl{top:-1px;left:-1px;border-top-width:1px;border-left-width:1px}
+.bk-corner.tr{top:-1px;right:-1px;border-top-width:1px;border-right-width:1px}
+.bk-corner.bl{bottom:-1px;left:-1px;border-bottom-width:1px;border-left-width:1px}
+.bk-corner.br{bottom:-1px;right:-1px;border-bottom-width:1px;border-right-width:1px}
+
+/* calendar section — open, no card wrapper */
+.bk-cal-section{margin-top:clamp(24px,4vh,40px)}
+.bk-cal-section .bk-card-head{margin-bottom:clamp(18px,2.6vh,24px)}
+
+/* the Cal.com embed — sits directly on its own light surface (no bordered box) */
+.bk-cal{position:relative;background:var(--cream);
+  min-height:clamp(560px,82vh,780px);overflow:hidden}
+.bk-cal-inline{width:100%;height:100%;min-height:clamp(560px,82vh,780px);overflow:auto}
+.bk-cal-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-muted)}
+
+/* trust row under the calendar */
+.bk-trust{list-style:none;margin:clamp(20px,3vh,28px) 0 0;padding:0;display:flex;flex-direction:column;
+  gap:clamp(11px,1.6vh,14px)}
+.bk-trust li{display:flex;align-items:flex-start;gap:11px;font-family:var(--f-body);font-size:clamp(13px,1.4vw,15px);
+  line-height:1.5;color:rgba(240,229,216,.82)}
+.bk-trust-ic{flex:0 0 auto;width:20px;height:20px;border:1px solid rgba(184,137,62,.45);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;color:#B8893E;margin-top:1px}
+
+/* what the 30 minutes covers — hairline ledger */
+.bk-covers{list-style:none;margin:0;padding:0;border-top:1px solid var(--bk-hair)}
+.bk-cover{display:grid;grid-template-columns:auto 1fr;gap:clamp(14px,2.4vw,26px);align-items:start;
+  padding:clamp(16px,2.6vh,22px) 2px;border-bottom:1px solid var(--bk-hair)}
+.bk-cover-n{font-family:var(--f-display);font-weight:600;font-size:clamp(20px,2.6vw,30px);line-height:1;
+  letter-spacing:-.02em;color:#B8893E}
+.bk-cover-t{font-family:var(--f-display);font-weight:600;font-size:clamp(15px,1.7vw,19px);line-height:1.25;
+  color:var(--cream);margin:0}
+.bk-cover-d{font-family:var(--f-body);font-size:clamp(13px,1.4vw,15px);line-height:1.55;
+  color:rgba(240,229,216,.7);margin:6px 0 0}
+
+/* don't drift — scarcity */
+.bk-noshow{text-align:center}
+.bk-noshow-h{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.012em;
+  font-size:clamp(20px,2.8vw,32px);line-height:1.16;color:var(--cream);margin:0;max-width:24ch;margin-inline:auto}
+.bk-noshow-h em{font-style:normal;color:#B8893E}
+.bk-noshow-p{font-family:var(--f-body);font-size:clamp(14px,1.5vw,16.5px);line-height:1.6;
+  color:rgba(240,229,216,.78);max-width:52ch;margin:clamp(14px,2vh,18px) auto 0}
+.bk-noshow-strong{color:var(--cream)}
+.bk-anchor{display:inline-flex;align-items:center;gap:.6em;margin-top:clamp(20px,3vh,28px);
+  padding:15px 26px;border-radius:2px;background:var(--cream);color:var(--oxblood);border:1px solid var(--cream);
+  font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  text-decoration:none;transition:background .2s var(--ease),color .2s var(--ease)}
+.bk-anchor:hover{background:transparent;color:var(--cream)}
+.bk-anchor .arrow{transition:transform .2s var(--ease)}
+.bk-anchor:hover .arrow{transform:translateX(3px)}
+
+/* mini FAQ — hairline rows */
+.bk-faq{border-top:1px solid var(--bk-hair)}
+.bk-faq-item{border-bottom:1px solid var(--bk-hair)}
+.bk-faq-q{list-style:none;display:flex;align-items:flex-start;justify-content:space-between;gap:18px;cursor:pointer;
+  padding:clamp(16px,2.4vh,22px) 2px;font-family:var(--f-display);font-weight:500;font-size:clamp(15px,1.7vw,18px);
+  line-height:1.35;color:var(--cream);transition:color .2s var(--ease)}
+.bk-faq-q::-webkit-details-marker{display:none}
+.bk-faq-ic{flex:0 0 auto;color:rgba(240,229,216,.6);transition:transform .3s var(--ease);margin-top:1px}
+.bk-faq-item[open] .bk-faq-ic{transform:rotate(180deg);color:#B8893E}
+.bk-faq-a{padding:0 2px clamp(18px,2.6vh,24px)}
+.bk-faq-a p{font-family:var(--f-body);font-size:clamp(13.5px,1.5vw,15.5px);line-height:1.65;
+  color:rgba(240,229,216,.78);margin:0;max-width:60ch}
+
+/* bottom lock-in + colophon */
+.bk-lockin{text-align:center;max-width:640px;margin:clamp(40px,6vh,72px) auto 0;
+  padding:clamp(30px,5vh,52px) clamp(20px,5vw,40px);border-top:1px solid var(--bk-hair)}
+.bk-lockin-eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:#B8893E;margin:0}
+.bk-lockin-sub{font-family:var(--f-body);font-size:clamp(14px,1.5vw,16.5px);line-height:1.6;
+  color:rgba(240,229,216,.78);margin:clamp(10px,1.6vh,14px) 0 0}
+.bk-foot{text-align:center;margin-top:clamp(30px,5vh,54px);padding:0 20px;
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(240,229,216,.5)}
+
+@media(max-width:560px){
+  .bk-cover{grid-template-columns:1fr;gap:6px}
+  .bk-cal,.bk-cal-inline{min-height:clamp(520px,86vh,700px)}
 }

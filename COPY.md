@@ -44,7 +44,7 @@ _Full page copy, top to bottom. "Instant Image Upgrade" is the single funnel ter
 
 **Moment 1 — Hero statement**
 - You built the success. / Your image never caught up.
-- People rarely underestimate your work. They often underestimate you before you speak.
+- The work is never in question. You are.
 
 **Moment 2 — The comparison**
 - **How people see you today:** Capable · Experienced · Trustworthy · Easy to underestimate
@@ -56,8 +56,8 @@ _Full page copy, top to bottom. "Instant Image Upgrade" is the single funnel ter
 - Your image answers first.
 
 **Moment 4 — Closing**
-- Nothing in your wardrobe is wrong. / It simply wasn't built for you.
-- That's exactly what Sanobar identifies during your consultation.
+- Nothing in your wardrobe is wrong. / It was simply never built for you.
+- That is exactly what Sanobar reads in your first consultation.
 
 ---
 

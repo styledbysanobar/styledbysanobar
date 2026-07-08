@@ -8,7 +8,7 @@ import FunnelScripts from "./FunnelScripts";
    Copy via NO-BRAINER, structure via SHAPE. [PENDING SANOBAR] = a real asset or
    figure still to land; honest placeholders only, never fabricated data. */
 
-const BOOK_HREF = "#book"; // [PENDING SANOBAR] real Calendly / application link
+const BOOK_HREF = "/book"; // the Cal.com booking page (app/book)
 
 /* ---- inline line-icon helper ---- */
 const I = (paths: React.ReactNode) => (
@@ -267,48 +267,50 @@ export default function Page() {
       </section>
 
       {/* ============ [3] HIGHLIGHT PROBLEM — the A to B gap ============ */}
-      <section className="r-band hi-problem pr" id="problem" aria-label="The real problem">
-        {/* moment 1 — hero statement */}
-        <div className="pr-moment pr-hero reveal">
-          <span className="pr-num" aria-hidden="true">02</span>
-          <h2 className="pr-h">You built the success.<br /><span className="pr-h-accent">Your image never caught up.</span></h2>
-          <p className="pr-support">People rarely underestimate your work. They often underestimate you before you speak.</p>
-        </div>
+      <section className="r-band hi-problem" id="problem" aria-label="The real problem">
+        <div className="r-inner">
+          <header className="r-head reveal">
+            <span className="r-index" aria-hidden="true">02</span>
+            <span className="sec-eyebrow">The real problem</span>
+            <h2 className="r-h2">You built the success. Your image never caught up.</h2>
+            <p className="r-sub">The work is never in question. You are.</p>
+          </header>
 
-        {/* moment 2 — the comparison (today vs should-be) */}
-        <div className="pr-moment pr-compare reveal">
-          <div className="pr-col">
-            <span className="pr-col-eyebrow">How people see you today</span>
-            <ul className="pr-list">
-              <li>Capable</li>
-              <li>Experienced</li>
-              <li>Trustworthy</li>
-              <li className="pr-punch">Easy to underestimate</li>
-            </ul>
+          {/* the gap — funnel's standard before/after panels (today light, should-be dark) */}
+          <div className="r-panels reveal">
+            <div className="r-panel">
+              <span className="r-panel-eyebrow">How people see you today</span>
+              <ul className="pr-words">
+                <li>Capable</li>
+                <li>Experienced</li>
+                <li>Trustworthy</li>
+                <li className="pr-words-punch">Easy to underestimate</li>
+              </ul>
+            </div>
+            <div className="r-gap" aria-hidden="true"><span className="r-gap-label">the gap</span></div>
+            <div className="r-panel r-panel--dark">
+              <span className="r-panel-eyebrow">How they should see you</span>
+              <ul className="pr-words">
+                <li>Senior</li>
+                <li>Decisive</li>
+                <li>Influential</li>
+                <li className="pr-words-punch">The person people notice first</li>
+              </ul>
+            </div>
           </div>
-          <span className="pr-divide" aria-hidden="true" />
-          <div className="pr-col pr-col--to">
-            <span className="pr-col-eyebrow">How they should see you</span>
-            <ul className="pr-list">
-              <li>Senior</li>
-              <li>Decisive</li>
-              <li>Influential</li>
-              <li className="pr-punch">The person people notice first</li>
-            </ul>
+
+          {/* the question every room asks */}
+          <div className="pr-ask reveal">
+            <span className="pr-ask-lead">Every room asks one question before you speak</span>
+            <h3 className="r-h2 pr-ask-q">&ldquo;How important is this person?&rdquo;</h3>
+            <span className="pr-ask-foot">Your image answers first.</span>
           </div>
-        </div>
 
-        {/* moment 3 — the question every room asks */}
-        <div className="pr-moment pr-question reveal">
-          <p className="pr-q-lead">Every room asks one question before you speak.</p>
-          <p className="pr-q-main">&ldquo;How important is this person?&rdquo;</p>
-          <p className="pr-q-foot">Your image answers first.</p>
-        </div>
-
-        {/* moment 4 — closing + transition to the consultation */}
-        <div className="pr-moment pr-close reveal">
-          <p className="pr-close-h">Nothing in your wardrobe is wrong.<br />It simply wasn&rsquo;t built for you.</p>
-          <span className="pr-close-note">That&rsquo;s exactly what Sanobar identifies during your consultation.</span>
+          {/* the close + bridge to the consultation */}
+          <div className="pr-final reveal">
+            <h3 className="r-h2">Nothing you wear is wrong. It was simply never built for you.</h3>
+            <span className="pr-bridge">That is exactly what Sanobar reads in your first consultation.</span>
+          </div>
         </div>
       </section>
 
@@ -341,7 +343,7 @@ export default function Page() {
 
       {/* ============ [5] WHAT YOU WILL GET — the Instant Image Upgrade ============ */}
       <section className="r-band hi-get reveal" aria-label="What you walk away with">
-        <div className="r-inner r-inner--wide">
+        <div className="r-inner">
           <header className="r-head">
             <span className="r-index" aria-hidden="true">04</span>
             <span className="sec-eyebrow">What the upgrade includes</span>

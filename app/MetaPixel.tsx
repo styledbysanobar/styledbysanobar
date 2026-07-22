@@ -2,8 +2,8 @@ import Script from "next/script";
 
 /* Meta Pixel base code. Mounted once in the root layout, so PageView fires on
    every page. Every link in this funnel is a plain <a> (no next/link), so each
-   navigation is a real page load and PageView fires again on its own — there is
-   no SPA route-change shim to maintain.
+   navigation is a real page load and PageView fires again on its own (there is
+   no SPA route-change shim to maintain).
 
    The id comes from NEXT_PUBLIC_META_PIXEL_ID. If it is unset (a bare local
    checkout) the pixel simply does not render, rather than initialising against

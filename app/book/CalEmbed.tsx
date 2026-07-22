@@ -11,9 +11,6 @@ export default function CalEmbed() {
   const booked = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    const debug =
-      typeof window !== "undefined" &&
-      new URLSearchParams(window.location.search).has("pixeldebug");
     /* eslint-disable */
     (function (C: any, A: string, L: string) {
       let p = function (a: any, ar: any) { a.q.push(ar); };
@@ -49,8 +46,8 @@ export default function CalEmbed() {
        fbq('init'), because firing it from this effect races the pixel script
        and loses silently. See the comment there. */
 
-    /* Meta Pixel — the conversion: the consultation is actually booked. This is
-       the event to optimise the campaign on.
+    /* Meta Pixel, the conversion event: the consultation is actually booked.
+       This is the event to optimise the campaign on.
 
        The SAME Lead is also sent server-side by the Cal.com webhook at
        /api/webhooks/cal. Both carry event_id cal_lead_<booking uid>, so Meta
@@ -64,7 +61,6 @@ export default function CalEmbed() {
     const fireLead = (e: any) => {
       const d = e?.detail?.data ?? {};
       const uid: string | undefined = d?.uid ?? d?.booking?.uid;
-      if (debug) console.log("[pixel-debug] fireLead", { uid, fbq: typeof window.fbq, e });
       if (uid) {
         if (booked.current.has(uid)) return; // already sent for this booking
         booked.current.add(uid);
@@ -74,28 +70,8 @@ export default function CalEmbed() {
     Cal.ns["30min"]("on", { action: "bookingSuccessfulV2", callback: fireLead });
     Cal.ns["30min"]("on", { action: "bookingSuccessful", callback: fireLead });
 
-    /* Diagnostics, off unless the URL carries ?pixeldebug=1.
-
-       Listens to the RAW postMessage channel rather than Cal's named events, so
-       it shows what Cal actually emits on booking even if the action name we
-       subscribe to is wrong. That is the whole point: a named listener cannot
-       tell you it was never called. Delete once the Lead is confirmed. */
-    let onMsg: ((ev: MessageEvent) => void) | null = null;
-    if (debug) {
-      console.log("[pixel-debug] armed. fbq at mount:", typeof window.fbq);
-      onMsg = (ev: MessageEvent) => {
-        if (typeof ev.origin === "string" && ev.origin.includes("cal.com")) {
-          console.log("[pixel-debug] cal =>", ev.data);
-        }
-      };
-      window.addEventListener("message", onMsg);
-    }
-
     const t = setTimeout(() => setReady(true), 2500);
-    return () => {
-      clearTimeout(t);
-      if (onMsg) window.removeEventListener("message", onMsg);
-    };
+    return () => clearTimeout(t);
   }, []);
 
   return (

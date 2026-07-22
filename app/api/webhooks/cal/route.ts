@@ -78,30 +78,22 @@ export async function POST(req: Request) {
      happen before any JSON parsing. */
   const raw = await req.text();
 
+  /* Hex over the raw bytes, confirmed against a real Cal delivery. */
   const signature = req.headers.get("x-cal-signature-256") ?? "";
-  /* An Hmac can only be digested once, so build a fresh one per encoding. */
-  const digest = (enc: "hex" | "base64") =>
-    crypto.createHmac("sha256", webhookSecret).update(raw).digest(enc);
-  const expected = digest("hex");
+  const expected = crypto.createHmac("sha256", webhookSecret).update(raw).digest("hex");
 
   if (!signature || !safeEqual(signature, expected)) {
-    /* Diagnostics for the FIRST real delivery. Cal's docs confirm HMAC-SHA256
-       over the body but do not pin the encoding, so log both candidates next to
-       what actually arrived: one glance says which one Cal uses, or that the
-       secret itself is wrong (neither matches). None of this leaks the secret,
-       these are one-way digests. Safe to delete once a delivery has landed. */
+    /* Only ever logs on failure, so it costs nothing in normal operation and
+       makes a rotated-and-mismatched secret obvious. Digests are one way, so
+       nothing here leaks the secret. */
     console.warn(
-      "[cal-webhook] rejected: bad signature\n" +
-        `  header present : ${signature ? "yes" : "NO, check the header name"}\n` +
-        `  received       : ${signature || "(none)"}\n` +
-        `  computed hex   : ${expected}\n` +
-        `  computed b64   : ${digest("base64")}\n` +
-        `  body bytes     : ${Buffer.byteLength(raw, "utf8")}\n` +
-        `  cal headers    : ${JSON.stringify(
-          Object.fromEntries(
-            [...req.headers.entries()].filter(([k]) => k.toLowerCase().startsWith("x-cal"))
-          )
-        )}`
+      "[cal-webhook] rejected: bad signature",
+      JSON.stringify({
+        headerPresent: Boolean(signature),
+        received: signature.slice(0, 16),
+        computed: expected.slice(0, 16),
+        bodyBytes: Buffer.byteLength(raw, "utf8"),
+      })
     );
     return Response.json({ error: "invalid signature" }, { status: 401 });
   }
@@ -122,22 +114,6 @@ export async function POST(req: Request) {
 
   const payload = body?.payload ?? {};
   const attendee = payload?.attendees?.[0] ?? {};
-
-  /* First-delivery diagnostics: confirms the paths this route depends on are
-     really where we think they are. Names/emails are NOT logged, only whether a
-     value was found. Safe to delete once a booking has come through clean. */
-  console.log(
-    "[cal-webhook] payload check:",
-    JSON.stringify({
-      payloadKeys: Object.keys(payload),
-      hasUid: Boolean(payload?.uid),
-      attendeeCount: payload?.attendees?.length ?? 0,
-      attendeeKeys: Object.keys(attendee),
-      hasEmail: Boolean(attendee?.email),
-      hasName: Boolean(attendee?.name),
-      responseKeys: Object.keys(payload?.responses ?? {}),
-    })
-  );
 
   /* uid is the dedup key shared with the browser pixel. Without it the pair
      cannot be collapsed, so we would rather send nothing than double count. */

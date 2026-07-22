@@ -217,7 +217,7 @@ export async function POST(req: Request) {
      and so Meta has value history if volume ever justifies value optimisation.
      Do NOT switch campaigns to value optimisation on this: at 8 consultations a
      week there is nowhere near enough signal, and this is stated intent on a
-     form, not revenue collected. */
+     form, not the revenue collected. */
   const budgetAnswer = answer(payload?.responses, Q.budget);
   const value = budgetToValue(budgetAnswer);
 

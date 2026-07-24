@@ -18,7 +18,7 @@ _Full page copy, top to bottom. "Instant Image Upgrade" is the single funnel ter
 - _Foot:_ The eye behind national campaigns and leading actors, now on you.
 
 - **CTA:** Apply for your Instant Image Upgrade →
-- **Assurance points:** One to one with Sanobar · A real read, not a pitch · Only 8 consultations a week
+- **Assurance points:** One on One with Celebrity Stylist · Styled Top Bollywood Stars · Only 8 Slots a Week
 - **Soft link:** Not ready to apply? See why the gap exists, and why it was never your fault ↓
 
 **Stats rail:** 10+ Years in fashion · 100+ Campaigns, films & shoots · 200+ Styling appointments at Broadway
@@ -34,7 +34,7 @@ _Full page copy, top to bottom. "Instant Image Upgrade" is the single funnel ter
 1. **It all started in films** — Co-styled on film sets featuring Deepika Padukone, Alia Bhatt, Kriti Sanon, Jim Sarbh, Pankaj Tripathi, Ajay Devgn, Huma Qureshi & Madhuri Dixit, across blockbusters like Gangubai Kathiawadi and Mimi.
 2. **Then came the big brands** — Launched 100+ brand campaigns for names like American Tourister and Parachute, and shoots featuring Virat Kohli, Anushka Sharma and Arijit Singh.
 3. **A national first** — Launched India's first nationwide personal-shopper program, running on her own diagnostic system, fully booked out in 15 days.
-4. **And now, you** — And now that same system is reading you, through the very quiz you just finished.
+4. **And now, you** — And now that same system reads you, one to one, in a private 30-minute consultation.
 
 **As seen on:** Kotak Mahindra · Oppo · Tanishq · American Tourister · Parachute · Santoor · Whisper · Myntra · Livspace · Future Group
 
@@ -116,7 +116,7 @@ _Footer note:_ Plus Sanobar on WhatsApp throughout, for the moments you are unsu
 - **Headline:** You already built the success. Now let your image _tell the same story_.
 - **Sub:** At the next wedding, the next meeting, the next stage, be the one they remember, for exactly the right reasons. One conversation, and a plan built only for you.
 - **CTA:** Apply for your Instant Image Upgrade →
-- **Micro:** Led personally by Sanobar · by private application · only 8 consultations each week
+- **Micro:** One on One with Celebrity Stylist · Styled Top Bollywood Stars · Only 8 Slots a Week
 - **Colophon:** Your image should be as thought through as everything else you have built. The Instant Image Upgrade, by Sanobar Samir.
 
 **Sticky bar:** Your image, read by the eye behind the campaigns. — Apply for your consultation →
@@ -126,4 +126,3 @@ _Footer note:_ Plus Sanobar on WhatsApp throughout, for the moments you are unsu
 ## Open flags
 
 - **05** carries `[PENDING SANOBAR: confirm wording]` and `[PENDING SANOBAR: real consented clips]`.
-- Track-record point **4** ("And now, you") still says _"through the very quiz you just finished"_ — references a quiz this page does not have. Needs a rewrite to point at the consultation.

@@ -1,4 +1,5 @@
 import FunnelScripts from "./FunnelScripts";
+import Testimonials from "./Testimonials";
 
 /* SANOBAR — high-ticket single-page funnel ("Instant Image Upgrade").
    One page, one action: apply for a one-to-one Instant Image Upgrade. Structure
@@ -42,7 +43,7 @@ const CRED_TRACK: { head: string; body: string }[] = [
   { head: "It all started in films", body: "Co-styled on film sets featuring Deepika Padukone, Alia Bhatt, Kriti Sanon, Jim Sarbh, Pankaj Tripathi, Ajay Devgn, Huma Qureshi & Madhuri Dixit, across blockbusters like Gangubai Kathiawadi and Mimi." },
   { head: "Then came the big brands", body: "Launched 100+ brand campaigns for names like American Tourister and Parachute, and shoots featuring Virat Kohli, Anushka Sharma and Arijit Singh." },
   { head: "A national first", body: "Launched India's first nationwide personal-shopper program, running on her own diagnostic system, fully booked out in 15 days." },
-  { head: "And now, you", body: "And now that same system is reading you, through the very quiz you just finished." },
+  { head: "And now, you", body: "And now that same system reads you, one to one, in a private 30-minute consultation." },
 ];
 const CRED_TRACK_ICONS: React.ReactNode[] = [
   I(<><rect x="3" y="7.5" width="18" height="12.5" /><circle cx="12" cy="13.7" r="3.1" /><path d="M8.5 7.5 10 5h4l1.5 2.5" /></>),
@@ -97,14 +98,9 @@ const LEAVE_ICONS: React.ReactNode[] = [
   I(<><rect x="5" y="3.5" width="14" height="17" rx="1" /><path d="M8.5 8h7M8.5 12h7M8.5 16h4" /></>),
 ];
 
-/* §6 testimonials: consented client clips (assets pending — honest placeholders). */
-const TESTI_FEATURED = { title: "The first look", dur: "0:32" };
-const TESTI_CLIPS: { title: string; dur: string }[] = [
-  { title: "The wardrobe edit", dur: "0:41" },
-  { title: "Colour draping", dur: "0:35" },
-  { title: "The body-shape read", dur: "0:28" },
-  { title: "Personal shopping", dur: "0:38" },
-];
+/* §6 testimonials now live in app/Testimonials.tsx: a two-row wall of real
+   poster cards, each opening its clip from R2. The clip list and the poster
+   mapping live there, next to the component that uses them. */
 
 /* §7 FAQ: objections in order; the first opens by default and carries the pill. */
 const FAQ: { q: string; a: React.ReactNode; most?: boolean }[] = [
@@ -187,15 +183,15 @@ export default function Page() {
             <ul className="hi-cta-points">
               <li className="hi-cta-point">
                 <span className="hi-cta-point-ic" aria-hidden="true">{I(<><circle cx="12" cy="8" r="3.2" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>)}</span>
-                <span className="hi-cta-point-txt">One to one with Sanobar</span>
+                <span className="hi-cta-point-txt">One on One with Celebrity Stylist</span>
               </li>
               <li className="hi-cta-point">
                 <span className="hi-cta-point-ic" aria-hidden="true">{I(<><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z" /><circle cx="12" cy="12" r="2.6" /></>)}</span>
-                <span className="hi-cta-point-txt">A real read, not a pitch</span>
+                <span className="hi-cta-point-txt">Styled Top Bollywood Stars</span>
               </li>
               <li className="hi-cta-point">
                 <span className="hi-cta-point-ic" aria-hidden="true">{I(<><rect x="3" y="4.5" width="18" height="16" rx="1.4" /><path d="M3 9h18M8 3v3M16 3v3" /></>)}</span>
-                <span className="hi-cta-point-txt">Only 8 consultations a week</span>
+                <span className="hi-cta-point-txt">Only 8 Slots a Week</span>
               </li>
             </ul>
             <a className="hi-soft" href="#problem">Not ready to apply? See why the gap exists, and why it was never your fault &darr;</a>
@@ -213,14 +209,18 @@ export default function Page() {
       <span data-sticky-start aria-hidden="true" />
 
       {/* ============ [2] WHO IS DOING IT — authority (heaviest component) ============ */}
-      <section className="r-band r-cred hi-who reveal" aria-label="Who is doing this">
+      <section className="r-band r-cred hi-who" aria-label="Who is doing this">
         <div className="r-inner">
           <div className="rc-top">
             <figure className="rc-portrait">
-              <img className="rc-portrait-img" src="/images/IMG_2730.PNG" alt="Sanobar Samir" />
+              {/* built from 7779d863-...png: the cutout is padded to exactly 4:5
+                  so the frame's object-fit:cover crops nothing off her hair */}
+              <span className="rc-portrait-glow" aria-hidden="true" />
+              <img className="rc-portrait-img" src="/images/about_portrait.webp"
+                   alt="Sanobar Samir" width={980} height={1120} loading="lazy" />
             </figure>
             <div className="rc-right">
-              <header className="r-head rc-head">
+              <header className="r-head rc-head reveal">
                 <span className="r-index" aria-hidden="true">01</span>
                 <span className="sec-eyebrow">The person behind your consultation</span>
               </header>
@@ -239,7 +239,7 @@ export default function Page() {
             <span className="rc-track-label">A track record that speaks for itself</span>
             <ol className="rc-steps">
               {CRED_TRACK.map((t, i) => (
-                <li className="rc-step" key={i}>
+                <li className={`rc-step reveal d${Math.min(i + 1, 6)}`} key={i}>
                   <span className="rc-step-ic" aria-hidden="true">{CRED_TRACK_ICONS[i]}</span>
                   <div className="rc-step-body">
                     <span className="rc-step-n">{String(i + 1).padStart(2, "0")}</span>
@@ -269,11 +269,12 @@ export default function Page() {
       </section>
 
       {/* ============ [3] THE REAL PROBLEM: built-success vs image-lag gap ============ */}
-      <section className="r-band hi-problem" id="problem" aria-label="The real problem">
+      <section className="r-band hi-problem reveal" id="problem" aria-label="The real problem">
         <div className="r-inner">
 
           {/* eyebrow (gold hairline under it) + title + sub */}
           <header className="r-head reveal">
+            <span className="r-index" aria-hidden="true">02</span>
             <span className="sec-eyebrow pr-eyebrow">The real problem</span>
             <h2 className="r-h2">You built the success. Your <em>image</em> never caught up.</h2>
             <p className="r-sub">People don&rsquo;t question your ability. They question <em className="pr-gold">your level</em>.</p>
@@ -292,6 +293,9 @@ export default function Page() {
               <span className="pr-pdiv" aria-hidden="true" />
               <span className="pr-tag">The person who still has to prove it.</span>
             </div>
+            <span className="pr-turn" aria-hidden="true">
+              {I(<><path d="M4 12h14" /><path d="M12.5 6l6 6-6 6" /></>)}
+            </span>
             <div className="r-panel r-panel--dark">
               <span className="pr-plabel">How you should be read</span>
               <ul className="pr-words">
@@ -335,9 +339,9 @@ export default function Page() {
       </section>
 
       {/* ============ [4] CALL STRUCTURE — the agenda ============ */}
-      <section className="r-band hi-call reveal" aria-label="What happens on the call">
+      <section className="r-band hi-call" aria-label="What happens on the call">
         <div className="r-inner">
-          <header className="r-head">
+          <header className="r-head reveal">
             <span className="r-index" aria-hidden="true">03</span>
             <span className="sec-eyebrow">What the consultation is</span>
             <h2 className="r-h2">Here&rsquo;s What We&rsquo;ll Discuss During Your <em>Instant Image Upgrade</em> Call.</h2>
@@ -346,7 +350,7 @@ export default function Page() {
           <div className="bp-steps-box">
             <ol className="bp-steps">
               {AGENDA.map((s, i) => (
-                <li className="bp-step" key={i}>
+                <li className={`bp-step reveal d${Math.min(i + 1, 6)}`} key={i}>
                   <span className="bp-step-ic" aria-hidden="true">{AGENDA_ICONS[i]}</span>
                   <div className="bp-step-body">
                     <span className="bp-step-n">{String(i + 1).padStart(2, "0")}<span className="bp-step-tag">{s.tag}</span></span>
@@ -361,9 +365,9 @@ export default function Page() {
       </section>
 
       {/* ============ [5] WHAT YOU WILL GET — the Instant Image Upgrade ============ */}
-      <section className="r-band hi-get reveal" aria-label="What you walk away with">
+      <section className="r-band hi-get" aria-label="What you walk away with">
         <div className="r-inner">
-          <header className="r-head">
+          <header className="r-head reveal">
             <span className="r-index" aria-hidden="true">04</span>
             <span className="sec-eyebrow">What the upgrade includes</span>
             <h2 className="r-h2">Your personal <em>Instant Image Upgrade</em></h2>
@@ -371,14 +375,22 @@ export default function Page() {
           </header>
           <ul className="bp-leave">
             {LEAVE.map((d, i) => (
-              <li className="bp-leave-item" key={i}>
+              <li className={`bp-leave-item reveal d${Math.min(i + 1, 6)}`} key={i}>
                 <span className="bp-leave-ic" aria-hidden="true">{LEAVE_ICONS[i]}</span>
                 <h4 className="bp-leave-t">{d.title}</h4>
                 <p className="bp-leave-d">{d.desc}</p>
               </li>
             ))}
           </ul>
-          <p className="bp-leave-note">Plus Sanobar on WhatsApp throughout, for the moments you are unsure.</p>
+          <div className="bp-bonus">
+            <span className="bp-bonus-ic" aria-hidden="true">
+              {I(<><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4.5 19.5l1.4-4.4A7.5 7.5 0 1 1 20 11.5z" /><path d="M9 11h.01M12 11h.01M15 11h.01" /></>)}
+            </span>
+            <div className="bp-bonus-body">
+              <span className="bp-bonus-eyebrow">Plus</span>
+              <p className="bp-bonus-txt">Sanobar on WhatsApp throughout, for the moments you are unsure.</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -389,54 +401,30 @@ export default function Page() {
             <span className="r-index" aria-hidden="true">05</span>
             <span className="sec-eyebrow">People who stood where you stand</span>
             <h2 className="r-h2">Accomplished, and finally <em>seen</em></h2>
-            <p className="rt-sub">Sanobar&rsquo;s appointment-only service, a first of its kind in India, booked out in fifteen days with a waiting list. Every person here was already successful. The only thing missing was an image that matched. <span className="r-pending">[PENDING SANOBAR: confirm wording]</span></p>
+            <p className="rt-sub">Sanobar&rsquo;s appointment-only service, a first of its kind in India, booked out in fifteen days with a waiting list. Every person here was already successful. The only thing missing was an image that matched.</p>
           </header>
+        </div>
 
-          <figure className="rt-featured">
-            <span className="rt-featured-media" aria-hidden="true" />
-            <button type="button" className="rt-play rt-play--lg" aria-label={`Play ${TESTI_FEATURED.title}`}>
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z" /></svg>
-            </button>
-            <figcaption className="rt-featured-cap">
-              <span className="rt-featured-eyebrow">Featured<span className="rt-cap-rule" aria-hidden="true" /></span>
-              <span className="rt-featured-title">{TESTI_FEATURED.title}</span>
-              <span className="rt-featured-dur">{TESTI_FEATURED.dur}</span>
-            </figcaption>
-          </figure>
+        {/* two rows scrolling in opposite directions; full-bleed, so it sits
+            outside .r-inner rather than being capped by its 720px measure */}
+        <Testimonials />
 
-          <div className="rt-band-label"><span>Inside an Instant Image Upgrade</span> <span className="r-pending">[PENDING SANOBAR: real consented clips]</span></div>
-
-          <ul className="rt-carousel">
-            {TESTI_CLIPS.map((c, i) => (
-              <li className="rt-card" key={i}>
-                <figure className="rt-card-media" aria-hidden="true">
-                  <button type="button" className="rt-play" aria-label={`Play ${c.title}`}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z" /></svg>
-                  </button>
-                </figure>
-                <div className="rt-card-meta">
-                  <h3 className="rt-card-title">{c.title}</h3>
-                  <span className="rt-card-dur">{c.dur}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-
+        <div className="r-inner">
           <p className="rt-closing">Real moments from real consultations. No scripts, no actors, just people <em>seeing themselves differently</em>.</p>
         </div>
       </section>
 
       {/* ============ [7] FAQ ============ */}
-      <section className="r-band hi-faq reveal" aria-label="Before you apply">
+      <section className="r-band hi-faq" aria-label="Before you apply">
         <div className="r-inner">
-          <header className="r-head">
+          <header className="r-head reveal">
             <span className="r-index" aria-hidden="true">06</span>
             <span className="sec-eyebrow">Before you apply</span>
             <h2 className="r-h2">Quick answers</h2>
           </header>
           <div className="faq">
             {FAQ.map((f, i) => (
-              <details className="faq-item" key={i} open={f.most}>
+              <details className={`faq-item reveal d${Math.min(i + 1, 6)}`} key={i} open={f.most}>
                 <summary className="faq-q">
                   <span className="faq-q-text">{f.q}{f.most ? <span className="most-asked">Most asked</span> : null}</span>
                   <span className="faq-ic" aria-hidden="true">
@@ -451,7 +439,7 @@ export default function Page() {
       </section>
 
       {/* ============ [8] FOOTER — dark oxblood finale peak ============ */}
-      <section className="r-band r-band--dark r-finale" id="book" data-sticky-stop>
+      <section className="r-band r-band--dark r-finale reveal" id="book" data-sticky-stop>
         <div className="r-inner">
           <span className="sec-eyebrow r-hero-eyebrow">Now let it tell the same story</span>
           <h2 className="r-finale-h">You already built the success. Now let your image <em>tell the same story</em>.</h2>
@@ -463,24 +451,24 @@ export default function Page() {
           <ul className="hi-cta-points r-finale-points">
             <li className="hi-cta-point">
               <span className="hi-cta-point-ic" aria-hidden="true">{I(<><circle cx="12" cy="8" r="3.2" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>)}</span>
-              <span className="hi-cta-point-txt">Led personally by Sanobar</span>
+              <span className="hi-cta-point-txt">One on One with Celebrity Stylist</span>
             </li>
             <li className="hi-cta-point">
               <span className="hi-cta-point-ic" aria-hidden="true">{I(<><rect x="5" y="11" width="14" height="9" rx="1.4" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>)}</span>
-              <span className="hi-cta-point-txt">By private application</span>
+              <span className="hi-cta-point-txt">Styled Top Bollywood Stars</span>
             </li>
             <li className="hi-cta-point">
               <span className="hi-cta-point-ic" aria-hidden="true">{I(<><rect x="3" y="4.5" width="18" height="16" rx="1.4" /><path d="M3 9h18M8 3v3M16 3v3" /></>)}</span>
-              <span className="hi-cta-point-txt">Only 8 consultations a week</span>
+              <span className="hi-cta-point-txt">Only 8 Slots a Week</span>
             </li>
           </ul>
-          <div className="r-colophon">Your image should be as thought through as everything else you have built.<br />The Instant Image Upgrade, by Sanobar Samir.</div>
+          <div className="r-colophon">Your image should be as thought through as everything else you have built.</div>
         </div>
       </section>
 
       {/* sticky book bar — chrome, appears past the hero, hides at the finale */}
       <div className="hi-sticky" aria-hidden="true">
-        <span className="hi-sticky-txt">Your image, read by the eye behind the campaigns.</span>
+        <span className="hi-sticky-scarce"><span className="hi-sticky-dot" aria-hidden="true" />Only 8 slots a week</span>
         <a className="hi-sticky-btn" href={BOOK_HREF}>Apply for your consultation <span className="arrow">&rarr;</span></a>
       </div>
 

@@ -32,9 +32,17 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
+/* iOS Safari inflates font sizes when a phone rotates to landscape, which breaks
+   every clamp() in this file. Opt out so the type scale we designed is the type
+   scale that ships. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-weight:400;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;line-height:1.6;
   overflow-x:hidden}
+/* Never let a long unbroken string (a URL, a long word) force a sideways scroll.
+   body has overflow-x:hidden, but that CLIPS the overflow rather than preventing
+   it, so text would silently lose its right edge on a narrow phone. */
+h1,h2,h3,p,li,a,summary{overflow-wrap:break-word}
 ::selection{background:rgba(38,0,0,.16)}
 a{color:inherit;text-decoration:none}
 
@@ -109,17 +117,24 @@ body.dimming .page{filter:saturate(.05) brightness(.5)}
 /* the CTA: a proper filled button (camel fill, oxblood type) */
 .cta-cluster{margin-top:clamp(30px,4.2vh,52px)}
 .cover .cta-cluster{animation:riseIn .9s var(--ease) 1s both}
-.cta-btn{display:inline-flex;align-items:center;gap:12px;
-  font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.14em;
-  font-size:clamp(14px,1.3vw,17px);line-height:1;text-decoration:none;
-  color:var(--oxblood);background:var(--cream);
-  padding:clamp(17px,2vh,21px) clamp(28px,3vw,40px);border:1px solid var(--cream);border-radius:2px;
-  box-shadow:0 18px 42px -22px rgba(0,0,0,.55);
-  transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .3s var(--ease),color .3s var(--ease)}
+/* Gold, matching the hero CTA: the finale is the page's most premium beat and
+   its CTA is the last thing before the click, so it carries the accent too. */
+.cta-btn{position:relative;display:inline-flex;align-items:center;gap:12px;overflow:hidden;
+  font-family:var(--f-display);font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  font-size:clamp(15px,1.4vw,18px);line-height:1;text-decoration:none;
+  color:var(--oxblood);
+  background:linear-gradient(135deg,#D8AC63 0%,#B8893E 54%,#A2712C 100%);
+  padding:clamp(18px,2.1vh,23px) clamp(30px,3.2vw,44px);
+  border:1px solid rgba(216,172,99,.85);border-radius:2px;
+  box-shadow:0 18px 44px -20px rgba(184,137,62,.6),0 6px 16px -10px rgba(38,0,0,.4);
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),filter .3s var(--ease)}
+.cta-btn::before{content:"";position:absolute;top:0;left:-70%;width:48%;height:100%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg)}
+.cta-btn:hover::before{animation:ctaSheen .85s var(--ease)}
 .cta-btn .arrow{font-style:normal;font-family:var(--f-body);font-size:.9em;
   transition:transform .45s var(--ease)}
-.cta-btn:hover{transform:translateY(-2px);box-shadow:0 26px 56px -22px rgba(0,0,0,.65);
-  background:transparent;color:var(--cream)}
+.cta-btn:hover{transform:translateY(-2px);filter:brightness(1.05);
+  box-shadow:0 28px 60px -20px rgba(184,137,62,.72),0 8px 20px -10px rgba(38,0,0,.5)}
 .cta-btn:hover .arrow{transform:translateX(6px)}
 .cta-micro{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
   gap:9px clamp(14px,2vw,22px);margin-top:22px;font-family:var(--f-mono);font-size:10.5px;
@@ -137,6 +152,9 @@ body.dimming .page{filter:saturate(.05) brightness(.5)}
 .js .reveal.d1{transition-delay:.09s}
 .js .reveal.d2{transition-delay:.18s}
 .js .reveal.d3{transition-delay:.27s}
+.js .reveal.d4{transition-delay:.36s}
+.js .reveal.d5{transition-delay:.45s}
+.js .reveal.d6{transition-delay:.54s}
 
 .band{padding:clamp(64px,12vh,150px) clamp(20px,4vw,56px);border-top:1px solid var(--hair)}
 .band-inner{max-width:980px;margin:0 auto}
@@ -566,17 +584,30 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .r-empty{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;gap:16px;padding:40px;background:var(--paper);color:var(--ink)}
 .r-empty-h{font-family:var(--f-display);font-weight:600;font-size:clamp(24px,3vw,34px);margin:6px 0}
-.r-band{padding:clamp(56px,9vh,120px) clamp(20px,5vw,40px);border-top:1px solid var(--hair)}
-.r-band:first-child{border-top:0}
+/* No rule between sections. The hairline divider read as a hard seam against
+   the tonal shifts between bands, so sections are separated by their padding
+   and background alone. The :first-child and --dark overrides that existed
+   only to suppress this border are gone with it. */
+.r-band{padding:clamp(42px,6.8vh,90px) clamp(20px,5vw,40px)}
 /* the dark peaks: flat oxblood field, cream ink (reuses the .oxblood token swap) */
-.r-band--dark{background:var(--oxblood);color:var(--cream);border-top:0;
+.r-band--dark{background:var(--oxblood);color:var(--cream);
   --ink:var(--cream);--ink-2:#E7D4BC;--ink-muted:#AE9069;--hair:rgba(240,229,216,.2)}
 /* two locked width tiers, shared gutter: STANDARD 720 (prose/most sections), WIDE 1080 (structural: hero, [04]) */
 .r-inner{max-width:720px;margin:0 auto}
 .r-inner--wide{max-width:1080px}
 
 /* entry animation, fail-open + reduced-motion safe (no JS observer on this page) */
-.r-band{animation:rRise .9s var(--ease) both}
+/* Bands no longer animate on LOAD, and this was the bug behind "no animations
+   anywhere". Every band ran rRise simultaneously at page load, so all eight
+   sections finished their entrance below the fold before the reader could
+   scroll to them. Worse, an animation with `both` fill holds its final
+   opacity:1 and outranks a normal declaration in the cascade, so it was
+   overriding `.js .reveal{opacity:0}` and killing the scroll-reveal system
+   outright. Nine .reveal elements were producing nothing.
+
+   Only the hero animates on load now, because it is the only band on screen at
+   load. Everything below it reveals on scroll. */
+.hi-hero{animation:rRise .9s var(--ease) both}
 .r-hero{animation:rRise 1s var(--ease) both}
 @keyframes rRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
@@ -695,7 +726,7 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
    quiet label set on it (not two boxes shoved together). */
 .r-panels{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;
   gap:clamp(24px,4.5vw,64px);margin-top:0}
-.r-panel{border:1px solid var(--hair);padding:clamp(26px,3.2vw,40px)}
+.r-panel{border:1px solid var(--hair);padding:clamp(22px,2.6vw,32px)}
 .r-panel--dark{background:var(--oxblood);border-color:var(--oxblood);color:var(--cream);
   --ink:var(--cream);--ink-2:#E7D4BC;--ink-muted:#AE9069}
 .r-panel-eyebrow{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-muted)}
@@ -820,8 +851,45 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 /* top: a big portrait carrying the 04 + eyebrow + stats overlaid on it | headline + lead */
 .rc-top{display:grid;grid-template-columns:50fr 50fr;gap:clamp(22px,3.6vw,44px);align-items:center}
 /* frameless cutout: Sanobar stands edge-to-edge on the section ground, no box */
-.rc-portrait{position:relative;margin:0;aspect-ratio:4/5;background:transparent;border:0;overflow:hidden}
-.rc-portrait-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center bottom;z-index:0}
+/* Frame stays 4/5. It sets the grid row height, and .rc-top centres both
+   columns in that row, so shortening this frame also steals the spacing above
+   the text on the right. The photo is made smaller via the image scale below
+   instead, which leaves the row height alone. */
+/* A framed studio panel rather than a bare cutout. She is background-removed,
+   so on the flat cream page she floated with nothing under her. The box gives
+   her a surface: a soft warm backdrop (deeper at the foot so she stands ON it,
+   not in front of it), a gold hairline, and a layered tinted shadow (C4). */
+/* align-self + margin drop the box below the top of the row, so it no longer
+   runs up to the section edge. The text keeps its own centre alignment
+   (untouched), only the box moves. */
+.rc-portrait{position:relative;align-self:start;
+  margin:clamp(20px,3.4vh,40px) 0 0;aspect-ratio:4/5;overflow:hidden;
+  border-radius:2px;border:1px solid rgba(184,137,62,.28);
+  background:
+    radial-gradient(120% 80% at 50% 12%,rgba(240,229,216,.9) 0%,transparent 60%),
+    linear-gradient(180deg,#F1E7DA 0%,#E7D8C6 62%,#DFCDB6 100%);
+  /* one soft grounded shadow, no far spread and no white inset highlight, so it
+     sits ON the page instead of floating above it */
+  box-shadow:0 10px 26px -18px rgba(38,0,0,.28)}
+/* The FRAME keeps its full size, so the grid row and the section height are
+   unchanged. Only the picture inside it shrinks. Origin is bottom-centre, so
+   she stays planted on the same baseline and the 20% comes off the TOP, which
+   is where she was crowding the section padding. */
+.rc-portrait-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center bottom;z-index:1;
+  scale:.88;transform-origin:50% 100%}
+/* A soft gold bloom behind the cutout. The subject is background-removed, so
+   without this she floats on flat paper with nothing holding her to the page.
+   Same idiom as the hero, where two radial gold glows sit behind the cutout
+   (C5: atmosphere, never a flat fill). Sits BEHIND the image, hence z-index 0. */
+.rc-portrait-glow{position:absolute;z-index:0;pointer-events:none;
+  /* tracks the scaled image: she fills 88% of the frame anchored to the
+     bottom, so her centre sits near 56% and the bloom is sized to match */
+  left:50%;top:56%;width:76%;height:58%;
+  translate:-50% -50%;border-radius:50%;
+  /* softened now that the box provides the grounding: reads as studio light on
+     the backdrop rather than the sole thing anchoring her */
+  background:radial-gradient(ellipse,rgba(184,137,62,.2) 0%,transparent 70%);
+  filter:blur(46px)}
 /* scrim: darken top (04 + eyebrow) and bottom (stats + caption) so the cream/gold overlays stay legible */
 .rc-portrait-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(20,0,0,.52) 0%,rgba(20,0,0,0) 26%,rgba(20,0,0,0) 52%,rgba(20,0,0,.6) 100%)}
 .rc-corner{position:absolute;width:14px;height:14px;border:0 solid rgba(240,229,216,.4);z-index:3}
@@ -886,8 +954,20 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .rc-qb-sub em{font-style:normal;color:#CFA35C}
 @media(max-width:720px){
   .rc-top{grid-template-columns:1fr;gap:clamp(22px,6vw,30px)}
-  .rc-portrait{max-width:340px;height:auto;min-height:0;aspect-ratio:4/5}
-  .rc-right{align-self:auto}
+  /* single column, so the portrait is centred rather than hugging the left edge */
+  .rc-portrait{max-width:340px;height:auto;min-height:0;aspect-ratio:4/5;
+    margin:0 auto;width:100%}   /* single column: no top offset, image leads the section */
+  /* The image scale is NOT overridden here. It stays at the base 0.88, because
+     that scale is what creates the space above her head: the cutout has zero
+     headroom of its own (her hair starts at the very first pixel row), so at
+     full size she sits flush against the top of the frame. */
+  /* Single column, so the whole right-hand block centres with the portrait:
+     the 01, the eyebrow, the title and the body. The gold rule and the body
+     measure both need margin-inline:auto as well, since text-align alone does
+     not centre a fixed-width block or a capped-measure paragraph. */
+  .rc-right{align-self:auto;text-align:center}
+  .rc-rule{margin-inline:auto}
+  .rc-lead{margin-inline:auto}
 }
 @media(max-width:560px){.r-shape{grid-template-columns:1fr;text-align:center}.r-sil{max-width:220px;margin:0 auto}
   .r-pair-plates{grid-template-columns:1fr;gap:10px}.r-pair-eq{transform:rotate(90deg);justify-self:center}}
@@ -945,6 +1025,105 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 /* closing prose */
 .rt-closing{text-align:center;max-width:56ch;margin:clamp(30px,4.4vh,46px) auto 0;font-family:var(--f-body);font-size:clamp(15px,1.6vw,17px);line-height:1.7;color:var(--ink-2)}
 .rt-closing em{font-style:normal;color:#B8893E}
+
+/* ---------- TESTIMONIAL WALL: two rows, opposite directions ----------
+   Scroll mechanic derived from .rc-marquee above (full-bleed, masked edges,
+   track rendered twice and travelling exactly -50%) so the page keeps one
+   marquee system rather than inventing a second.
+
+   The posters are already designed cards carrying their own title and play
+   button, so the treatment here is deliberately restrained: a hairline mat, a
+   lift on hover, and nothing overlaid on the artwork (R7, C12 "the brand frames
+   the embed, it does not restyle it"). */
+.tw-wall{width:100vw;margin-left:calc(50% - 50vw);
+  margin-top:clamp(22px,3.4vh,38px);
+  display:flex;flex-direction:column;gap:clamp(12px,1.6vw,20px)}
+.tw-row{overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.tw-track{display:flex;align-items:center;width:max-content;
+  gap:clamp(10px,1.4vw,18px)}
+/* the two rows travel in opposite directions. Slightly different durations so
+   they never lock into a visible shared rhythm. */
+.tw-row--l .tw-track{animation:twLeft 64s linear infinite}
+.tw-row--r .tw-track{animation:twRight 78s linear infinite}
+@keyframes twLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes twRight{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+/* a moving target is hard to click, so the row holds still while pointed at */
+.tw-row:hover .tw-track,
+.tw-row:focus-within .tw-track{animation-play-state:paused}
+
+.tw-card{position:relative;flex:0 0 auto;display:block;padding:0;
+  border:0;background:none;cursor:pointer;
+  width:clamp(210px,25vw,320px);aspect-ratio:4/3;
+  border-radius:2px;overflow:hidden;
+  transition:transform .45s var(--ease),box-shadow .45s var(--ease);
+  box-shadow:0 16px 40px -26px rgba(0,0,0,.6)}
+.tw-card-img{width:100%;height:100%;object-fit:cover;display:block}
+/* A soft centre scrim so the play disc reads on every poster regardless of what
+   is behind it. Kept low and radial rather than a flat wash, so it darkens the
+   middle without dulling the artwork or its gold. */
+.tw-card-scrim{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 50% 50%,rgba(20,0,0,.42) 0%,rgba(20,0,0,.14) 42%,transparent 68%);
+  transition:opacity .45s var(--ease)}
+/* Play affordance: gold ring, cream glyph. On brand, never YouTube red (R7).
+   Fills gold on hover so the state change is physical rather than a colour
+   swap (C6). */
+.tw-play{position:absolute;left:50%;top:50%;translate:-50% -50%;
+  width:clamp(42px,4.4vw,54px);height:clamp(42px,4.4vw,54px);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;pointer-events:none;
+  color:var(--cream);background:rgba(20,0,0,.34);
+  border:1px solid rgba(184,137,62,.8);
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  box-shadow:0 6px 22px -10px rgba(0,0,0,.7);
+  transition:background .38s var(--ease),color .38s var(--ease),
+             border-color .38s var(--ease),scale .38s var(--ease)}
+.tw-play svg{width:38%;height:38%;margin-left:8%} /* optical centring: a triangle sits left-heavy */
+.tw-card:hover .tw-play,.tw-card:focus-visible .tw-play{
+  background:#B8893E;border-color:#B8893E;color:var(--oxblood);scale:1.08}
+.tw-card:hover .tw-card-scrim,.tw-card:focus-visible .tw-card-scrim{opacity:.55}
+/* the mat: an inner hairline ring so each poster reads as a framed exhibit */
+.tw-card-ring{position:absolute;inset:0;pointer-events:none;border-radius:2px;
+  box-shadow:inset 0 0 0 1px rgba(184,137,62,.34);
+  transition:box-shadow .45s var(--ease)}
+.tw-card:hover,.tw-card:focus-visible{transform:translateY(-4px);
+  box-shadow:0 26px 56px -26px rgba(0,0,0,.7),0 0 34px -12px rgba(184,137,62,.3)}
+.tw-card:hover .tw-card-ring,.tw-card:focus-visible .tw-card-ring{
+  box-shadow:inset 0 0 0 1px rgba(184,137,62,.75)}
+
+/* ---------- lightbox ---------- */
+.tw-lightbox{position:fixed;inset:0;z-index:90;
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(16px,4vw,48px);
+  background:rgba(20,0,0,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  animation:twFade .3s var(--ease) both}
+@keyframes twFade{from{opacity:0}to{opacity:1}}
+.tw-player{position:relative;width:min(100%,420px);max-height:86svh;display:flex}
+.tw-video{width:100%;max-height:86svh;border-radius:2px;background:#000;
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.9)}
+.tw-close{position:absolute;top:clamp(12px,2.4vw,26px);right:clamp(12px,2.4vw,26px);
+  width:42px;height:42px;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(240,229,216,.3);border-radius:50%;
+  background:rgba(0,0,0,.35);color:var(--cream);cursor:pointer;
+  transition:background .25s var(--ease),border-color .25s var(--ease)}
+.tw-close:hover{background:rgba(0,0,0,.6);border-color:#B8893E;color:#B8893E}
+.tw-close svg{width:18px;height:18px}
+
+@media(max-width:620px){
+  .tw-card{width:clamp(180px,58vw,240px)}
+  .tw-wall{gap:10px}
+}
+
+/* Reduced motion: the rows stop entirely and become a centred wrapped grid, so
+   the content is all still reachable without anything moving. The duplicated
+   second copy is hidden so nothing appears twice once it is no longer a loop. */
+@media(prefers-reduced-motion:reduce){
+  .tw-row{-webkit-mask-image:none;mask-image:none}
+  .tw-track{animation:none;flex-wrap:wrap;justify-content:center;width:auto}
+  .tw-track .tw-card:nth-child(n+12){display:none}
+  .tw-lightbox{animation:none}
+  .tw-card,.tw-play,.tw-card-scrim,.tw-card-ring{transition:none}
+}
 
 /* final band — warm panel, icon + rule + tie line */
 .rt-final{width:100vw;margin-left:calc(50% - 50vw);margin-top:clamp(40px,6vh,72px);background:#EADCC8;border-top:1px solid var(--hair)}
@@ -1156,8 +1335,31 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 /* (b) deliverables, 4-across in a solid PRIMARY (oxblood) box — the "what you get" highlight */
 .bp-leave{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
   background:rgba(207,163,92,.22);border:1px solid var(--oxblood)}
-.bp-leave-note{text-align:center;margin:clamp(18px,2.6vh,26px) auto 0;max-width:44ch;font-family:var(--f-mono);
-  font-size:clamp(10.5px,1.1vw,12px);letter-spacing:.14em;text-transform:uppercase;line-height:1.7;color:var(--ink-muted)}
+/* The WhatsApp inclusion, formatted as a bonus card rather than fine print. It
+   is real ongoing access to the stylist after the call, so it earns a gold
+   accent and readable body type. Sits just under the deliverables grid, gold
+   hairline echoing the grid's gold gaps. */
+.bp-bonus{display:flex;align-items:center;gap:clamp(14px,2vw,22px);
+  margin-top:clamp(12px,1.6vw,16px);
+  padding:clamp(16px,2vw,22px) clamp(18px,2.4vw,28px);
+  background:
+    radial-gradient(130% 150% at 0% 50%,rgba(184,137,62,.14) 0%,transparent 58%),
+    var(--oxblood);
+  border:1px solid rgba(207,163,92,.36);border-radius:2px;
+  box-shadow:0 16px 36px -26px rgba(38,0,0,.5)}
+.bp-bonus-ic{flex:0 0 auto;width:clamp(44px,4.8vw,54px);height:clamp(44px,4.8vw,54px);
+  border-radius:50%;border:1px solid rgba(207,163,92,.6);color:#CFA35C;
+  display:flex;align-items:center;justify-content:center}
+.bp-bonus-ic svg{width:46%;height:46%}
+.bp-bonus-body{text-align:left}
+.bp-bonus-eyebrow{display:block;font-family:var(--f-mono);font-size:10px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:#CFA35C;margin-bottom:5px}
+.bp-bonus-txt{margin:0;font-family:var(--f-body);font-size:clamp(14px,1.5vw,16px);
+  line-height:1.5;color:var(--cream)}
+@media(max-width:560px){
+  .bp-bonus{flex-direction:column;text-align:center;gap:12px;padding:22px 20px}
+  .bp-bonus-body{text-align:center}
+}
 .bp-leave-item{background:var(--oxblood);padding:clamp(22px,2.6vw,32px) clamp(16px,1.8vw,22px);text-align:center}
 .bp-leave-ic{display:flex;align-items:center;justify-content:center;width:clamp(40px,4.4vw,48px);height:clamp(40px,4.4vw,48px);margin:0 auto clamp(12px,1.8vh,16px);color:#CFA35C}
 .bp-leave-ic svg{width:100%;height:100%;display:block}
@@ -1186,7 +1388,14 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 
 /* ---------- result: reduced motion shows everything, moves nothing ---------- */
 @media(prefers-reduced-motion:reduce){
-  .r-band,.r-hero{animation:none!important}
+  /* .r-band no longer animates on load; the hero carries it now. */
+  .hi-hero,.r-hero{animation:none!important}
+  /* the breathing CTA and the FAQ unroll both stop entirely; the FAQ keeps its
+     wash, stripe and icon fill, which are state not motion, so the open row is
+     still clearly marked without anything moving. */
+  .hi-cta-btn{animation:none!important}
+  .faq-item[open] .faq-a{animation:none!important}
+  .faq-item,.faq-item::before,.faq-q,.faq-a,.faq-ic{transition:none!important}
 }
 
 /* ================================================================
@@ -1215,7 +1424,11 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
   align-items:start;text-align:left}
 .hi-hero-intro{grid-area:intro}
 .hi-hero-media{grid-area:media;align-self:stretch}
-.hi-hero-offer{grid-area:offer}
+/* The offer card is a container, so its contents size against the CARD width
+   rather than the viewport. The card sits in a grid track with max-width:none,
+   so viewport units are the wrong measure: at tablet widths the two-column grid
+   squeezes this track badly while the viewport still reads as "large". */
+.hi-hero-offer{grid-area:offer;container-type:inline-size}
 
 /* intro */
 .hi-eyebrow{max-width:none;white-space:nowrap;letter-spacing:.12em;line-height:1.7;opacity:.85}
@@ -1249,43 +1462,119 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
   color:var(--cream);opacity:.5;text-align:center;line-height:1.8}
 .hi-hero-ph i{display:block;font-style:normal;font-size:9px;letter-spacing:.2em;opacity:.7;margin-top:5px;color:#B8893E}
 
-/* offer card (circular icon badges) */
-.hi-hero-card{display:flex;flex-direction:column;gap:14px;text-align:left;
-  border:1px solid var(--hair);background:var(--oxblood);border-radius:2px;
-  padding:clamp(20px,2.1vw,26px)}
+/* offer card (circular icon badges)
+   Composition: centred masthead, left-aligned ledger of what you get, centred lit
+   closing line. Editorial rather than a plain bordered box (C9). */
+.hi-hero-card{position:relative;display:flex;flex-direction:column;gap:14px;text-align:left;
+  border:1px solid rgba(184,137,62,.26);border-radius:2px;
+  /* atmosphere, not a flat fill (C5): a faint gold bloom from the top edge over
+     the oxblood, plus a cream sheen on the upper face so the surface has light. */
+  background:
+    radial-gradient(120% 88% at 50% 0%,rgba(184,137,62,.11) 0%,transparent 62%),
+    linear-gradient(180deg,rgba(240,229,216,.04) 0%,transparent 46%),
+    var(--oxblood);
+  padding:clamp(22px,2.3vw,30px);
+  /* depth = real light (C4): an inset top highlight reading as a lit edge, then
+     two tinted shadows (one far and ambient, one near and oxblood-tinted).
+     Never a flat grey drop. */
+  box-shadow:
+    0 1px 0 rgba(240,229,216,.09) inset,
+    0 30px 64px -36px rgba(0,0,0,.62),
+    0 10px 26px -20px rgba(38,0,0,.55)}
+/* one gold hairline along the very top edge, fading out at both ends. The single
+   accent, spent scarcely (C2). */
+.hi-hero-card::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent 0%,rgba(184,137,62,.7) 50%,transparent 100%)}
+/* centred title with the short gold rule beneath, the same idiom as .pr-eyebrow
+   further down this file, so the page stays one system */
 .hi-card-eyebrow{font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.18em;
-  text-transform:uppercase;color:#B8893E}
+  text-transform:uppercase;color:#B8893E;text-align:center}
+.hi-card-eyebrow::after{content:"";display:block;width:34px;height:1px;background:#B8893E;
+  opacity:.6;margin:10px auto 0}
 .hi-card-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
 .hi-card-list li{display:flex;align-items:flex-start;gap:12px}
 .hi-card-ic{flex:0 0 auto;width:26px;height:26px;border:1px solid rgba(184,137,62,.5);border-radius:50%;
   display:flex;align-items:center;justify-content:center;color:#B8893E}
 .hi-card-ic svg{width:14px;height:14px}
 .hi-card-txt{font-family:var(--f-body);font-size:14px;line-height:1.45;color:var(--cream);opacity:.94}
-.hi-card-foot{margin:3px 0 0;padding-top:12px;border-top:1px solid rgba(240,229,216,.14);
-  font-family:var(--f-body);font-size:12.5px;line-height:1.5;color:var(--cream);opacity:.6}
+/* The card's closing credential. It was cream at .6 opacity, which read as fine
+   print and buried the strongest line in the card. It is now the lit moment (C3):
+   gold, full weight, centred, above a gold-tinted rule.
+
+   DEFAULT IS WRAPPING, deliberately. nowrap that does not fit gets clipped by the
+   body's overflow-x:hidden, and a silently truncated credential is far worse than
+   a tidy two-line one. One line is opted INTO below, only where the card is
+   provably wide enough. */
+.hi-card-foot{margin:2px 0 0;padding-top:clamp(13px,1.7vh,16px);
+  border-top:1px solid rgba(184,137,62,.24);
+  font-family:var(--f-body);font-weight:500;
+  font-size:clamp(11px,1.05vw,13px);line-height:1.5;letter-spacing:.004em;
+  color:#CFA35C;text-align:center;text-wrap:balance}
+
+/* One line, once the CARD itself is wide enough to hold it. 2.35cqi keeps the
+   65 characters at roughly 87% of the inner width, so there is real margin for
+   font-metric variance rather than sitting exactly on the edge. Below 420px of
+   card width it simply stays wrapped and balanced. */
+@container (min-width:420px){
+  .hi-card-foot{white-space:nowrap;font-size:clamp(9.75px,2.35cqi,13px);text-wrap:auto}
+}
 
 /* offer CTA — stays in place, just widened rightward to run over the image
    (212% of its column + one gap = full layout width; z-index lifts it above the img) */
+/* GOLD, not cream. This is the one decisive action, so it takes the accent the
+   rest of the page spends sparingly (C2/C3). A cream button read as neutral
+   chrome; a lit gold button is the brightest thing on the dark hero and the eye
+   goes straight to it. */
 .hi-cta-btn{position:relative;z-index:3;width:calc(212% + clamp(28px,4vw,64px) - clamp(20px,5vw,40px));
-  display:flex;align-items:center;justify-content:center;gap:.6em;
-  margin-top:clamp(16px,2.2vh,24px);padding:17px 22px;border-radius:2px;
-  background:var(--cream);color:var(--oxblood);border:1px solid var(--cream);
-  font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-  text-decoration:none;transition:background .2s var(--ease),color .2s var(--ease)}
-.hi-cta-btn:hover{background:transparent;color:var(--cream)}
+  display:flex;align-items:center;justify-content:center;gap:.6em;overflow:hidden;
+  margin-top:clamp(16px,2.2vh,24px);padding:19px 24px;border-radius:2px;
+  background:linear-gradient(135deg,#D8AC63 0%,#B8893E 54%,#A2712C 100%);
+  color:var(--oxblood);border:1px solid rgba(216,172,99,.85);
+  /* sized to match the finale CTA (was 12.5px, which read smaller than it) */
+  font-family:var(--f-mono);font-size:clamp(13.5px,1.4vw,17px);font-weight:700;
+  letter-spacing:.11em;text-transform:uppercase;
+  text-decoration:none;
+  transition:transform .25s var(--ease),box-shadow .3s var(--ease),filter .25s var(--ease)}
+/* a light sheen swept diagonally across the face on hover (R3) */
+.hi-cta-btn::before{content:"";position:absolute;top:0;left:-70%;width:48%;height:100%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
+  transform:skewX(-18deg)}
+.hi-cta-btn:hover::before{animation:ctaSheen .85s var(--ease)}
+@keyframes ctaSheen{to{left:135%}}
+.hi-cta-btn:hover{transform:translateY(-2px);filter:brightness(1.05)}
 .hi-cta-btn .arrow{transition:transform .2s var(--ease)}
 .hi-cta-btn:hover .arrow{transform:translateX(3px)}
-/* flat/editorial: one soft resting shadow for lift so it reads as a tappable CTA (esp. mobile),
-   deepening slightly on press/hover. Same dark-shadow idiom as the cover CTA. No emboss/border/pulse. */
-.hi-cta-btn{box-shadow:0 14px 34px -20px rgba(0,0,0,.5)}
-.hi-cta-btn:hover,.hi-cta-btn:active{box-shadow:0 22px 48px -22px rgba(0,0,0,.6)}
+/* R3: the ONE primary CTA breathes, and only this one. A gold halo swells and
+   recedes behind the button, plus a resting warm-tinted lift shadow. Cancelled
+   on hover so the pointer takes over. */
+@keyframes ctaBreathe{
+  0%,100%{box-shadow:0 16px 40px -18px rgba(184,137,62,.6),
+                     0 4px 14px -8px rgba(38,0,0,.4),
+                     0 0 0 0 rgba(216,172,99,0)}
+  50%    {box-shadow:0 16px 40px -18px rgba(184,137,62,.6),
+                     0 4px 14px -8px rgba(38,0,0,.4),
+                     0 0 30px 2px rgba(216,172,99,.5)}
+}
+.hi-cta-btn{animation:ctaBreathe 3.4s var(--ease) 1.4s infinite}
+.hi-cta-btn:hover,.hi-cta-btn:focus-visible{animation:none;
+  box-shadow:0 24px 56px -18px rgba(184,137,62,.72),0 8px 20px -10px rgba(38,0,0,.5)}
 /* micro + soft: widened to the full layout width like the button, centered on screen under it */
 /* three assurance points under the CTA: golden icon + a short phrase each */
+/* The three assurance points sit on ONE horizontal line.
+   The binding constraint is the finale instance, which lives inside
+   .r-inner (max-width:720px) with width:auto. The three phrases run about
+   74 characters, so once icons and gaps are counted the row was landing within
+   a few pixels of 720 and tipping over into a second line. The gaps are
+   therefore budgeted tighter than the visual default would suggest, to buy
+   slack for font-metric variance.
+   flex-wrap stays as a safety net: if a copy change ever overruns, it wraps
+   instead of being clipped by the body's overflow-x:hidden. */
 .hi-cta-points{position:relative;z-index:3;list-style:none;margin:16px 0 0;padding:0;
   width:calc(212% + clamp(28px,4vw,64px) - clamp(20px,5vw,40px));
   display:flex;justify-content:center;align-items:center;flex-wrap:wrap;
-  column-gap:clamp(20px,3vw,42px);row-gap:12px}
-.hi-cta-point{display:flex;align-items:center;gap:9px}
+  column-gap:clamp(14px,2.2vw,30px);row-gap:12px}
+.hi-cta-point{display:flex;align-items:center;gap:8px}
 .hi-cta-point-txt{white-space:nowrap}
 .hi-cta-point-ic{flex:0 0 auto;width:24px;height:24px;border:1px solid rgba(184,137,62,.5);border-radius:50%;
   display:flex;align-items:center;justify-content:center;color:#B8893E}
@@ -1328,12 +1617,65 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
   .hi-hero-glow{display:block;width:280px;height:200px;top:62%;transform:translate(-50%,-50%) rotate(-20deg);
     background:radial-gradient(ellipse,rgba(184,137,62,.6) 0%,transparent 100%);filter:blur(40px)}
   .hi-cta-btn,.hi-cta-points,.hi-soft{width:100%} /* single column on mobile: back to column width */
-  .hi-cta-points{flex-direction:column;align-items:flex-start;gap:11px;
-    width:auto;max-width:max-content;margin-inline:auto}
+  /* The points STAY on one horizontal row here. They used to be forced into a
+     vertical stack from 820px down, which is why they read as a list rather
+     than a line. Tablets have the width for a single row. */
+  .hi-cta-points{column-gap:clamp(12px,2vw,22px)}
   .hi-eyebrow{white-space:normal;letter-spacing:.1em}
   .hi-h1{margin-inline:auto}
   .hi-sub{margin-inline:auto}
 }
+
+/* Small phones (iPhone SE / mini, and most Android at 360px).
+   The assurance phrases currently fit on one line, but they are nowrap, so the
+   moment the copy grows by a few characters they would be clipped by the body's
+   overflow-x:hidden with no visible error. Let them wrap instead. */
+/* Phones: the three points stay on ONE horizontal line.
+
+   The icons are DROPPED here rather than shrunk. At 24px each, three icons plus
+   their gaps eat about 120px, which is over a third of the usable width on a
+   360px screen. On a phone the words are what reassure; the icon is decoration,
+   so decoration yields. Tablet and desktop keep them.
+
+   With the icons gone the three phrases need a divider or they read as one
+   run-on sentence, so a gold middot sits between them. Same separator idiom as
+   .bk-strip-sep on the booking page, so the page stays one system.
+
+   flex-wrap stays as the safety net: this only holds one line while the copy is
+   short enough. If a phrase grows it wraps visibly rather than being clipped by
+   body{overflow-x:hidden}, which would silently delete the last point. */
+@media(max-width:620px){
+  /* Phones: the FIRST point takes the full top row, the other two share the row
+     beneath it.
+
+     The copy drives this. Beat 1 ("One to one with a Bollywood celebrity
+     stylist") runs 45 characters and cannot be split without breaking the
+     claim, so it needs the wide row to itself.
+
+     This is a GRID, not wrapped flex, on purpose. Relying on flex-wrap makes the
+     split depend on how wide the phrases happen to render, so a copy edit could
+     silently turn 2+1 into 1+2 or 3 on one line. The grid pins it: two auto
+     columns, and the third chip spans both. The arrangement is now a decision,
+     not a side effect of string lengths.
+
+     Icons are KEPT. The second row is what pays for them: across two rows there
+     is room for the icons and the phrases, where on one row there was not.
+     They step down from 26px to 20px so the top row keeps a comfortable text
+     budget, and the middot separator is dropped, because with an icon opening
+     each chip a divider is redundant. */
+  .hi-cta-points{display:grid;grid-template-columns:auto auto;
+    justify-content:center;align-items:center;
+    column-gap:clamp(8px,2.4vw,13px);row-gap:clamp(9px,2.6vw,12px);
+    width:100%;max-width:100%;margin-inline:0}
+  .hi-cta-point{gap:6px}
+  .hi-cta-point-ic{width:20px;height:20px}
+  .hi-cta-point-ic svg{width:11px;height:11px}
+  .hi-cta-point-txt{white-space:nowrap;letter-spacing:0;
+    font-size:clamp(10.5px,3vw,12.5px)}
+  /* the FIRST point takes its own full-width row, centred */
+  .hi-cta-point:nth-child(1){grid-column:1/-1;justify-self:center}
+}
+
 
 /* ---- [3] THE REAL PROBLEM: built-success vs image-lag gap.
    Reuses .r-head / .r-panels / .r-panel(-dark) / .pr-words; extends with the
@@ -1341,7 +1683,9 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
    pull-quote, and the two-column gold-accent reframe bar.
    Reference was serif + italic: translated to Jost + gold emphasis, square edges. */
 .hi-problem .r-inner{display:flex;flex-direction:column;align-items:center}
-.hi-problem .r-head{align-items:center;text-align:center}
+/* zero here on purpose: the gap to the panels is owned by .pr-panels alone,
+   otherwise this margin-bottom and that margin-top stack into one large gap */
+.hi-problem .r-head{align-items:center;text-align:center;margin-bottom:0}
 .hi-problem .r-h2{max-width:26ch;text-align:center}
 .hi-problem .r-sub{margin-left:auto;margin-right:auto;text-align:center;max-width:46ch}
 
@@ -1352,10 +1696,53 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .pr-eyebrow::after{content:"";display:block;width:34px;height:1px;background:#B8893E;margin:11px auto 0}
 
 /* two square panels side by side (no centre gap marker) */
-.pr-panels{width:100%;grid-template-columns:1fr 1fr;gap:clamp(16px,2.4vw,28px);
-  margin-top:clamp(30px,4.5vh,48px)}
-.hi-problem .r-panel{background:var(--cream);display:flex;flex-direction:column}
-.hi-problem .r-panel--dark{background:var(--oxblood)}
+.pr-panels{width:100%;grid-template-columns:1fr auto 1fr;align-items:stretch;gap:clamp(16px,2.4vw,28px);
+  margin-top:clamp(24px,3.4vh,38px)}
+/* R6 / C8: these two were identical rectangles with a 1px hairline, so the
+   layout argued nothing. It is a before/after, so it now reads as one: the
+   "today" panel is demoted (dusty, hatched, flat, muted type) and the "should
+   be" panel is the lit focal (raised, gold-ruled, warm layered shadow). */
+
+/* --- demoted: how you're read today --- */
+.hi-problem .r-panel{position:relative;background:var(--cream);
+  display:flex;flex-direction:column;border:1px solid var(--hair);
+  /* a faint diagonal hatch so it reads tired and dated, not merely paler */
+  background-image:repeating-linear-gradient(135deg,
+    rgba(38,0,0,.038) 0 1px,transparent 1px 8px);
+  box-shadow:none}
+.hi-problem .r-panel .pr-plabel{color:var(--ink-muted)}
+.hi-problem .r-panel .pr-plabel::after{background:var(--ink-muted);opacity:.4}
+.hi-problem .r-panel .pr-words li{color:var(--ink-2);opacity:.82}
+.hi-problem .r-panel .pr-tag{color:var(--ink-muted)}
+
+/* --- the lit one: how you should be read --- */
+.hi-problem .r-panel--dark{background:var(--oxblood);
+  background-image:radial-gradient(120% 90% at 50% 0%,
+    rgba(184,137,62,.14) 0%,transparent 62%);
+  border-color:rgba(184,137,62,.34);
+  /* No translate lift. With align-items:stretch both panels are the same
+     height, so nudging one up simply broke the bottom alignment and read as a
+     mistake. The weight is carried by the gold rule, the bloom, the shadow and
+     a little extra padding instead, which is C8 without the visual glitch. */
+  padding:clamp(26px,3.1vw,38px);
+  box-shadow:0 1px 0 rgba(240,229,216,.09) inset,
+             0 34px 66px -34px rgba(0,0,0,.62),
+             0 12px 30px -22px rgba(38,0,0,.55)}
+/* gold rule along its top edge: the one accent, spent on the winning column */
+.hi-problem .r-panel--dark::after{content:"";position:absolute;left:0;right:0;top:-1px;
+  height:2px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(184,137,62,.9),transparent)}
+.hi-problem .r-panel--dark .pr-plabel{color:#CFA35C}
+.hi-problem .r-panel--dark .pr-plabel::after{background:#CFA35C;opacity:.6}
+
+/* The turn between the two states. A real inline line-SVG in a hairline gold
+   ring, matching .hi-card-ic / .hi-cta-point-ic so the icon family stays one
+   weight (C11). It sits in its own grid track rather than floating over the
+   seam, so nothing overlaps. */
+.pr-turn{align-self:center;width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(184,137,62,.5);color:#B8893E;background:var(--paper);
+  display:flex;align-items:center;justify-content:center}
+.pr-turn svg{width:18px;height:18px}
 
 /* per-panel gold label + short rule under it */
 .pr-plabel{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;
@@ -1377,7 +1764,7 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .r-panel--dark .pr-tag{color:#CFA35C}
 
 /* pull quote: big gold marks (open top-left, close bottom-right), rules out to the sides */
-.pr-quote{width:100%;max-width:660px;margin:clamp(46px,7.5vh,96px) auto 0;text-align:center}
+.pr-quote{width:100%;max-width:660px;margin:clamp(44px,6.8vh,86px) auto 0;text-align:center}
 .pr-quote-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(16px,3vw,34px)}
 .pr-quote-rule{height:1px;background:var(--hair)}
 .pr-quote-core{position:relative;margin:0;padding:0 clamp(10px,2vw,20px)}
@@ -1391,25 +1778,45 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
   color:var(--ink-2);margin:clamp(18px,2.6vh,26px) 0 0}
 
 /* bottom reframe bar: cream fill, hairline border, solid gold left accent, vertical divider */
-.pr-bar{position:relative;width:100%;max-width:720px;margin:clamp(40px,6.5vh,84px) auto 0;
-  display:grid;grid-template-columns:1fr 1fr;background:var(--cream);border:1px solid var(--hair)}
-.pr-bar::before{content:"";position:absolute;top:0;bottom:0;left:0;width:3px;background:#B8893E}
+/* The section's closing verdict, so it earns real presence. It was a flat
+   cream rectangle with a neutral hairline and no shadow at all: ¬C4 (no depth)
+   and ¬C5 (flat fill). Now it has a warm bloom off the gold edge, a paper
+   sheen across the top, a layered tinted shadow and an inset highlight. */
+.pr-bar{position:relative;width:100%;max-width:720px;margin:clamp(28px,4.2vh,52px) auto 0;
+  display:grid;grid-template-columns:1fr 1fr;
+  background:
+    radial-gradient(110% 130% at 0% 0%,rgba(184,137,62,.10) 0%,transparent 56%),
+    linear-gradient(180deg,rgba(255,255,255,.55) 0%,transparent 42%),
+    var(--cream);
+  border:1px solid rgba(184,137,62,.24);
+  box-shadow:0 1px 0 rgba(255,255,255,.65) inset,
+             0 26px 56px -30px rgba(38,0,0,.34),
+             0 8px 20px -16px rgba(38,0,0,.22)}
+/* the gold edge is lit at the head and falls away down the block, rather than
+   a flat bar of colour */
+.pr-bar::before{content:"";position:absolute;top:0;bottom:0;left:0;width:3px;
+  background:linear-gradient(180deg,#B8893E 0%,#CFA35C 42%,rgba(184,137,62,.3) 100%)}
 .pr-bar-col{padding:clamp(24px,3vw,36px)}
 .pr-bar-col:first-child{position:relative;padding-left:clamp(27px,3.2vw,40px)}
-.pr-bar-col:first-child::after{content:"";position:absolute;top:clamp(20px,2.6vw,32px);bottom:clamp(20px,2.6vw,32px);right:0;width:1px;background:var(--hair)}
+.pr-bar-col:first-child::after{content:"";position:absolute;top:clamp(20px,2.6vw,32px);bottom:clamp(20px,2.6vw,32px);right:0;width:1px;
+  background:linear-gradient(180deg,transparent,var(--hair) 16%,var(--hair) 84%,transparent)}
 .pr-bar-lead{font-family:var(--f-display);font-weight:500;font-size:clamp(19px,2.5vw,28px);
   line-height:1.3;letter-spacing:-.01em;color:var(--ink);margin:0}
 .pr-bar-turn{font-family:var(--f-display);font-weight:500;font-size:clamp(19px,2.5vw,28px);
   line-height:1.3;letter-spacing:-.01em;margin:clamp(6px,1vh,10px) 0 0}
 .pr-bar-muted{font-family:var(--f-body);font-weight:400;font-size:clamp(14px,1.5vw,16px);
   line-height:1.6;color:var(--ink-muted);margin:0}
-.pr-bar-strong{font-family:var(--f-display);font-weight:600;font-size:clamp(15px,1.7vw,19px);
-  line-height:1.35;color:var(--ink);margin:clamp(14px,2vh,18px) 0 0}
-.pr-bar-strong::before{content:"";display:block;width:3px;height:18px;background:#B8893E;
+.pr-bar-strong{font-family:var(--f-display);font-weight:600;font-size:clamp(16px,1.9vw,21px);
+  line-height:1.32;letter-spacing:-.005em;color:var(--ink);margin:clamp(14px,2vh,18px) 0 0}
+/* horizontal, matching .rc-rule / .pr-eyebrow::after / .pr-plabel::after.
+   This was 3px wide by 18px tall, a vertical stub that read as a rendering
+   glitch and was the only accent rule in the file running the wrong way. */
+.pr-bar-strong::before{content:"";display:block;width:28px;height:1px;background:#B8893E;
   margin:0 0 clamp(10px,1.4vh,14px)}
 
 @media(max-width:560px){
-  .pr-panels{grid-template-columns:1fr;gap:clamp(14px,3vh,20px)}
+  .pr-panels{grid-template-columns:1fr;gap:clamp(14px,3vh,20px);justify-items:center}
+  .pr-turn{rotate:90deg}   /* stacked, so the turn points down */
   .pr-bar{grid-template-columns:1fr}
   .pr-bar-col:first-child{border-bottom:1px solid var(--hair)}
   .pr-bar-col:first-child::after{display:none}
@@ -1444,38 +1851,107 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .most-asked{display:inline-block;margin-left:12px;transform:translateY(-2px);
   font-family:var(--f-mono);font-size:9px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
   color:#8a5a1e;border:1px solid #CBA25E;border-radius:2px;padding:3px 7px;white-space:nowrap}
-.faq-ic{flex:0 0 auto;width:20px;height:20px;margin-top:2px;color:var(--ink-muted);
-  transition:transform .3s var(--ease)}
-.faq-ic svg{width:100%;height:100%}
-.faq-item[open] .faq-ic{transform:rotate(180deg)}
+/* R4: the icon is a bordered disc, not a bare chevron, so it can FILL on open
+   (C6, a physical state change) rather than only rotating. */
+.faq-ic{flex:0 0 auto;width:26px;height:26px;margin-top:0;color:var(--ink-muted);
+  border:1px solid var(--hair);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .38s var(--ease),background .38s var(--ease),
+             border-color .38s var(--ease),color .38s var(--ease)}
+.faq-ic svg{width:14px;height:14px}
+
+/* Opening a row is an EVENT, not a toggle (C6). Four things move together:
+   a faint gold wash over the row, a gold stripe growing down the left edge,
+   the content indenting, and the icon rotating while it fills.
+   Previously this was a plain show/hide with a rotating chevron, which is the
+   ¬C6 inversion called out in the anti-slop list. */
+.faq-item{position:relative;
+  transition:background .38s var(--ease)}
+.faq-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:#B8893E;transform:scaleY(0);transform-origin:top;
+  transition:transform .42s var(--ease)}
+.faq-item[open]{background:rgba(184,137,62,.05)}
+.faq-item[open]::before{transform:scaleY(1)}
+.faq-item[open] .faq-q,
+.faq-item[open] .faq-a{padding-left:clamp(14px,1.6vw,20px)}
+.faq-q,.faq-a{transition:padding-left .38s var(--ease)}
+
+.faq-item[open] .faq-ic{transform:rotate(180deg);
+  background:#B8893E;border-color:#B8893E;color:var(--cream)}
 .faq-item[open] .faq-q-text{color:var(--ink)}
+/* the answer unrolls rather than appearing (C6) */
+.faq-item[open] .faq-a{animation:faqOpen .42s var(--ease) both}
+@keyframes faqOpen{
+  from{opacity:0;transform:translateY(-6px)}
+  to{opacity:1;transform:none}
+}
 .faq-a{overflow:hidden;padding:0 4px clamp(20px,2.8vh,28px)}
 .faq-a p{max-width:64ch;font-family:var(--f-body);font-size:clamp(14.5px,1.6vw,16.5px);
   line-height:1.68;color:var(--ink-2);margin:0}
 
 /* ---- STICKY BOOK BAR (chrome; on between hero and finale) ---- */
 .hi-sticky{position:fixed;left:0;right:0;bottom:0;z-index:60;
-  display:flex;align-items:center;justify-content:center;gap:clamp(14px,3vw,28px);
-  padding:12px clamp(16px,4vw,32px);background:var(--oxblood);
-  border-top:1px solid rgba(240,229,216,.16);
+  display:flex;align-items:center;justify-content:space-between;gap:clamp(14px,3vw,28px);
+  padding:11px clamp(16px,4vw,30px);
+  background:linear-gradient(180deg,#300606 0%,var(--oxblood) 100%);
+  border-top:1px solid rgba(184,137,62,.5);
+  box-shadow:0 -14px 34px -16px rgba(0,0,0,.6);
   transform:translateY(120%);transition:transform .45s var(--ease);
   pointer-events:none}
 .hi-sticky.is-on{transform:translateY(0);pointer-events:auto}
-.hi-sticky-txt{font-family:var(--f-body);font-size:14px;color:var(--cream);opacity:.85}
-.hi-sticky-btn{flex:0 0 auto;font-family:var(--f-mono);font-size:11px;font-weight:500;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--oxblood);background:var(--cream);
-  border:1px solid var(--cream);border-radius:2px;padding:11px 18px;text-decoration:none;
-  display:inline-flex;align-items:center;gap:.5em;transition:background .2s var(--ease),color .2s var(--ease)}
-.hi-sticky-btn:hover{background:transparent;color:var(--cream)}
+
+/* scarcity tag with a live pulsing dot (R8) */
+.hi-sticky-scarce{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;
+  font-family:var(--f-mono);font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  color:#CFA35C}
+.hi-sticky-dot{width:7px;height:7px;border-radius:50%;background:#CFA35C;
+  animation:stickyPulse 2s var(--ease) infinite}
+@keyframes stickyPulse{
+  0%{box-shadow:0 0 0 0 rgba(207,163,92,.55)}
+  70%{box-shadow:0 0 0 7px rgba(207,163,92,0)}
+  100%{box-shadow:0 0 0 0 rgba(207,163,92,0)}
+}
+
+/* gold, matching the primary CTAs */
+.hi-sticky-btn{flex:0 0 auto;position:relative;overflow:hidden;
+  font-family:var(--f-mono);font-size:11.5px;font-weight:700;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--oxblood);
+  background:linear-gradient(135deg,#D8AC63 0%,#B8893E 54%,#A2712C 100%);
+  border:1px solid rgba(216,172,99,.85);border-radius:2px;padding:13px 22px;text-decoration:none;
+  display:inline-flex;align-items:center;justify-content:center;gap:.5em;
+  box-shadow:0 8px 22px -8px rgba(184,137,62,.6)}
 .hi-sticky-btn .arrow{transition:transform .2s var(--ease)}
 .hi-sticky-btn:hover .arrow{transform:translateX(3px)}
-@media(max-width:600px){
-  .hi-sticky-txt{display:none}
-  .hi-sticky{justify-content:stretch}
-  .hi-sticky-btn{flex:1 1 auto;justify-content:center}
+
+/* Mobile: the bar becomes the page's anchor CTA. Scarcity on top, a big
+   full-width gold button beneath it that quietly breathes so the eye lands on
+   it. Bottom padding clears the iPhone home indicator. */
+@media(max-width:620px){
+  /* Always present on mobile. The JS still toggles .is-on for the slide-in /
+     finale-hide on desktop, but here we pin it visible from load and keep it
+     through the finale, overriding both. It is the page's persistent anchor
+     CTA, so it should never leave the screen. */
+  .hi-sticky{flex-direction:column;align-items:stretch;gap:7px;
+    padding:9px 14px calc(9px + env(safe-area-inset-bottom,0px));
+    transform:translateY(0)!important;pointer-events:auto!important}
+  .hi-sticky-scarce{justify-content:center;font-size:10px}
+  .hi-sticky-btn{width:100%;padding:16px 20px;font-size:12.5px;
+    animation:stickyBtnBreathe 3.2s var(--ease) infinite}
+  /* clear the bar so the finale CTA and colophon are never trapped behind it */
+  .r-finale{padding-bottom:clamp(120px,20vh,160px)}
 }
+@keyframes stickyBtnBreathe{
+  0%,100%{box-shadow:0 8px 22px -8px rgba(184,137,62,.6),0 0 0 0 rgba(216,172,99,0)}
+  50%    {box-shadow:0 8px 22px -8px rgba(184,137,62,.6),0 0 26px 1px rgba(216,172,99,.5)}
+}
+.hi-sticky-btn .arrow{transition:transform .2s var(--ease)}
+.hi-sticky-btn:hover .arrow{transform:translateX(3px)}
 @media(prefers-reduced-motion:reduce){
   .hi-sticky{transition:none}
+  /* stop everything that pulses or breathes; the gold fills and the lit shadows
+     are all still there, so the CTAs stay prominent without motion */
+  .hi-cta-btn,.hi-sticky-btn,.hi-sticky-dot{animation:none}
+  .hi-cta-btn::before,.cta-btn::before{display:none}
 }
 
 /* ============================================================
@@ -1483,7 +1959,11 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
    cream text, gold accent, hairlines + corner ticks. Cal.com embed framed
    on a cream inset (the brand frames the widget, never restyles it).
    ============================================================ */
-.bk-page{background:var(--stage);color:var(--cream);min-height:100vh;
+/* svh, not vh: on iOS the URL bar makes 100vh taller than what is actually
+   visible, so a vh-sized page gains phantom scroll at the bottom. The rest of
+   this stylesheet already uses svh (.cover, .quiz-stage); the booking page was
+   the one place still on vh. */
+.bk-page{background:var(--stage);color:var(--cream);min-height:100svh;
   padding-bottom:clamp(40px,7vh,80px);
   --bk-hair:rgba(240,229,216,.16);--bk-hair-2:rgba(240,229,216,.28)}
 
@@ -1543,9 +2023,14 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .bk-cal-section .bk-card-head{margin-bottom:clamp(18px,2.6vh,24px)}
 
 /* the Cal.com embed — sits directly on its own light surface (no bordered box) */
+/* svh so the calendar box is sized to what the phone can actually SHOW. With vh
+   the embed ran taller than the visible viewport, pushing the month grid and the
+   time slots below the fold with a nested scrollbar to reach them. This is the
+   single most important element on the page, so it must fit. */
 .bk-cal{position:relative;background:var(--cream);
-  min-height:clamp(560px,82vh,780px);overflow:hidden}
-.bk-cal-inline{width:100%;height:100%;min-height:clamp(560px,82vh,780px);overflow:auto}
+  min-height:clamp(560px,82svh,780px);overflow:hidden}
+.bk-cal-inline{width:100%;height:100%;min-height:clamp(560px,82svh,780px);overflow:auto;
+  -webkit-overflow-scrolling:touch}
 .bk-cal-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;
   font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-muted)}
 
@@ -1610,5 +2095,19 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 
 @media(max-width:560px){
   .bk-cover{grid-template-columns:1fr;gap:6px}
-  .bk-cal,.bk-cal-inline{min-height:clamp(520px,86vh,700px)}
+  .bk-cal,.bk-cal-inline{min-height:clamp(520px,86svh,700px)}
+
+  /* Phone: the booking CTAs go full width. As inline-flex they were a small
+     centred target mid-screen; a thumb should not have to aim. */
+  .bk-anchor{display:flex;width:100%;justify-content:center;padding:16px 20px}
+
+  /* The status strip is three tracked mono phrases. At 10.5px with .16em on a
+     360px screen it wraps into a cramped block, so drop the tracking a little
+     and let the separators disappear rather than stranding one on its own row. */
+  .bk-strip{font-size:10px;letter-spacing:.1em;gap:6px 10px}
+  .bk-strip-sep{display:none}
+
+  /* Tighten the outer gutter so the calendar gets the width it needs. */
+  .bk-wrap{padding-left:16px;padding-right:16px}
+  .bk-card{padding-left:16px;padding-right:16px}
 }

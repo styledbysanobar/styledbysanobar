@@ -32,6 +32,41 @@ export default function FunnelScripts() {
       targets.forEach((t) => t.classList.add("in"));
     }
 
+    /* count-up on the stat rail (C7: count-ups reward arrival).
+       Reads the number out of the existing markup, so "10+" keeps its plus and
+       nothing has to be duplicated in a data attribute. Eases out so it
+       decelerates into the final figure rather than stopping dead. */
+    let statIo: IntersectionObserver | null = null;
+    const frames: number[] = [];
+    if (!reduce && "IntersectionObserver" in window) {
+      statIo = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            const el = e.target as HTMLElement;
+            statIo?.unobserve(el);
+            const raw = el.textContent ?? "";
+            const m = raw.match(/\d+/);
+            if (!m) return;
+            const target = Number(m[0]);
+            const at = raw.indexOf(m[0]);
+            const prefix = raw.slice(0, at);
+            const suffix = raw.slice(at + m[0].length);
+            const started = performance.now();
+            const tick = (now: number) => {
+              const p = Math.min(1, (now - started) / 1100);
+              const eased = 1 - Math.pow(1 - p, 3);
+              el.textContent = prefix + Math.round(target * eased) + suffix;
+              if (p < 1) frames.push(requestAnimationFrame(tick));
+            };
+            frames.push(requestAnimationFrame(tick));
+          });
+        },
+        { threshold: 0.5 }
+      );
+      document.querySelectorAll<HTMLElement>(".hi-stat-n").forEach((n) => statIo!.observe(n));
+    }
+
     // sticky book bar: on between the hero sentinel and the finale sentinel
     const bar = document.querySelector<HTMLElement>(".hi-sticky");
     const heroEnd = document.querySelector<HTMLElement>("[data-sticky-start]");
@@ -65,6 +100,8 @@ export default function FunnelScripts() {
       io?.disconnect();
       heroIo?.disconnect();
       endIo?.disconnect();
+      statIo?.disconnect();
+      frames.forEach((f) => cancelAnimationFrame(f));
     };
   }, []);
 

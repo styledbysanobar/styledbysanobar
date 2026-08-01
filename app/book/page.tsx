@@ -55,20 +55,11 @@ export default function BookPage() {
         {/* hero */}
         <div className="bk-head">
           <span className="sec-eyebrow bk-eyebrow">One step left</span>
-          <h1 className="bk-h1">Pick your time. Then it begins.</h1>
-          <p className="bk-sub">
-            This is the one to one where Sanobar reads your image and shows you exactly what to change. Choose a slot below and it is yours.
-          </p>
+          <h1 className="bk-h1">Pick your slot</h1>
         </div>
 
-        {/* calendar — rendered open, not wrapped in a card */}
+        {/* calendar — rendered open, straight under the heading */}
         <section className="bk-cal-section">
-          <header className="bk-card-head">
-            <span className="sec-eyebrow">Choose a time</span>
-            <h2 className="bk-card-title">A slot that suits you</h2>
-            <p className="bk-card-sub">All times shown in your local zone.</p>
-          </header>
-
           <CalEmbed />
 
           <ul className="bk-trust">

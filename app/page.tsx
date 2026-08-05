@@ -9,7 +9,9 @@ import Testimonials from "./Testimonials";
    Copy via NO-BRAINER, structure via SHAPE. [PENDING SANOBAR] = a real asset or
    figure still to land; honest placeholders only, never fabricated data. */
 
-const BOOK_HREF = "/book"; // the Cal.com booking page (app/book)
+/* Every CTA on this page now goes to the consultation fee step, not straight to
+   the calendar. /checkout takes the payment and then forwards to /book. */
+const BOOK_HREF = "/checkout";
 
 /* ---- inline line-icon helper ---- */
 const I = (paths: React.ReactNode) => (
@@ -119,7 +121,7 @@ const FAQ: { q: string; a: React.ReactNode; most?: boolean }[] = [
   },
   {
     q: "Is this a sales call in disguise? What does it cost?",
-    a: <>No. The first conversation is about you, and Sanobar will give you a real, honest read whether or not you ever work with her further. What that leads to afterward is entirely your call.</>,
+    a: <>No. It is ₹97 to hold your slot, and that is all the consultation costs. The first conversation is about you, and Sanobar will give you a real, honest read whether or not you ever work with her further. What that leads to afterward is entirely your call.</>,
   },
   {
     q: "I already own expensive clothes, and someone shops for me. Why do I need this?",
@@ -179,7 +181,7 @@ export default function Page() {
               </ul>
               <p className="hi-card-foot">The eye behind national campaigns and leading actors, now on you.</p>
             </div>
-            <a className="hi-cta-btn" href={BOOK_HREF}>Apply for your Instant Image Upgrade <span className="arrow">&rarr;</span></a>
+            <a className="hi-cta-btn" href={BOOK_HREF}>Apply for your Instant Image Upgrade (₹97) <span className="arrow">&rarr;</span></a>
             <ul className="hi-cta-points">
               <li className="hi-cta-point">
                 <span className="hi-cta-point-ic" aria-hidden="true">{I(<><circle cx="12" cy="8" r="3.2" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>)}</span>
@@ -194,6 +196,12 @@ export default function Page() {
                 <span className="hi-cta-point-txt">Only 8 Slots a Week</span>
               </li>
             </ul>
+            <div className="hi-cta-why">
+              <span className="hi-cta-why-lbl">Why ₹97</span>
+              <p className="hi-cta-why-txt">
+                <strong>₹97 holds the slot.</strong> Sanobar takes 8 consultations a week, so the time is blocked only for you.
+              </p>
+            </div>
             <a className="hi-soft" href="#problem">Not ready to apply? See why the gap exists, and why it was never your fault &darr;</a>
           </div>
         </div>
@@ -447,7 +455,7 @@ export default function Page() {
             At the next wedding, the next meeting, the next stage, be the one they remember, for exactly the right
             reasons. One conversation, and a plan built only for you.
           </p>
-          <a className="cta-btn" href={BOOK_HREF}>Apply for your Instant Image Upgrade <span className="arrow">&rarr;</span></a>
+          <a className="cta-btn" href={BOOK_HREF}>Apply for your Instant Image Upgrade (₹97) <span className="arrow">&rarr;</span></a>
           <ul className="hi-cta-points r-finale-points">
             <li className="hi-cta-point">
               <span className="hi-cta-point-ic" aria-hidden="true">{I(<><circle cx="12" cy="8" r="3.2" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>)}</span>
@@ -469,7 +477,7 @@ export default function Page() {
       {/* sticky book bar — chrome, appears past the hero, hides at the finale */}
       <div className="hi-sticky" aria-hidden="true">
         <span className="hi-sticky-scarce"><span className="hi-sticky-dot" aria-hidden="true" />Only 8 slots a week</span>
-        <a className="hi-sticky-btn" href={BOOK_HREF}>Apply for your consultation <span className="arrow">&rarr;</span></a>
+        <a className="hi-sticky-btn" href={BOOK_HREF}>Apply for your consultation (₹97) <span className="arrow">&rarr;</span></a>
       </div>
 
       <FunnelScripts />

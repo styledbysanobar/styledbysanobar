@@ -21,7 +21,10 @@ Audience: **BOTH men and women** (founders / execs / HNIs + homemakers). All cop
   via type scale, hairline rules, negative space. **Edge-everywhere: square frames, corner ticks, straight rules, near-
   zero border-radius. No circles/rounded boxes** (decided this session for the hanger/icon question).
 - Palette (LOCKED): `--oxblood #260000` + `--cream #F0E5D8`, `--stage #180000` (deepest dark, the quiz ground). FLAT,
-  **NO GRADIENTS ever**. A golden accent `#B8893E` is used sparingly (the "What you already have" bar + the reads accent).
+  **NO GRADIENTS ever**. A golden accent is used sparingly (the "What you already have" bar + the reads accent). It lives in ONE
+  place now, the `--gold` / `--gold-rgb` tokens in `:root` (currently `#BF9B30`, a deeper old gold chosen over
+  the original `#B8893E` which read dull). Solid uses take `var(--gold)`, low-alpha hairlines and washes take
+  `rgba(var(--gold-rgb),X)`. Change both token lines together.
 - Type (LOCKED, luxury-house model): `--f-brand` = **Bodoni Moda**, masthead wordmark ONLY. `--f-display`/`--f-body`/
   `--f-mono` ALL = **Jost** (one geometric sans; hierarchy from case + tracking + weight + scale). Loaded via Google
   Fonts `<link>` in `app/layout.tsx`. Italics OFF. **NO em dashes anywhere** (reader copy AND ideally comments).

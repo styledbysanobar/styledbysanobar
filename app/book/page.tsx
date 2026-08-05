@@ -39,14 +39,20 @@ export default function BookPage() {
       </header>
 
       {/* progress: pick a time -> confirmed */}
+      {/* three steps now that the fee page sits in front of this one */}
       <nav className="bk-progress" aria-label="Booking progress">
-        <span className="bk-step active">
+        <span className="bk-step done">
           <span className="bk-step-n">1</span>
+          Seat confirmed
+        </span>
+        <span className="bk-rail" aria-hidden="true" />
+        <span className="bk-step active">
+          <span className="bk-step-n">2</span>
           Pick your time
         </span>
         <span className="bk-rail" aria-hidden="true" />
         <span className="bk-step">
-          <span className="bk-step-n">2</span>
+          <span className="bk-step-n">3</span>
           Confirmed
         </span>
       </nav>

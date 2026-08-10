@@ -13,10 +13,50 @@ import Testimonials from "./Testimonials";
    the calendar. /checkout takes the payment and then forwards to /book. */
 const BOOK_HREF = "/checkout";
 
-/* ---- inline line-icon helper ---- */
+/* ---- inline line-icon helper ----
+   Strokes reference #goldRail rather than currentColor, so every glyph on the
+   page is lit on the same 135deg diagonal as the CTA and the border rails
+   instead of sitting flat. The gradient is defined once, in GoldRailDefs below,
+   and must be present in the DOM for the reference to resolve. */
 const I = (paths: React.ReactNode) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg viewBox="0 0 24 24" fill="none" stroke="url(#goldRail)" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     {paths}
+  </svg>
+);
+
+/* Shared SVG defs: the icon gradient, and the mono-ivory logo filter. Rendered
+   zero-size and hidden from a11y; paints nothing itself. Stops read the palette
+   tokens, so a change to the golds carries through the icons automatically. */
+const GoldRailDefs = () => (
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style={{ position: "absolute" }}>
+    <defs>
+      {/* Turns any client logo into a single-ink ivory lockup, the way a brand kit
+          does it, WITHOUT flattening it. brightness becomes transparency: the dark
+          and mid parts of a mark become solid ivory, anything already white drops
+          to nothing. So Parachute's blue field renders as an ivory badge with its
+          white script punched out as holes, instead of the solid blob a plain
+          brightness(0) invert(1) produced. Steps: read luminance into alpha,
+          invert it, clip back to the artwork's own alpha so the transparent
+          background stays transparent, then flood the result with ivory.
+          color-interpolation-filters must be sRGB; the linearRGB default skews
+          mid-tones badly. */}
+      <filter id="monoIvory" colorInterpolationFilters="sRGB">
+        <feColorMatrix type="luminanceToAlpha" result="lum" />
+        <feComponentTransfer in="lum" result="inv">
+          <feFuncA type="table" tableValues="1 0.97 0.88 0.55 0" />
+        </feComponentTransfer>
+        <feComposite in="inv" in2="SourceGraphic" operator="in" result="masked" />
+        <feFlood floodColor="#F3E9DC" result="ink" />
+        <feComposite in="ink" in2="masked" operator="in" />
+      </filter>
+      <linearGradient id="goldRail" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="var(--gold-edge)" />
+        <stop offset="20%" stopColor="var(--gold-soft)" />
+        <stop offset="50%" stopColor="var(--gold-bright)" />
+        <stop offset="80%" stopColor="var(--gold-soft)" />
+        <stop offset="100%" stopColor="var(--gold-edge)" />
+      </linearGradient>
+    </defs>
   </svg>
 );
 
@@ -52,18 +92,6 @@ const CRED_TRACK_ICONS: React.ReactNode[] = [
   I(<><path d="M5 8h14l-1 12H6L5 8z" /><path d="M9 8V6.5a3 3 0 0 1 6 0V8" /></>),
   I(<><path d="M4 20.5h16" /><path d="M5.5 20.5V10.5l6.5-4 6.5 4v10" /><path d="M10 20.5v-5h4v5" /></>),
   I(<><circle cx="12" cy="7" r="3" /><path d="M6 20a6 6 0 0 1 12 0" /></>),
-];
-const CRED_LOGOS: { name: string; src: string; scale?: number }[] = [
-  { name: "Kotak Mahindra", src: "/images/logos/kotak.svg" },
-  { name: "Oppo", src: "/images/logos/oppo.png" },
-  { name: "Tanishq", src: "/images/logos/tanishq.webp" },
-  { name: "American Tourister", src: "/images/logos/american-tourister.svg" },
-  { name: "Parachute", src: "/images/logos/parachute.png", scale: 1.55 },
-  { name: "Santoor", src: "/images/logos/santoor.png", scale: 1.95 },
-  { name: "Whisper", src: "/images/logos/whisper.png", scale: 1.3 },
-  { name: "Myntra", src: "/images/logos/myntra.png", scale: 1.45 },
-  { name: "Livspace", src: "/images/logos/livspace.png", scale: 1 },
-  { name: "Future Group", src: "/images/logos/future-group.png" },
 ];
 
 /* §4 call structure: what actually happens on the consultation, as an agenda. */
@@ -135,29 +163,42 @@ const FAQ: { q: string; a: React.ReactNode; most?: boolean }[] = [
 
 /* hero offer-card items: circular icon badge + one line each. */
 const HERO_CARD: { icon: React.ReactNode; text: string }[] = [
-  { icon: I(<><circle cx="12" cy="8" r="3.2" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>), text: "A private, one-to-one consultation with Sanobar herself." },
-  { icon: I(<><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z" /><circle cx="12" cy="12" r="2.6" /></>), text: "An honest read on what is holding your image back." },
-  { icon: I(<><path d="M4 4h7l9 9-7 7-9-9z" /><circle cx="8.2" cy="8.2" r="1.1" /></>), text: "The gap between the success you have built and how you are actually seen." },
-  { icon: I(<><rect x="5" y="3.5" width="14" height="17" rx="1" /><path d="M8.5 8h7M8.5 12h7M8.5 16h4" /></>), text: "Your customised Instant Image Upgrade, built only for you to close that gap." },
+  { icon: I(<><circle cx="12" cy="8" r="3.2" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>), text: "A celebrity stylist's honest feedback on what your image says about you" },
+  { icon: I(<><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z" /><circle cx="12" cy="12" r="2.6" /></>), text: "Exactly what is holding your personal image back, and why" },
+  { icon: I(<><path d="M4 4h7l9 9-7 7-9-9z" /><circle cx="8.2" cy="8.2" r="1.1" /></>), text: "The direction that closes the gap between your success and your image" },
+  { icon: I(<><rect x="5" y="3.5" width="14" height="17" rx="1" /><path d="M8.5 8h7M8.5 12h7M8.5 16h4" /></>), text: "A straight answer on whether her Instant Image Upgrade is right for you" },
+];
+
+/* hero logo strip: the language-independent trust hit, on the first screen.
+   Static (not the §2 marquee) so it never competes with the CTA for the eye. */
+const HERO_LOGOS: { name: string; src: string; scale?: number }[] = [
+  { name: "Kotak Mahindra", src: "/images/logos/kotak.svg" },
+  { name: "Tanishq", src: "/images/logos/tanishq.webp" },
+  { name: "Oppo", src: "/images/logos/oppo.png" },
+  { name: "Myntra", src: "/images/logos/myntra.png", scale: 1.45 },
+  { name: "American Tourister", src: "/images/logos/american-tourister.svg" },
+  { name: "Parachute", src: "/images/logos/parachute.png", scale: 1.55 },
 ];
 
 export default function Page() {
   return (
     <main className="result hi">
+      <GoldRailDefs />
       {/* ============ [1] HERO — two-column: text stack left, tall portrait
            right; stacks on mobile with the image between body and card ======= */}
       <section className="r-band r-band--dark hi-hero">
         <div className="hi-hero-layout">
           <div className="hi-hero-intro">
-            <span className="sec-eyebrow r-hero-eyebrow hi-eyebrow">For founders, leaders, experts, and public figures</span>
+            <span className="sec-eyebrow r-hero-eyebrow hi-eyebrow">The Bollywood Celebrity Stylist behind India&rsquo;s blockbuster films and campaigns asks:</span>
             <h1 className="hi-h1">
               Why do people half as successful as you look <em className="hi-turn">twice as expensive?</em>
             </h1>
             <p className="hi-sub">
-              It is not your money. It is not your taste. In 30 minutes, <span className="hi-hl">Bollywood celebrity
-              stylist Sanobar Samir</span> will get on a call with you and use her <span className="hi-hl">Instant
-              Image Upgrade System</span> to close the gap, so people finally see you at the level you have already
-              reached.
+              <span className="hi-hl">Sanobar Samir</span> has spent 10+ years styling leading actors and working on
+              films and campaigns featuring <span className="hi-hl">Shah Rukh Khan, Deepika Padukone, Martin Garrix</span> and
+              many of India&rsquo;s biggest names. In a private 30-minute <span className="hi-hl">Celebrity Image
+              Audit</span>, she studies your personal image, identifies exactly what is holding it back, shows you how
+              to fix it, and tells you honestly if you are a right fit for her Instant Image Upgrade.
             </p>
           </div>
 
@@ -170,7 +211,7 @@ export default function Page() {
 
           <div className="hi-hero-offer">
             <div className="hi-hero-card">
-              <span className="hi-card-eyebrow">Your 30-minute Instant Image Upgrade</span>
+              <span className="hi-card-eyebrow">Your 30-minute Celebrity Image Audit</span>
               <ul className="hi-card-list">
                 {HERO_CARD.map((c, i) => (
                   <li key={i}>
@@ -179,39 +220,59 @@ export default function Page() {
                   </li>
                 ))}
               </ul>
-              <p className="hi-card-foot">The eye behind national campaigns and leading actors, now on you.</p>
+              <p className="hi-card-foot">The same eye behind India&rsquo;s biggest celebrities, now on you.</p>
             </div>
-            <a className="hi-cta-btn" href={BOOK_HREF}>Apply for your Instant Image Upgrade (₹97) <span className="arrow">&rarr;</span></a>
+            <a className="hi-cta-btn" href={BOOK_HREF}>Book your Celebrity Image Audit (₹97) <span className="arrow">&rarr;</span></a>
             <ul className="hi-cta-points">
               <li className="hi-cta-point">
                 <span className="hi-cta-point-ic" aria-hidden="true">{I(<><circle cx="12" cy="8" r="3.2" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>)}</span>
-                <span className="hi-cta-point-txt">One on One with Celebrity Stylist</span>
+                <span className="hi-cta-point-txt">One-on-one with a Celebrity Stylist</span>
               </li>
               <li className="hi-cta-point">
                 <span className="hi-cta-point-ic" aria-hidden="true">{I(<><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z" /><circle cx="12" cy="12" r="2.6" /></>)}</span>
-                <span className="hi-cta-point-txt">Styled Top Bollywood Stars</span>
+                <span className="hi-cta-point-txt">10+ Years Styling India&rsquo;s Stars</span>
               </li>
               <li className="hi-cta-point">
                 <span className="hi-cta-point-ic" aria-hidden="true">{I(<><rect x="3" y="4.5" width="18" height="16" rx="1.4" /><path d="M3 9h18M8 3v3M16 3v3" /></>)}</span>
-                <span className="hi-cta-point-txt">Only 8 Slots a Week</span>
+                <span className="hi-cta-point-txt">Only 8 Audits a Week</span>
               </li>
             </ul>
             <div className="hi-cta-why">
               <span className="hi-cta-why-lbl">Why ₹97</span>
               <p className="hi-cta-why-txt">
-                <strong>₹97 holds the slot.</strong> Sanobar takes 8 consultations a week, so the time is blocked only for you.
+                <strong>₹97 holds the slot.</strong> Sanobar takes 8 audits a week, so the time is blocked only for you.
               </p>
             </div>
-            <a className="hi-soft" href="#problem">Not ready to apply? See why the gap exists, and why it was never your fault &darr;</a>
           </div>
         </div>
-        <div className="hi-hero-stats">
-          {CRED_STATS.map((s) => (
-            <div className="hi-stat" key={s.l}>
-              <span className="hi-stat-n">{s.n}</span>
-              <span className="hi-stat-l">{s.l}</span>
+        <div className="hi-hero-rail">
+          <div className="hi-hero-stats">
+            {CRED_STATS.map((s) => (
+              <div className="hi-stat" key={s.l}>
+                <span className="hi-stat-n">{s.n}</span>
+                <span className="hi-stat-l">{s.l}</span>
+              </div>
+            ))}
+          </div>
+          <div className="hi-hero-logos">
+            <span className="hi-hero-logos-lbl">As seen on</span>
+            {/* same infinite slide as the §01 wall: the list is repeated 6x and the
+                track travels -50%, so the second half lands exactly where the first
+                began and the loop is seamless. Copies past the third are decorative,
+                so they are hidden from screen readers. */}
+            <div className="hi-hero-marquee">
+              <div className="hi-hero-marquee-track">
+                {Array.from({ length: 6 }).flatMap((_, g) =>
+                  HERO_LOGOS.map((l, i) => (
+                    <span className="hi-hero-logo" key={`${g}-${i}`} aria-hidden={g >= 3}>
+                      <img className="hi-hero-logo-img" src={l.src} alt={l.name}
+                           style={{ "--logo-scale": l.scale ?? 1 } as React.CSSProperties} />
+                    </span>
+                  ))
+                )}
+              </div>
             </div>
-          ))}
+          </div>
         </div>
       </section>
       <span data-sticky-start aria-hidden="true" />
@@ -259,19 +320,22 @@ export default function Page() {
             </ol>
           </div>
 
-          <div className="rc-logos-wrap">
-            <span className="r-authority-eyebrow">As seen on</span>
-            <div className="rc-marquee">
-              <div className="rc-marquee-track">
-                {Array.from({ length: 6 }).flatMap((_, g) =>
-                  CRED_LOGOS.map((l, i) => (
-                    <span className="r-logo" key={`${g}-${i}`} aria-hidden={g >= 3}>
-                      <img className="r-logo-img" src={l.src} alt={l.name} style={{ "--logo-scale": l.scale ?? 1 } as React.CSSProperties} />
-                    </span>
-                  ))
-                )}
-              </div>
-            </div>
+          {/* Closing turn. The section has spent itself listing what she has
+              done; this is the one line that converts all of it into a promise
+              to the reader, so it gets the page's strongest device: her world
+              (dark oxblood) cutting into the cream band, and the payoff half in
+              lit gold. */}
+          <div className="rc-close reveal">
+            {/* Back to the original single rule. The flanked-lozenge version
+                was tried and pulled: at this size the rotated square reads as a
+                stray dot rather than a fleuron, and it broke the rule into two
+                short pieces that each looked like a fragment. One unbroken rail
+                is the calmer mark and it matches the eyebrow rules elsewhere. */}
+            <span className="rc-close-rule" aria-hidden="true" />
+            <p className="rc-close-line">
+              If Bollywood&rsquo;s superstars trust her with how they look,{" "}
+              <em className="rc-close-turn">imagine how she&rsquo;ll make you look.</em>
+            </p>
           </div>
         </div>
       </section>
@@ -406,7 +470,6 @@ export default function Page() {
       <section className="r-band r-testi hi-testi reveal" aria-label="People who stood where you stand">
         <div className="r-inner">
           <header className="rt-head">
-            <span className="r-index" aria-hidden="true">05</span>
             <span className="sec-eyebrow">People who stood where you stand</span>
             <h2 className="r-h2">Accomplished, and finally <em>seen</em></h2>
             <p className="rt-sub">Sanobar&rsquo;s appointment-only service, a first of its kind in India, booked out in fifteen days with a waiting list. Every person here was already successful. The only thing missing was an image that matched.</p>
@@ -455,19 +518,19 @@ export default function Page() {
             At the next wedding, the next meeting, the next stage, be the one they remember, for exactly the right
             reasons. One conversation, and a plan built only for you.
           </p>
-          <a className="cta-btn" href={BOOK_HREF}>Apply for your Instant Image Upgrade (₹97) <span className="arrow">&rarr;</span></a>
+          <a className="cta-btn" href={BOOK_HREF}>Book your Celebrity Image Audit (₹97) <span className="arrow">&rarr;</span></a>
           <ul className="hi-cta-points r-finale-points">
             <li className="hi-cta-point">
               <span className="hi-cta-point-ic" aria-hidden="true">{I(<><circle cx="12" cy="8" r="3.2" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>)}</span>
-              <span className="hi-cta-point-txt">One on One with Celebrity Stylist</span>
+              <span className="hi-cta-point-txt">One-on-one with a Celebrity Stylist</span>
             </li>
             <li className="hi-cta-point">
               <span className="hi-cta-point-ic" aria-hidden="true">{I(<><rect x="5" y="11" width="14" height="9" rx="1.4" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>)}</span>
-              <span className="hi-cta-point-txt">Styled Top Bollywood Stars</span>
+              <span className="hi-cta-point-txt">10+ Years Styling India&rsquo;s Stars</span>
             </li>
             <li className="hi-cta-point">
               <span className="hi-cta-point-ic" aria-hidden="true">{I(<><rect x="3" y="4.5" width="18" height="16" rx="1.4" /><path d="M3 9h18M8 3v3M16 3v3" /></>)}</span>
-              <span className="hi-cta-point-txt">Only 8 Slots a Week</span>
+              <span className="hi-cta-point-txt">Only 8 Audits a Week</span>
             </li>
           </ul>
           <div className="r-colophon">Your image should be as thought through as everything else you have built.</div>
@@ -476,8 +539,8 @@ export default function Page() {
 
       {/* sticky book bar — chrome, appears past the hero, hides at the finale */}
       <div className="hi-sticky" aria-hidden="true">
-        <span className="hi-sticky-scarce"><span className="hi-sticky-dot" aria-hidden="true" />Only 8 slots a week</span>
-        <a className="hi-sticky-btn" href={BOOK_HREF}>Apply for your consultation (₹97) <span className="arrow">&rarr;</span></a>
+        <span className="hi-sticky-scarce"><span className="hi-sticky-dot" aria-hidden="true" />Only 8 audits a week</span>
+        <a className="hi-sticky-btn" href={BOOK_HREF}>Book your Celebrity Image Audit (₹97) <span className="arrow">&rarr;</span></a>
       </div>
 
       <FunnelScripts />

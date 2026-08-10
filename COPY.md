@@ -6,22 +6,25 @@ _Full page copy, top to bottom. "Instant Image Upgrade" is the single funnel ter
 
 ## HERO
 
-- **Eyebrow:** For founders, leaders, experts, and public figures
+_The consultation is named the **Celebrity Image Audit**. The **Instant Image Upgrade** is the paid programme it can lead to. Two names, two things, kept distinct._
+
+- **Eyebrow:** The Bollywood Celebrity Stylist behind India's blockbuster films and campaigns asks:
 - **Headline:** Why do people half as successful as you look _twice as expensive?_
-- **Sub:** It is not your money. It is not your taste. In 30 minutes, **Bollywood celebrity stylist Sanobar Samir** will get on a call with you and use her **Instant Image Upgrade System** to close the gap, so people finally see you at the level you have already reached.
+- **Sub:** **Sanobar Samir** has spent 10+ years styling leading actors and working on films and campaigns featuring **Shah Rukh Khan, Deepika Padukone, Martin Garrix** and many of India's biggest names. In a private 30-minute **Celebrity Image Audit**, she studies your personal image, identifies exactly what is holding it back, shows you how to fix it, and tells you honestly if you are a right fit for her Instant Image Upgrade.
 
-**Offer card — _Your 30-minute Instant Image Upgrade_**
-- One to one with Sanobar herself, live
-- She reads your image on sight, the way she reads it for the camera
-- She names exactly what is holding it back
-- You leave with your Instant Image Upgrade plan, built only for you
-- _Foot:_ The eye behind national campaigns and leading actors, now on you.
+**Offer card — _Your 30-minute Celebrity Image Audit_**
+- A celebrity stylist's honest feedback on what your image says about you
+- Exactly what is holding your personal image back, and why
+- The direction that closes the gap between your success and your image
+- A straight answer on whether her Instant Image Upgrade is right for you
+- _Foot:_ The same eye behind India's biggest celebrities, now on you.
 
-- **CTA:** Apply for your Instant Image Upgrade →
-- **Assurance points:** One on One with Celebrity Stylist · Styled Top Bollywood Stars · Only 8 Slots a Week
+- **CTA:** Book your Celebrity Image Audit (₹97) →
+- **Assurance points:** One-on-one with a Celebrity Stylist · 10+ Years Styling India's Stars · Only 8 Audits a Week
+- **Why ₹97:** ₹97 holds the slot. Sanobar takes 8 audits a week, so the time is blocked only for you.
 - **Soft link:** Not ready to apply? See why the gap exists, and why it was never your fault ↓
 
-**Stats rail:** 10+ Years in fashion · 100+ Campaigns, films & shoots · 200+ Styling appointments at Broadway
+**Proof rail (stats + logos, one band):** 10+ Years in fashion · 100+ Campaigns, films & shoots · 200+ Styling appointments at Broadway │ AS SEEN ON — Kotak · Tanishq · Oppo · Myntra · American Tourister · Parachute
 
 ---
 

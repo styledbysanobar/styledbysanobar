@@ -37,7 +37,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&family=Jost:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
-        <link rel="stylesheet" href="/styles.css" />
+        {/* The ?v= is a cache buster and it MATTERS. /styles.css is a static file
+            out of /public, so a browser that has cached it will keep serving the
+            old copy and every change made here silently does nothing. Bump this
+            number whenever styles.css changes and the stale copy is evicted. */}
+        <link rel="stylesheet" href="/styles.css?v=60" />
       </head>
       <body>
         {children}

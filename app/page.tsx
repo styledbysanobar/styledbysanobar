@@ -1,4 +1,5 @@
 import FunnelScripts from "./FunnelScripts";
+import GoldRailDefs from "./GoldRailDefs";
 import Testimonials from "./Testimonials";
 
 /* SANOBAR — high-ticket single-page funnel ("Instant Image Upgrade").
@@ -16,49 +17,16 @@ const BOOK_HREF = "/checkout";
 /* ---- inline line-icon helper ----
    Strokes reference #goldRail rather than currentColor, so every glyph on the
    page is lit on the same 135deg diagonal as the CTA and the border rails
-   instead of sitting flat. The gradient is defined once, in GoldRailDefs below,
-   and must be present in the DOM for the reference to resolve. */
+   instead of sitting flat. The gradient is defined once, in ./GoldRailDefs, and
+   must be present in the DOM for the reference to resolve. */
 const I = (paths: React.ReactNode) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="url(#goldRail)" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     {paths}
   </svg>
 );
 
-/* Shared SVG defs: the icon gradient, and the mono-ivory logo filter. Rendered
-   zero-size and hidden from a11y; paints nothing itself. Stops read the palette
-   tokens, so a change to the golds carries through the icons automatically. */
-const GoldRailDefs = () => (
-  <svg width="0" height="0" aria-hidden="true" focusable="false" style={{ position: "absolute" }}>
-    <defs>
-      {/* Turns any client logo into a single-ink ivory lockup, the way a brand kit
-          does it, WITHOUT flattening it. brightness becomes transparency: the dark
-          and mid parts of a mark become solid ivory, anything already white drops
-          to nothing. So Parachute's blue field renders as an ivory badge with its
-          white script punched out as holes, instead of the solid blob a plain
-          brightness(0) invert(1) produced. Steps: read luminance into alpha,
-          invert it, clip back to the artwork's own alpha so the transparent
-          background stays transparent, then flood the result with ivory.
-          color-interpolation-filters must be sRGB; the linearRGB default skews
-          mid-tones badly. */}
-      <filter id="monoIvory" colorInterpolationFilters="sRGB">
-        <feColorMatrix type="luminanceToAlpha" result="lum" />
-        <feComponentTransfer in="lum" result="inv">
-          <feFuncA type="table" tableValues="1 0.97 0.88 0.55 0" />
-        </feComponentTransfer>
-        <feComposite in="inv" in2="SourceGraphic" operator="in" result="masked" />
-        <feFlood floodColor="#F3E9DC" result="ink" />
-        <feComposite in="ink" in2="masked" operator="in" />
-      </filter>
-      <linearGradient id="goldRail" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="var(--gold-edge)" />
-        <stop offset="20%" stopColor="var(--gold-soft)" />
-        <stop offset="50%" stopColor="var(--gold-bright)" />
-        <stop offset="80%" stopColor="var(--gold-soft)" />
-        <stop offset="100%" stopColor="var(--gold-edge)" />
-      </linearGradient>
-    </defs>
-  </svg>
-);
+/* The #goldRail gradient and #monoIvory filter now live in ./GoldRailDefs, so
+   /checkout can light its glyphs on the same diagonal. */
 
 /* the big names, bolded wherever they appear (celebrities, brands, films). */
 const BIG_NAMES = [
@@ -416,7 +384,7 @@ export default function Page() {
           <header className="r-head reveal">
             <span className="r-index" aria-hidden="true">03</span>
             <span className="sec-eyebrow">What the consultation is</span>
-            <h2 className="r-h2">Here&rsquo;s What We&rsquo;ll Discuss During Your <em>Instant Image Upgrade</em> Call.</h2>
+            <h2 className="r-h2">Here&rsquo;s What We&rsquo;ll Discuss During Your <em>Celebrity Image Audit</em>.</h2>
             <p className="r-sub">One to one with Sanobar herself, 30 minutes, just the two of you. Come exactly as you are; there is nothing to prepare.</p>
           </header>
           <div className="bp-steps-box">

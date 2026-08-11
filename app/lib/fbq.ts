@@ -88,7 +88,7 @@ export function trackCustom(event: string, params?: Record<string, unknown>) {
    the numbers line up in Events Manager. Kept in sync with the server-side copy
    in app/api/webhooks/cal/route.ts. */
 export const OFFER = {
-  content_name: "Instant Image Upgrade consultation",
+  content_name: "Celebrity Image Audit",
   content_category: "booking",
 } as const;
 

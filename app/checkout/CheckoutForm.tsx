@@ -125,7 +125,7 @@ export default function CheckoutForm({ amountLabel }: { amountLabel: string }) {
         amount: order.amount,
         currency: order.currency,
         name: "Sanobar Samir",
-        description: "Instant Image Upgrade consultation",
+        description: "Celebrity Image Audit",
         prefill: { name: f.name.trim(), email: f.email.trim(), contact: phone },
         theme: { color: "#260000" },
         modal: {

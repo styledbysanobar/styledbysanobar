@@ -5,7 +5,7 @@ import MetaPixel from "./MetaPixel";
 export const metadata: Metadata = {
   title: "The Instant Image Upgrade · Sanobar Samir",
   description:
-    "You earned your success. People still cannot see it on you. A private, one-to-one Instant Image Upgrade with celebrity stylist Sanobar Samir, so how people see you finally matches what you have built.",
+    "You earned your success. People still cannot see it on you. A private, one-to-one Celebrity Image Audit with celebrity stylist Sanobar Samir, so how people see you finally matches what you have built.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

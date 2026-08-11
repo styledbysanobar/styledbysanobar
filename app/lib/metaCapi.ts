@@ -15,7 +15,7 @@ const GRAPH_VERSION = "v21.0";
 
 /* Kept in sync with OFFER in app/lib/fbq.ts and the Cal webhook. */
 export const OFFER = {
-  content_name: "Instant Image Upgrade consultation",
+  content_name: "Celebrity Image Audit",
   content_category: "booking",
 } as const;
 

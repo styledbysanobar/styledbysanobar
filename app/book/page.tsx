@@ -2,44 +2,23 @@ import type { Metadata } from "next";
 import CalEmbed from "./CalEmbed";
 
 export const metadata: Metadata = {
-  title: "Pick your time · Instant Image Upgrade with Sanobar Samir",
+  title: "Pick your time · Celebrity Image Audit with Sanobar Samir",
   description:
-    "Your application is in. Choose a 30-minute one-to-one with celebrity stylist Sanobar Samir, and walk away knowing exactly what to change about your image.",
+    "Two steps to lock your Celebrity Image Audit with celebrity stylist Sanobar Samir: pick your slot, then send her a DM on Instagram.",
 };
 
-/* what the 30 minutes covers (kept short — the funnel already sells it). */
-const COVERS: { n: string; t: string; d: string }[] = [
-  { n: "01", t: "She reads where you are today", d: "Your work, the rooms you walk into, and how you want to be seen." },
-  { n: "02", t: "She reads your proportions and colouring", d: "Your body shape and the shades that genuinely suit you, the way she reads it for the camera." },
-  { n: "03", t: "She names what is holding your image back", d: "The one or two quiet things working against how you look, that no one ever pointed out." },
-];
+/* [CONFIRM] Sanobar's handle. A wrong one breaks step 2 silently. */
+const IG_HANDLE = "styledbysanobar";
+const IG_URL = `https://instagram.com/${IG_HANDLE}`;
 
-const FAQ: { q: string; a: string; open?: boolean }[] = [
-  {
-    q: "Is the call really with Sanobar herself?",
-    open: true,
-    a: "Yes. Every consultation is one to one with Sanobar. No assistant, no junior stylist. She reads your image personally, because that is the whole point.",
-  },
-  {
-    q: "What if I need to move it?",
-    a: "Free reschedule up to 24 hours before your slot, from the link in your confirmation email. Come when you can be fully present.",
-  },
-];
+/* The page after payment does ONE job: get both steps done. The funnel already
+   sold the consultation, so the covers ledger, the FAQ and the scarcity block
+   that used to live here are gone. Anything that is not step 1 or step 2 is
+   something to read instead of something to do. */
 
 export default function BookPage() {
   return (
     <main className="bk-page">
-      {/* status strip */}
-      <header className="bk-strip">
-        <span className="bk-strip-item ok">By private application</span>
-        <span className="bk-strip-sep" aria-hidden="true">·</span>
-        <span className="bk-strip-item">One to one with Sanobar</span>
-        <span className="bk-strip-sep" aria-hidden="true">·</span>
-        <span className="bk-strip-item">30 minutes</span>
-      </header>
-
-      {/* progress: pick a time -> confirmed */}
-      {/* three steps now that the fee page sits in front of this one */}
       <nav className="bk-progress" aria-label="Booking progress">
         <span className="bk-step done">
           <span className="bk-step-n">1</span>
@@ -53,92 +32,76 @@ export default function BookPage() {
         <span className="bk-rail" aria-hidden="true" />
         <span className="bk-step">
           <span className="bk-step-n">3</span>
-          Confirmed
+          Call booked
         </span>
       </nav>
 
       <div className="bk-wrap">
-        {/* hero */}
         <div className="bk-head">
-          <span className="sec-eyebrow bk-eyebrow">One step left</span>
-          <h1 className="bk-h1">Pick your slot</h1>
+          <span className="sec-eyebrow bk-eyebrow">Your seat is confirmed</span>
+          <h1 className="bk-h1">
+            Two steps and you are <em>in</em>
+          </h1>
         </div>
 
-        {/* calendar — rendered open, straight under the heading */}
-        <section className="bk-cal-section">
+        {/* 1 — book the slot */}
+        <section className="bk-card bk-stepcard" id="cal">
+          <header className="bk-stepcard-head">
+            <span className="bk-stepnum" aria-hidden="true">1</span>
+            <span className="bk-stepcard-titles">
+              <span className="sec-eyebrow">Required · Pick your slot</span>
+              <h2 className="bk-card-title">Book your Celebrity Image Audit</h2>
+            </span>
+          </header>
           <CalEmbed />
-
-          <ul className="bk-trust">
-            <li><span className="bk-trust-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg></span>One to one, directly with Sanobar. Not a team member.</li>
-            <li><span className="bk-trust-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg></span>Your meeting link lands in your inbox the moment you book.</li>
-            <li><span className="bk-trust-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg></span>Free to reschedule, up to 24 hours before.</li>
-          </ul>
         </section>
 
-        {/* what the 30 minutes covers */}
-        <section className="bk-card">
-          <header className="bk-card-head">
-            <span className="sec-eyebrow">What the 30 minutes covers</span>
-            <h2 className="bk-card-title">A private read of your image</h2>
+        {/* 2 — the DM that holds the slot */}
+        <section className="bk-card bk-stepcard">
+          <header className="bk-stepcard-head">
+            <span className="bk-stepnum" aria-hidden="true">2</span>
+            <span className="bk-stepcard-titles">
+              <span className="sec-eyebrow">Required · Instagram</span>
+              <h2 className="bk-card-title">Follow Sanobar and send one DM</h2>
+            </span>
           </header>
-          <ol className="bk-covers">
-            {COVERS.map((c) => (
-              <li className="bk-cover" key={c.n}>
-                <span className="bk-cover-n" aria-hidden="true">{c.n}</span>
-                <div className="bk-cover-body">
-                  <h3 className="bk-cover-t">{c.t}</h3>
-                  <p className="bk-cover-d">{c.d}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        {/* don't drift — scarcity */}
-        <section className="bk-card bk-noshow">
-          <h2 className="bk-noshow-h">Sanobar takes only <em>8 consultations</em> a week.</h2>
-          <p className="bk-noshow-p">
-            The slot you pick is held for you. Leave it, and it goes to the next person on the list, and the next opening may be weeks away.
-          </p>
-          <p className="bk-noshow-p bk-noshow-strong">
-            You are one step from the read that changes how every room sees you. Lock your time.
-          </p>
-          <a href="#cal" className="bk-anchor">
-            Pick my time
-            <span className="arrow" aria-hidden="true">&rarr;</span>
-          </a>
-        </section>
-
-        {/* two quick questions */}
-        <section className="bk-card">
-          <header className="bk-card-head">
-            <span className="sec-eyebrow">Before you book</span>
-            <h2 className="bk-card-title">Two quick questions</h2>
-          </header>
-          <div className="bk-faq">
-            {FAQ.map((f, i) => (
-              <details className="bk-faq-item" key={i} open={f.open}>
-                <summary className="bk-faq-q">
-                  <span>{f.q}</span>
-                  <span className="bk-faq-ic" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M6 9l6 6 6-6" /></svg>
-                  </span>
-                </summary>
-                <div className="bk-faq-a"><p>{f.a}</p></div>
-              </details>
-            ))}
+          <div className="bk-ig">
+            <figure className="bk-ig-photo">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/ig_photo.jpg" alt="Sanobar Samir" />
+              <figcaption className="bk-ig-handle">@{IG_HANDLE}</figcaption>
+            </figure>
+            <div className="bk-ig-copy">
+              <p className="bk-step-p">
+                Follow <b>@{IG_HANDLE}</b> and send her the message{" "}
+                <b className="bk-dm">&ldquo;I have booked&rdquo;</b>. This confirms your
+                commitment, only those who DM keep their call.
+              </p>
+              <a className="bk-anchor" href={IG_URL} target="_blank" rel="noopener noreferrer">
+                Follow and send the DM
+                <span className="arrow" aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
           </div>
         </section>
-      </div>
 
-      {/* bottom lock-in */}
-      <div className="bk-lockin">
-        <p className="bk-lockin-eyebrow">You are one step from the read.</p>
-        <p className="bk-lockin-sub">One slot. 30 minutes with Sanobar. Then it begins.</p>
-        <a href="#cal" className="bk-anchor">
-          Take me to the calendar
-          <span className="arrow" aria-hidden="true">&rarr;</span>
-        </a>
+        {/* the one warning that makes step 2 happen */}
+        <section className="bk-card bk-crit">
+          <div className="bk-crit-head">
+            <span className="bk-crit-ic" aria-hidden="true" />
+            <span className="sec-eyebrow bk-crit-label">Critical · read this</span>
+          </div>
+          <ul className="bk-crit-list">
+            <li>
+              <b>No slot booked, no call.</b> Unbooked slots are released to the
+              next person on the list within 24 hours.
+            </li>
+            <li>
+              <b>No Instagram DM, your slot is dropped.</b> Sanobar only works
+              with people who are serious. The DM proves you are committed.
+            </li>
+          </ul>
+        </section>
       </div>
 
       <footer className="bk-foot">

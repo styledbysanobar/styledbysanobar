@@ -1956,8 +1956,7 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
    so decoration yields. Tablet and desktop keep them.
 
    With the icons gone the three phrases need a divider or they read as one
-   run-on sentence, so a gold middot sits between them. Same separator idiom as
-   .bk-strip-sep on the booking page, so the page stays one system.
+   run-on sentence, so a gold middot sits between them.
 
    flex-wrap stays as the safety net: this only holds one line while the copy is
    short enough. If a phrase grows it wraps visibly rather than being clipped by
@@ -2322,16 +2321,6 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
   padding-bottom:clamp(40px,7vh,80px);
   --bk-hair:rgba(var(--cream-rgb),.16);--bk-hair-2:rgba(var(--cream-rgb),.28)}
 
-/* status strip */
-.bk-strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(8px,1.4vw,14px);
-  padding:11px clamp(16px,4vw,28px);border-bottom:1px solid var(--bk-hair);
-  font-family:var(--f-mono);font-weight:600;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cream)}
-.bk-strip-item{display:inline-flex;align-items:center;gap:7px;opacity:.72}
-.bk-strip-item.ok{opacity:1;color:var(--gold)}
-.bk-tick{display:inline-flex;width:16px;height:16px;border:0;border-radius:var(--r-ic);
-  align-items:center;justify-content:center;color:var(--gold-soft)}
-.bk-strip-sep{opacity:.4}
-
 /* progress */
 .bk-progress{display:flex;align-items:center;justify-content:center;gap:clamp(10px,2vw,18px);
   padding:clamp(16px,2.6vh,24px) 20px;border-bottom:1px solid var(--bk-hair)}
@@ -2339,8 +2328,13 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
   letter-spacing:.16em;text-transform:uppercase;color:var(--cream);opacity:.5}
 .bk-step.active{opacity:1;color:var(--gold)}
 .bk-step.done{opacity:.85}
-.bk-step-n{display:inline-flex;width:22px;height:22px;border:1px solid var(--bk-hair-2);border-radius:var(--r-ic);
-  align-items:center;justify-content:center;font-size:10px}
+/* flex:0 0 auto is load-bearing. Without it the numeral is a flex item with the
+   default shrink of 1, so on a narrow screen the row squeezes it horizontally
+   and the circle renders as an egg. Height is untouched by the squeeze, which is
+   exactly why it deforms rather than just getting smaller. */
+.bk-step-n{flex:0 0 auto;display:inline-flex;width:22px;height:22px;
+  border:1px solid var(--bk-hair-2);border-radius:var(--r-ic);
+  align-items:center;justify-content:center;font-size:10px;line-height:1}
 .bk-step.active .bk-step-n{border-color:var(--gold-soft);color:var(--gold)}
 .bk-step.done .bk-step-n{border-color:rgba(var(--gold-soft-rgb),.5);color:var(--gold)}
 .bk-rail{width:clamp(26px,6vw,64px);height:1px;background:var(--bk-hair-2)}
@@ -2353,29 +2347,13 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .bk-h1{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.01em;
   font-size:clamp(28px,4vw,50px);line-height:1.1;color:var(--cream);margin:0;text-wrap:balance}
 .bk-h1 em{font-style:normal;color:var(--gold)}
-.bk-sub{font-family:var(--f-body);font-weight:400;font-size:clamp(15px,1.7vw,18px);line-height:1.62;
-  color:rgba(var(--cream-rgb),.82);max-width:52ch;margin:clamp(16px,2.4vh,22px) auto 0;text-wrap:balance}
 
 /* cards */
 .bk-card{border-radius:var(--r-card);position:relative;border:1px solid var(--bk-hair);padding:clamp(22px,3.4vw,40px);
   margin-top:clamp(20px,3.2vh,30px);background:rgba(var(--cream-rgb),.02)}
-.bk-card-head{text-align:center;margin-bottom:clamp(20px,3vh,28px)}
 .bk-card-title{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.012em;
   font-size:clamp(20px,2.6vw,30px);line-height:1.15;color:var(--cream);margin:clamp(8px,1.2vh,12px) 0 0}
-.bk-card-sub{font-family:var(--f-body);font-size:clamp(13px,1.4vw,15px);line-height:1.5;
-  color:rgba(var(--cream-rgb),.6);margin:clamp(8px,1.2vh,10px) 0 0}
 .bk-card .sec-eyebrow{color:var(--gold-soft);margin-bottom:0}
-
-/* corner ticks on the calendar card */
-.bk-corner{position:absolute;width:15px;height:15px;border:0 solid rgba(var(--gold-soft-rgb),.55);z-index:2}
-.bk-corner.tl{top:-1px;left:-1px;border-top-width:1px;border-left-width:1px}
-.bk-corner.tr{top:-1px;right:-1px;border-top-width:1px;border-right-width:1px}
-.bk-corner.bl{bottom:-1px;left:-1px;border-bottom-width:1px;border-left-width:1px}
-.bk-corner.br{bottom:-1px;right:-1px;border-bottom-width:1px;border-right-width:1px}
-
-/* calendar section — open, no card wrapper */
-.bk-cal-section{margin-top:clamp(24px,4vh,40px)}
-.bk-cal-section .bk-card-head{margin-bottom:clamp(18px,2.6vh,24px)}
 
 /* the Cal.com embed — sits directly on its own light surface (no bordered box) */
 /* svh so the calendar box is sized to what the phone can actually SHOW. With vh
@@ -2390,91 +2368,122 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
   font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-muted)}
 
 /* trust row under the calendar */
-.bk-trust{list-style:none;margin:clamp(20px,3vh,28px) 0 0;padding:0;display:flex;flex-direction:column;
-  gap:clamp(11px,1.6vh,14px)}
-.bk-trust li{display:flex;align-items:flex-start;gap:11px;font-family:var(--f-body);font-size:clamp(13px,1.4vw,15px);
-  line-height:1.5;color:rgba(var(--cream-rgb),.82)}
-.bk-trust-ic{flex:0 0 auto;width:20px;height:20px;border:0;border-radius:var(--r-ic);
-  display:flex;align-items:center;justify-content:center;color:var(--gold-soft);margin-top:1px}
+/* ---------- the two step cards ----------
+   The page after payment is a to-do list, not a sales page: a numbered head so
+   the eye knows there are exactly two things, then the doing (the calendar, the
+   DM button) straight underneath. Left-set, because a numbered step reads as a
+   sequence and a centred one does not. */
+.bk-stepcard{margin-top:clamp(20px,3.4vh,34px)}
+.bk-stepcard-head{display:grid;grid-template-columns:auto 1fr;gap:clamp(13px,2.2vw,20px);
+  align-items:center;text-align:left;margin-bottom:clamp(18px,2.8vh,26px)}
+.bk-stepnum{display:inline-flex;align-items:center;justify-content:center;
+  width:clamp(34px,4.4vw,42px);height:clamp(34px,4.4vw,42px);border-radius:var(--r-ic);
+  border:1px solid rgba(var(--gold-soft-rgb),.5);
+  font-family:var(--f-display);font-weight:600;font-size:clamp(16px,1.9vw,20px);line-height:1;
+  color:var(--gold)}
+.bk-stepcard-titles{display:block}
+.bk-stepcard-titles .sec-eyebrow{display:block;color:var(--gold-soft);margin-bottom:6px}
+.bk-stepcard .bk-card-title{text-align:left;margin:0}
+.bk-step-p{font-family:var(--f-body);font-size:clamp(14px,1.5vw,16.5px);line-height:1.6;
+  color:rgba(var(--cream-rgb),.78);margin:0;max-width:52ch}
+.bk-step-p b{color:var(--cream);font-weight:600}
+/* the message itself is the one highlighted phrase in the step, so it takes the
+   accent gold. Written as `b.bk-dm` because `.bk-step-p b` above is more
+   specific than a bare class and was quietly overriding it back to cream. */
+.bk-step-p b.bk-dm{color:var(--gold)}
+.bk-stepcard .bk-anchor{margin-top:clamp(18px,2.6vh,24px)}
 
-/* what the 30 minutes covers — hairline ledger */
-.bk-covers{list-style:none;margin:0;padding:0;border-top:1px solid var(--bk-hair)}
-.bk-cover{display:grid;grid-template-columns:auto 1fr;gap:clamp(14px,2.4vw,26px);align-items:start;
-  padding:clamp(16px,2.6vh,22px) 2px;border-bottom:1px solid var(--bk-hair)}
-.bk-cover-n{font-family:var(--f-display);font-weight:600;font-size:clamp(20px,2.6vw,30px);line-height:1;
-  letter-spacing:-.02em;color:var(--gold)}
-.bk-cover-t{font-family:var(--f-display);font-weight:600;font-size:clamp(15px,1.7vw,19px);line-height:1.25;
-  color:var(--cream);margin:0}
-.bk-cover-d{font-family:var(--f-body);font-size:clamp(13px,1.4vw,15px);line-height:1.55;
-  color:rgba(var(--cream-rgb),.7);margin:6px 0 0}
+/* step 2 — her portrait beside the instruction, so the DM is being sent to a
+   face and not to a handle. The handle sits ON the photo as a pill, the way the
+   funnel labels its own plates. */
+.bk-ig{display:grid;grid-template-columns:clamp(140px,20vw,178px) 1fr;
+  gap:clamp(20px,2.8vw,32px);align-items:start}
+.bk-ig-photo{position:relative;margin:0;aspect-ratio:1;border-radius:var(--r-media);
+  overflow:visible;border:1px solid rgba(var(--gold-soft-rgb),.5);background:var(--oxblood)}
+/* her Instagram photo stays in COLOUR: it is the picture on the profile they are
+   about to open, so it should look like it. */
+.bk-ig-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  border-radius:inherit}
+.bk-ig-handle{position:absolute;left:50%;bottom:0;transform:translate(-50%,50%);white-space:nowrap;
+  font-family:var(--f-mono);font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:lowercase;
+  color:var(--gold);background:var(--oxblood-deep);
+  border:1px solid rgba(var(--gold-soft-rgb),.55);border-radius:var(--r-pill);
+  padding:5px 12px;box-shadow:0 10px 24px -12px rgba(0,0,0,.9)}
+.bk-ig-copy{min-width:0}
+@media(max-width:620px){
+  .bk-ig{grid-template-columns:1fr;gap:clamp(26px,5vw,32px);justify-items:center;text-align:center}
+  .bk-ig-photo{width:min(220px,62vw)}
+  .bk-ig-copy .bk-step-p{max-width:none}
+}
 
-/* don't drift — scarcity */
-.bk-noshow{text-align:center}
-.bk-noshow-h{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.012em;
-  font-size:clamp(20px,2.8vw,32px);line-height:1.16;color:var(--cream);margin:0;max-width:24ch;margin-inline:auto}
-.bk-noshow-h em{font-style:normal;color:var(--gold)}
-.bk-noshow-p{font-family:var(--f-body);font-size:clamp(14px,1.5vw,16.5px);line-height:1.6;
-  color:rgba(var(--cream-rgb),.78);max-width:52ch;margin:clamp(14px,2vh,18px) auto 0}
-.bk-noshow-strong{color:var(--cream)}
+/* the warning box, and the reason step 2 actually gets done. Titled, because an
+   untitled block of small text is skimmed; the ringed alert glyph and the label
+   tell the eye to stop before it reads a word. Both icons are real Lucide files
+   (ISC) used as masks, so they take the gold like every other glyph here. */
+.bk-crit{margin-top:clamp(20px,3.4vh,34px);
+  border-color:rgba(var(--gold-soft-rgb),.38);background:rgba(var(--gold-rgb),.045)}
+/* the alert glyph marks the BLOCK, once, in its heading. The lines below are
+   plain paragraphs led by a gold phrase, the way this funnel writes a list. */
+.bk-crit-head{display:flex;align-items:center;gap:9px;margin-bottom:clamp(14px,2.2vh,18px)}
+.bk-crit-ic{flex:0 0 auto;width:18px;height:18px;
+  background:var(--gold-rail);
+  -webkit-mask:url(/assets/icons/triangle-alert.svg) center/contain no-repeat;
+  mask:url(/assets/icons/triangle-alert.svg) center/contain no-repeat}
+.bk-crit-label{color:var(--gold);margin-bottom:0}
+.bk-crit-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.bk-crit-list li{font-family:var(--f-body);font-size:clamp(13px,1.4vw,15px);line-height:1.6;
+  color:rgba(var(--cream-rgb),.72)}
+.bk-crit-list b{color:var(--gold);font-weight:600}
+
+/* the one button on the page. Same CTA face as .hi-cta-btn and .co-btn: the gold
+   is the primary click and nothing else on the page wears it. */
 .bk-anchor{display:inline-flex;align-items:center;gap:.6em;margin-top:clamp(20px,3vh,28px);
-  padding:15px 26px;border-radius:var(--r-btn);background:var(--cream);color:var(--oxblood);border:1px solid var(--cream);
-  font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-  text-decoration:none;transition:background .2s var(--ease),color .2s var(--ease)}
-.bk-anchor:hover{background:transparent;color:var(--cream)}
+  padding:15px 26px;border-radius:var(--r-btn);
+  background:var(--cta-face);color:var(--cta-ink);border:1px solid var(--gold-bright);
+  font-family:var(--f-mono);font-size:12px;font-weight:var(--cta-weight);letter-spacing:var(--cta-track);
+  text-transform:uppercase;
+  text-decoration:none;transition:background .3s var(--ease),color .3s var(--ease)}
+.bk-anchor:hover{background:transparent;color:var(--gold-bright)}
 .bk-anchor .arrow{transition:transform .2s var(--ease)}
 .bk-anchor:hover .arrow{transform:translateX(3px)}
 
-/* mini FAQ — hairline rows */
-.bk-faq{border-top:1px solid var(--bk-hair)}
-.bk-faq-item{border-bottom:1px solid var(--bk-hair)}
-.bk-faq-q{list-style:none;display:flex;align-items:flex-start;justify-content:space-between;gap:18px;cursor:pointer;
-  padding:clamp(16px,2.4vh,22px) 2px;font-family:var(--f-display);font-weight:500;font-size:clamp(15px,1.7vw,18px);
-  line-height:1.35;color:var(--cream);transition:color .2s var(--ease)}
-.bk-faq-q::-webkit-details-marker{display:none}
-.bk-faq-ic{flex:0 0 auto;color:rgba(var(--cream-rgb),.6);transition:transform .3s var(--ease);margin-top:1px}
-.bk-faq-item[open] .bk-faq-ic{transform:rotate(180deg);color:var(--gold-soft)}
-.bk-faq-a{padding:0 2px clamp(18px,2.6vh,24px)}
-.bk-faq-a p{font-family:var(--f-body);font-size:clamp(13.5px,1.5vw,15.5px);line-height:1.65;
-  color:rgba(var(--cream-rgb),.78);margin:0;max-width:60ch}
-
-/* bottom lock-in + colophon */
-.bk-lockin{text-align:center;max-width:640px;margin:clamp(40px,6vh,72px) auto 0;
-  padding:clamp(30px,5vh,52px) clamp(20px,5vw,40px);border-top:1px solid var(--bk-hair)}
-.bk-lockin-eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold-soft);margin:0}
-.bk-lockin-sub{font-family:var(--f-body);font-size:clamp(14px,1.5vw,16.5px);line-height:1.6;
-  color:rgba(var(--cream-rgb),.78);margin:clamp(10px,1.6vh,14px) 0 0}
+/* colophon */
 .bk-foot{text-align:center;margin-top:clamp(30px,5vh,54px);padding:0 20px;
   font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
   color:rgba(var(--cream-rgb),.5)}
 
 @media(max-width:560px){
-  .bk-cover{grid-template-columns:1fr;gap:6px}
   .bk-cal,.bk-cal-inline{min-height:clamp(520px,86svh,700px)}
 
   /* Phone: the booking CTAs go full width. As inline-flex they were a small
      centred target mid-screen; a thumb should not have to aim. */
   .bk-anchor{display:flex;width:100%;justify-content:center;padding:16px 20px}
 
-  /* The status strip is three tracked mono phrases. At 10.5px with .16em on a
-     360px screen it wraps into a cramped block, so drop the tracking a little
-     and let the separators disappear rather than stranding one on its own row. */
-  .bk-strip{font-size:10px;letter-spacing:.1em;gap:6px 10px}
-  .bk-strip-sep{display:none}
-
   /* Tighten the outer gutter so the calendar gets the width it needs. */
   .bk-wrap{padding-left:16px;padding-right:16px}
   .bk-card{padding-left:16px;padding-right:16px}
+
+  /* Three labelled steps plus two rails do not fit a 360px row: the labels wrap
+     mid-word and the rail is squeezed to nothing. Drop the tracking, shorten the
+     rail, and let the label sit UNDER its numeral so each step stays a legible
+     column. The circles keep their size either way. */
+  /* align-items:flex-start, not the desktop centre. Stacked steps have
+     different heights once a label wraps to two lines, and centring makes the
+     SHORTEST one drop: "Confirmed" is one line, so its circle sat lower than
+     the other two. Top-aligned, all three circles share a baseline. */
+  .bk-progress{align-items:flex-start;gap:8px;padding-left:12px;padding-right:12px}
+  .bk-step{flex-direction:column;gap:7px;font-size:9.5px;letter-spacing:.08em;
+    text-align:center;max-width:8.5em}
+  .bk-rail{width:14px;align-self:flex-start;margin-top:11px}
 }
 
 /* ============================================================
    CHECKOUT (app/checkout) · the consultation fee step
    Sits between the landing page and /book. Premium here is voice and
-   restraint, not scale: the Bodoni wordmark on top, an itemised ledger,
-   ONE lit figure, and the payment marks on cream tiles. Reuses the
-   booking chrome (.bk-strip, .bk-progress) so the two read as one
-   funnel. Edge everywhere: square frames, corner ticks, hairline rules,
-   flat colour, no gradients.
+   restraint, not scale: an itemised ledger, ONE lit figure, and the
+   payment marks on cream tiles. Reuses the booking chrome (.bk-progress)
+   so the two read as one funnel. Rounded 10px cards, hairline rules, and
+   the gold rail on the CTA, the title turn and the fee figure.
    ============================================================ */
 .co-page{background:var(--stage);color:var(--cream);min-height:100svh;
   padding-bottom:clamp(40px,7vh,80px);
@@ -2487,23 +2496,26 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .co-eyebrow{color:var(--gold-soft)}
 .co-h1{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.01em;
   font-size:clamp(27px,3.8vw,46px);line-height:1.1;color:var(--cream);margin:0;text-wrap:balance}
-.co-h1 em{font-style:normal;color:var(--gold)}
+/* the turn in the title, lit on the rail like every other gold turn in the
+   funnel. color: is the fallback and must stay. */
+.co-h1 em{font-style:normal;color:var(--gold);background-image:var(--gold-rail-text)}
 .co-sub{font-family:var(--f-body);font-size:clamp(14.5px,1.6vw,17px);line-height:1.6;
   color:rgba(var(--cream-rgb),.78);max-width:58ch;margin:clamp(14px,2.2vh,20px) auto 0;text-wrap:balance}
 
 /* two panels: the ledger, then the payment */
+/* start, NOT stretch. Stretching the panels to equal height only moves the
+   problem: the ledger is shorter than the form, so the leftover height has to go
+   somewhere, and it opens as one dead gap inside the left card. Let each panel
+   be its own height; uneven bottom edges on a two-column grid are normal. */
 .co-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,1.8vw,26px);align-items:start}
 
-.co-panel{position:relative;border:1px solid var(--bk-hair);
+.co-panel{border-radius:var(--r-card);position:relative;border:1px solid var(--bk-hair);
   padding:clamp(24px,2.8vw,42px);background:rgba(var(--cream-rgb),.02)}
 .co-panel--pay{border-color:rgba(var(--gold-soft-rgb),.36);background:rgba(var(--cream-rgb),.035)}
 
-/* corner ticks, the house frame device */
-.co-corner{position:absolute;width:15px;height:15px;border:0 solid rgba(var(--gold-soft-rgb),.55);z-index:2}
-.co-corner.tl{top:-1px;left:-1px;border-top-width:1px;border-left-width:1px}
-.co-corner.tr{top:-1px;right:-1px;border-top-width:1px;border-right-width:1px}
-.co-corner.bl{bottom:-1px;left:-1px;border-bottom-width:1px;border-left-width:1px}
-.co-corner.br{bottom:-1px;right:-1px;border-bottom-width:1px;border-right-width:1px}
+/* The square corner-tick frame device is gone: the house moved to rounded 10px
+   cards (--r-card) and the funnel and booking pages dropped their ticks in the
+   redesign. Ticks pinned at -1px cannot sit on a rounded edge anyway. */
 
 .co-panel-label{font-family:var(--f-mono);font-weight:600;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
   color:var(--gold-soft);margin:0 0 clamp(14px,2.2vh,20px)}
@@ -2514,7 +2526,10 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .co-item{font-family:var(--f-display);font-weight:600;font-size:clamp(17px,2vw,22px);line-height:1.25;
   color:var(--cream);margin:0 0 clamp(6px,1vh,10px)}
 
-/* an itemised ledger, not a bullet list */
+/* an itemised ledger, not a bullet list. Title carries the beat, one quiet line
+   under it says what it means, and nothing goes past that: the selling is done,
+   this page confirms. The four rows are the hero sub itemised, so the fee page
+   and the funnel describe the same consultation in the same words. */
 .co-included{list-style:none;margin:0;padding:0;border-top:1px solid var(--bk-hair)}
 .co-included-row{display:grid;grid-template-columns:auto 1fr;gap:clamp(13px,2vw,18px);align-items:start;
   padding:clamp(14px,2.1vh,18px) 0;border-bottom:1px solid var(--bk-hair)}
@@ -2532,15 +2547,21 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .co-total-l{font-family:var(--f-mono);font-weight:600;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
   color:rgba(var(--cream-rgb),.68)}
 .co-total-v{font-family:var(--f-display);font-weight:600;font-size:clamp(32px,5vw,50px);line-height:1;
-  letter-spacing:-.02em;color:var(--gold)}
+  letter-spacing:-.02em;color:var(--gold);background-image:var(--gold-rail-text)}
 
-/* the two promises that take the risk off the click */
+/* the reschedule policy: the one thing that takes the risk off the click */
 .co-assure{list-style:none;margin:clamp(18px,2.6vh,24px) 0 0;padding:clamp(16px,2.2vh,20px) 0 0;
   border-top:1px solid var(--bk-hair);display:flex;flex-direction:column;gap:11px}
 .co-assure li{display:flex;align-items:flex-start;gap:10px;font-family:var(--f-body);
   font-size:clamp(12.5px,1.35vw,14px);line-height:1.5;color:rgba(var(--cream-rgb),.74)}
-.co-assure-tick{flex:0 0 auto;width:17px;height:17px;color:var(--gold-soft);margin-top:1px}
-.co-assure-tick svg{width:100%;height:100%;display:block}
+/* the real Lucide "info" icon (public/assets/icons/info.svg, ISC), used as a
+   MASK rather than an <img>: an external SVG cannot inherit the page's colour,
+   so masking it lets the gold rail show through and the glyph stays on the same
+   135deg diagonal as every other icon in the funnel. */
+.co-assure-ic{flex:0 0 auto;width:18px;height:18px;margin-top:1px;
+  background:var(--gold-rail);
+  -webkit-mask:url(/assets/icons/info.svg) center/contain no-repeat;
+  mask:url(/assets/icons/info.svg) center/contain no-repeat}
 
 /* the form */
 .co-form{display:flex;flex-direction:column;gap:clamp(13px,1.9vh,17px)}
@@ -2625,9 +2646,7 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .bp-bonus-ic::after,
 .pr-turn::after,
 .faq-ic::after,
-.rg-ic::after,
-.bk-tick::after,
-.bk-trust-ic::after{
+.rg-ic::after{
   content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
   background:var(--gold-rail);pointer-events:none;
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
@@ -2640,9 +2659,7 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .bp-bonus-ic,
 .pr-turn,
 .faq-ic,
-.rg-ic,
-.bk-tick,
-.bk-trust-ic{position:relative}
+.rg-ic{position:relative}
 
 
 /* ---------- LIT METAL TYPE ----------
@@ -2664,6 +2681,8 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .hi-h1 .hi-turn,
 .hi-sub .hi-hl,
 .rc-close-turn,
+.co-h1 em,
+.co-total-v,
 .hi-problem .r-panel--dark .pr-plabel{
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -2674,7 +2693,7 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
    one the clip is silently undone and the gradient paints the whole box with
    invisible text on top of it. */
 @supports not ((-webkit-background-clip:text) or (background-clip:text)){
-  .hi-eyebrow,.hi-card-eyebrow,.hi-hero-logos-lbl,.hi-h1 .hi-turn,.hi-sub .hi-hl,.rc-close-turn,.hi-problem .r-panel--dark .pr-plabel{
+  .hi-eyebrow,.hi-card-eyebrow,.hi-hero-logos-lbl,.hi-h1 .hi-turn,.hi-sub .hi-hl,.rc-close-turn,.co-h1 em,.co-total-v,.hi-problem .r-panel--dark .pr-plabel{
     background:none;-webkit-text-fill-color:currentColor}
 }
 

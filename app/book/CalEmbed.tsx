@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { OFFER, leadEventId, track } from "../lib/fbq";
 
-/* Cal.com inline embed for Sanobar's 30-minute Instant Image Upgrade consultation.
+/* Cal.com inline embed for Sanobar's 30-minute Celebrity Image Audit.
    calLink: sanobar-samir-fiqx39/30min. Runs client-side only; the brand FRAMES the
    embed (cream inset + loading placeholder), it does not restyle Cal's own UI (C12). */
 export default function CalEmbed() {

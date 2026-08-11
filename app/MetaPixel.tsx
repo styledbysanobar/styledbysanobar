@@ -35,7 +35,7 @@ fbq('track', 'PageView');
    so this is the reliable "clicked apply" number. */
 if (window.location.pathname.replace(/\\/+$/, '') === '/book') {
   fbq('track', 'ViewContent', {
-    content_name: 'Instant Image Upgrade consultation',
+    content_name: 'Celebrity Image Audit',
     content_category: 'booking'
   });
 }`}

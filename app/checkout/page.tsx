@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 
+import GoldRailDefs from "../GoldRailDefs";
 import { amountRupeesLabel } from "../lib/razorpay";
 import CheckoutForm from "./CheckoutForm";
 
 export const metadata: Metadata = {
-  title: "Confirm your consultation · Instant Image Upgrade with Sanobar Samir",
+  title: "Confirm your Celebrity Image Audit · Sanobar Samir",
   description:
-    "Confirm your one to one Instant Image Upgrade consultation with celebrity stylist Sanobar Samir, then pick your slot.",
+    "Confirm your private 30-minute Celebrity Image Audit with celebrity stylist Sanobar Samir, then pick your slot.",
 };
 
 /* The fee page sits between the landing page and /book. The funnel already did
@@ -18,21 +19,32 @@ export const metadata: Metadata = {
 /* Read at request time so a price change in env needs no rebuild. */
 export const dynamic = "force-dynamic";
 
+/* The ledger. These are the four beats of the hero sub in COPY.md, itemised:
+   "she studies your personal image, identifies exactly what is holding it back,
+   shows you how to fix it, and tells you honestly if you are a right fit for her
+   Instant Image Upgrade." Same words as the page that sold it, so nothing here
+   is new information and nothing reads as a different offer. Short lines only:
+   the selling is done, this page confirms and takes the payment. */
 const INCLUDED: { n: string; t: string; d: string }[] = [
   {
     n: "01",
-    t: "30 minutes, 1:1 with Bollywood Celebrity Stylist",
-    d: "With Sanobar herself. No assistant, no junior stylist.",
+    t: "30 min audit with a Bollywood Celebrity Stylist",
+    d: "One to one with Sanobar herself. No assistant, no junior stylist.",
   },
   {
     n: "02",
-    t: "She Reads You Properly",
-    d: "Your proportions, your colouring, and the rooms you actually walk into.",
+    t: "What is holding your image back",
+    d: "The one or two quiet things working against how you look.",
   },
   {
     n: "03",
-    t: "You Leave Knowing What to Change",
-    d: "The one or two quiet things working against your image today.",
+    t: "How to fix it",
+    d: "The direction that closes the gap between your success and your image.",
+  },
+  {
+    n: "04",
+    t: "If you are right for the Instant Image Upgrade",
+    d: "Your complete image transformation, done with her.",
   },
 ];
 
@@ -41,6 +53,8 @@ export default function CheckoutPage() {
 
   return (
     <main className="co-page">
+      <GoldRailDefs />
+
       <nav className="bk-progress" aria-label="Booking progress">
         <span className="bk-step active">
           <span className="bk-step-n">1</span>
@@ -54,7 +68,7 @@ export default function CheckoutPage() {
         <span className="bk-rail" aria-hidden="true" />
         <span className="bk-step">
           <span className="bk-step-n">3</span>
-          Confirmed
+          Call booked
         </span>
       </nav>
 
@@ -73,14 +87,12 @@ export default function CheckoutPage() {
         <div className="co-grid">
           {/* what is being paid for */}
           <section className="co-panel" aria-label="Order summary">
-            <span className="co-corner tl" aria-hidden="true" />
-            <span className="co-corner tr" aria-hidden="true" />
-            <span className="co-corner bl" aria-hidden="true" />
-            <span className="co-corner br" aria-hidden="true" />
-
             <p className="co-panel-label">What you are confirming</p>
 
-            <h2 className="co-item">Instant Image Upgrade consultation</h2>
+            {/* the consultation is the Celebrity Image Audit. The Instant Image
+                Upgrade is the paid programme it can lead to: two names, two
+                things, kept distinct (COPY.md). */}
+            <h2 className="co-item">Celebrity Image Audit</h2>
 
             <ol className="co-included">
               {INCLUDED.map((i) => (
@@ -101,19 +113,9 @@ export default function CheckoutPage() {
 
             <ul className="co-assure">
               <li>
-                <span className="co-assure-tick" aria-hidden="true">
-                  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 10.5l4 4 8-9" />
-                  </svg>
-                </span>
-                A private read of your image, not a sales call
-              </li>
-              <li>
-                <span className="co-assure-tick" aria-hidden="true">
-                  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 10.5l4 4 8-9" />
-                  </svg>
-                </span>
+                {/* an "i", not a tick: this is the reschedule policy, a piece of
+                    information, not another promise being made */}
+                <span className="co-assure-ic" aria-hidden="true" />
                 Free reschedule up to 24 hours before your slot
               </li>
             </ul>
@@ -121,11 +123,6 @@ export default function CheckoutPage() {
 
           {/* the payment */}
           <section className="co-panel co-panel--pay" aria-label="Your details">
-            <span className="co-corner tl" aria-hidden="true" />
-            <span className="co-corner tr" aria-hidden="true" />
-            <span className="co-corner bl" aria-hidden="true" />
-            <span className="co-corner br" aria-hidden="true" />
-
             <p className="co-panel-label">Your details</p>
             <p className="co-panel-sub">This is where your confirmation and the call link are sent.</p>
 

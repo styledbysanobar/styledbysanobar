@@ -41,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             out of /public, so a browser that has cached it will keep serving the
             old copy and every change made here silently does nothing. Bump this
             number whenever styles.css changes and the stale copy is evicted. */}
-        <link rel="stylesheet" href="/styles.css?v=60" />
+        <link rel="stylesheet" href="/styles.css?v=61" />
       </head>
       <body>
         {children}

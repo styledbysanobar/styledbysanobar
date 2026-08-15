@@ -2485,46 +2485,185 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
    so the two read as one funnel. Rounded 10px cards, hairline rules, and
    the gold rail on the CTA, the title turn and the fee figure.
    ============================================================ */
+/* Bottom padding clears the sticky bar, so the last line of the page is never
+   sitting underneath it. */
 .co-page{background:var(--stage);color:var(--cream);min-height:100svh;
-  padding-bottom:clamp(40px,7vh,80px);
+  padding-bottom:calc(clamp(40px,7vh,80px) + 78px + env(safe-area-inset-bottom));
   --bk-hair:rgba(var(--cream-rgb),.16);--bk-hair-2:rgba(var(--cream-rgb),.28)}
 
-.co-wrap{max-width:1180px;margin:0 auto;padding:clamp(34px,5.5vh,64px) clamp(16px,2.6vw,30px) 0}
+/* Phone: one stack, capped so the line length stays readable.
+   Desktop: two columns, handled in the min-width block at the end. */
+.co-wrap{max-width:600px;margin:0 auto;padding:clamp(30px,4.6vh,52px) clamp(16px,2.6vw,30px) 0}
+.co-col{min-width:0}
 
-/* editorial head: eyebrow -> title -> deck */
-.co-head{text-align:center;margin-bottom:clamp(26px,4.4vh,44px)}
-.co-eyebrow{color:var(--gold-soft)}
-.co-h1{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.01em;
-  font-size:clamp(27px,3.8vw,46px);line-height:1.1;color:var(--cream);margin:0;text-wrap:balance}
-/* the turn in the title, lit on the rail like every other gold turn in the
-   funnel. color: is the fallback and must stay. */
-.co-h1 em{font-style:normal;color:var(--gold);background-image:var(--gold-rail-text)}
-.co-sub{font-family:var(--f-body);font-size:clamp(14.5px,1.6vw,17px);line-height:1.6;
-  color:rgba(var(--cream-rgb),.78);max-width:58ch;margin:clamp(14px,2.2vh,20px) auto 0;text-wrap:balance}
+/* ---- 1 · THE CREDIBILITY CARD ----
+   The most prominent object on the page. A gold rail ring rather than a flat
+   border, drawn as a masked ::after because a rounded border cannot take a
+   gradient. Same technique as every other ringed element in the funnel. */
+.co-card{position:relative;border-radius:var(--r-card);
+  display:flex;align-items:stretch;gap:clamp(14px,2.4vw,18px);
+  padding:clamp(15px,2.2vw,20px);
+  background:linear-gradient(180deg,rgba(var(--cream-rgb),.07),rgba(var(--cream-rgb),.022));
+  /* the ring reads brighter with a little light spilling off it */
+  box-shadow:0 0 0 1px rgba(var(--gold-soft-rgb),.14),0 14px 44px -22px rgba(0,0,0,.75)}
+/* 2px rather than the 1px used elsewhere in the funnel, and lit on a brighter
+   ramp: this card is meant to be the most prominent object on the page. */
+.co-card::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;
+  background:linear-gradient(135deg,
+    var(--gold-soft) 0%,
+    var(--gold-bright) 26%,
+    var(--gold-hi) 50%,
+    var(--gold-bright) 74%,
+    var(--gold-soft) 100%);
+  pointer-events:none;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask-composite:exclude}
 
-/* two panels: the ledger, then the payment */
-/* start, NOT stretch. Stretching the panels to equal height only moves the
-   problem: the ledger is shorter than the form, so the leftover height has to go
-   somewhere, and it opens as one dead gap inside the left card. Let each panel
-   be its own height; uneven bottom edges on a two-column grid are normal. */
-.co-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,1.8vw,26px);align-items:start}
+.co-card-idbody{min-width:0}
+/* gold, on the same rail as the eyebrow, so the credential brackets the name
+   above and below in lit metal. width:fit-content for the same reason. */
+.co-card-role{font-family:var(--f-mono);font-weight:600;font-size:10px;letter-spacing:.17em;
+  text-transform:uppercase;width:fit-content;margin:6px 0 0;
+  color:var(--gold);background-image:var(--gold-rail-text)}
 
-.co-panel{border-radius:var(--r-card);position:relative;border:1px solid var(--bk-hair);
-  padding:clamp(24px,2.8vw,42px);background:rgba(var(--cream-rgb),.02)}
-.co-panel--pay{border-color:rgba(var(--gold-soft-rgb),.36);background:rgba(var(--cream-rgb),.035)}
+/* One credential line. It runs quiet so the five highlighted names carry it:
+   set the body text any brighter and the highlight has nothing to beat. */
+.co-card-cred{font-family:var(--f-body);font-size:clamp(12.5px,1.35vw,13.5px);line-height:1.6;
+  color:rgba(var(--cream-rgb),.6);margin:clamp(9px,1.4vh,12px) 0 0}
+.co-nm{font-weight:600;color:var(--cream)}
+/* A rounded square that runs the full height of the card, not a circle. It is a
+   background-removed cut-out, so it needs a ground of its own or her dark hair
+   dissolves into the oxblood: it gets the same cream tile the payment marks get,
+   because the brand frames the image, it never recolours it.
+   align-self:stretch plus height:auto is what makes it match the card height
+   whatever the credential line wraps to. */
+.co-stylist-photo{flex:0 0 auto;align-self:stretch;
+  width:clamp(84px,21vw,112px);height:auto;
+  border-radius:calc(var(--r-card) - 6px);object-fit:cover;object-position:50% 16%;
+  background:var(--cream)}
+/* .sec-eyebrow carries a large bottom margin for section heads and a light-mode
+   colour. Both are wrong inside a tight identity block.
+   width:fit-content matters: the rail maps to the ELEMENT box, so on a full
+   width block the lit part of the gradient lands past the end of the words.
+   color: is the fallback and must stay. */
+.co-stylist-eyebrow{display:block;width:fit-content;margin-bottom:0;
+  color:var(--gold);background-image:var(--gold-rail-text)}
+.co-stylist-name{font-family:var(--f-display);font-weight:600;font-size:clamp(19px,2.5vw,25px);
+  line-height:1.15;color:var(--cream);margin:6px 0 0}
 
-/* The square corner-tick frame device is gone: the house moved to rounded 10px
-   cards (--r-card) and the funnel and booking pages dropped their ticks in the
-   redesign. Ticks pinned at -1px cannot sit on a rounded edge anyway. */
+/* ---- 2 · URGENCY, one line. Fixed capacity on the left, the live count on the
+        right behind a recording dot. Splitting them matters: the left half is a
+        standing policy, the right half is a reading taken just now, and the
+        divider is what tells the eye they are two different kinds of fact.
+        Capacity, not a countdown, so it never reads as pressure. ---- */
+/* One row: the standing policy on the left, the live reading on the right behind
+   a recording dot, with a divider telling the eye they are two different kinds
+   of fact. Mono uppercase, because this is a status readout and not a headline.
+
+   Scale is the ONLY thing that changed from the first pass: it stays a single
+   quiet row, it is just set large enough to hold the page. Do not turn it back
+   into stacked figures, that reads as a metrics dashboard. */
+.co-live{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
+  gap:clamp(14px,3vw,22px);margin:clamp(28px,4.2vh,40px) 0 clamp(26px,3.8vh,34px);
+  font-family:var(--f-mono);font-weight:600;font-size:clamp(13px,2.1vw,17px);
+  letter-spacing:.15em;text-transform:uppercase;line-height:1}
+.co-live-cap{color:rgba(var(--cream-rgb),.68)}
+.co-live-bar{width:1px;height:clamp(18px,2.6vw,24px);background:rgba(var(--cream-rgb),.24)}
+.co-live-now{display:inline-flex;align-items:center;gap:clamp(9px,1.8vw,12px);color:var(--gold-bright)}
+.co-live-dot{flex:0 0 auto;width:clamp(9px,1.7vw,11px);height:clamp(9px,1.7vw,11px);
+  border-radius:50%;background:var(--gold);
+  box-shadow:0 0 0 4px rgba(var(--gold-soft-rgb),.2)}
+/* the breathing ring is what makes it read as a live status rather than a claim */
+@media(prefers-reduced-motion:no-preference){
+  .co-live-dot{animation:co-pulse 2.4s var(--ease) infinite}
+}
+@keyframes co-pulse{0%,100%{opacity:1}50%{opacity:.32}}
+
+/* ---- 4 · WHAT IS INCLUDED, collapsed ---- */
+/* A bordered widget, not a pair of hairlines: it has to read as a control the
+   reader can open, which a rule across the page does not. Gold hairline, kept to
+   1px so it never competes with the 2px lit ring on the credibility card. */
+.co-inc{border:1px solid rgba(var(--gold-soft-rgb),.44);border-radius:var(--r-card);
+  background:rgba(var(--cream-rgb),.018);transition:border-color .25s var(--ease)}
+.co-inc:hover{border-color:rgba(var(--gold-soft-rgb),.72)}
+.co-inc-sum{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:clamp(15px,2.2vh,18px) clamp(15px,2.2vw,20px);
+  font-family:var(--f-mono);font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  line-height:1.45;color:rgba(var(--cream-rgb),.82);transition:color .25s var(--ease)}
+.co-inc-sum::-webkit-details-marker{display:none}
+.co-inc-sum:hover{color:var(--cream)}
+/* One leading icon per section label, same size and same 1.7 stroke on both, so
+   "What's included" and "Your details" read as a matched pair. */
+.co-sec-lbl{display:inline-flex;align-items:center;gap:clamp(9px,1.6vw,12px);min-width:0}
+.co-sec-ic{flex:0 0 auto;width:clamp(22px,4.2vw,26px);height:clamp(22px,4.2vw,26px);
+  color:var(--gold)}
+
+/* the standard chevron, same one used for every disclosure in the funnel */
+.co-inc-chev{flex:0 0 auto;width:17px;height:17px;color:var(--gold-soft);
+  transition:transform .3s var(--ease)}
+.co-inc[open] .co-inc-chev{transform:rotate(180deg)}
+.co-inc[open] .co-included{border-top:1px solid var(--bk-hair);
+  margin:0 clamp(15px,2.2vw,20px) clamp(6px,1vh,10px)}
+
+/* ---- 5 · THE PAYMENT BLOCK ---- */
+/* same gold hairline as the What's included widget, so the two blocks below the
+   card read as a matched pair */
+.co-pay{margin-top:clamp(22px,3.4vh,32px);border-radius:var(--r-card);position:relative;
+  border:1px solid rgba(var(--gold-soft-rgb),.44);background:rgba(var(--cream-rgb),.035);
+  padding:clamp(22px,3.2vw,32px)}
+
+/* ---- 6 · ONE VOICE, directly above the button ---- */
+.co-quote{margin:clamp(6px,1vh,10px) 0 0;padding:clamp(14px,2vh,18px) 0 0;
+  border-top:1px solid var(--bk-hair)}
+.co-quote-t{font-family:var(--f-body);font-style:italic;font-size:clamp(13.5px,1.5vw,15px);
+  line-height:1.6;color:rgba(var(--cream-rgb),.88);margin:0}
+.co-quote-t::before{content:"\201C"}
+.co-quote-t::after{content:"\201D"}
+.co-quote-n{font-family:var(--f-mono);font-weight:600;font-size:9.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold-soft);margin-top:9px}
+
+/* ---- 7 · THE BUTTON LOCKUP: one line in, the CTA, three pointers out. ---- */
+.co-reschedule{display:flex;align-items:center;gap:9px;
+  font-family:var(--f-body);font-size:clamp(12.5px,1.35vw,13.5px);line-height:1.55;
+  color:rgba(var(--cream-rgb),.6);margin:clamp(4px,.8vh,7px) 0 clamp(12px,1.8vh,16px)}
+.co-reschedule-ic{flex:0 0 auto;width:16px;height:16px;color:var(--gold-soft)}
+
+/* three pointers under the CTA, one row, wrapping to a stack only when the
+   labels genuinely stop fitting */
+.co-assurance{list-style:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  gap:clamp(10px,2.2vw,20px);margin:clamp(16px,2.4vh,22px) 0 0;padding:0;
+  font-family:var(--f-mono);font-weight:600;font-size:clamp(8.5px,1.05vw,9.5px);
+  letter-spacing:.14em;text-transform:uppercase;color:rgba(var(--cream-rgb),.56)}
+.co-assurance-i{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.co-assurance-ic{flex:0 0 auto;width:15px;height:15px;color:var(--gold-soft)}
+
+/* ---- THE STICKY TWIN. Only paints once the real button leaves the view ----
+   A real bar, not a floating button: solid ground, a gold hairline along the top
+   edge and a shadow lifting off the page, so it reads as page furniture that the
+   content scrolls underneath. The old version faded to transparent, which is why
+   the button looked like it was hovering with nothing holding it. */
+.co-sticky{position:fixed;left:0;right:0;bottom:0;z-index:40;
+  padding:clamp(11px,1.8vh,15px) clamp(14px,3vw,20px)
+          calc(clamp(11px,1.8vh,15px) + env(safe-area-inset-bottom));
+  background:var(--stage);
+  border-top:1px solid rgba(var(--gold-soft-rgb),.34);
+  box-shadow:0 -18px 44px -20px rgba(0,0,0,.7);
+  transform:translateY(110%);opacity:0;pointer-events:none;
+  transition:transform .32s var(--ease),opacity .32s var(--ease)}
+@supports (backdrop-filter:blur(8px)){
+  .co-sticky{background:rgba(var(--oxblood-deep-rgb),.92);backdrop-filter:blur(10px)}
+}
+.co-sticky.is-on{transform:none;opacity:1;pointer-events:auto}
+/* the button tracks the column width above it rather than spanning the screen */
+.co-btn--sticky{max-width:600px;margin:0 auto}
+@media(prefers-reduced-motion:reduce){.co-sticky{transition:none}}
 
 .co-panel-label{font-family:var(--f-mono);font-weight:600;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--gold-soft);margin:0 0 clamp(14px,2.2vh,20px)}
+  color:var(--gold);margin:0 0 clamp(14px,2.2vh,20px)}
 .co-panel-sub{font-family:var(--f-body);font-size:clamp(13px,1.4vw,14.5px);line-height:1.55;
   color:rgba(var(--cream-rgb),.6);margin:-12px 0 clamp(18px,2.6vh,24px)}
 
-/* the thing being bought, named once, in the display voice */
-.co-item{font-family:var(--f-display);font-weight:600;font-size:clamp(17px,2vw,22px);line-height:1.25;
-  color:var(--cream);margin:0 0 clamp(6px,1vh,10px)}
 
 /* an itemised ledger, not a bullet list. Title carries the beat, one quiet line
    under it says what it means, and nothing goes past that: the selling is done,
@@ -2533,6 +2672,8 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .co-included{list-style:none;margin:0;padding:0;border-top:1px solid var(--bk-hair)}
 .co-included-row{display:grid;grid-template-columns:auto 1fr;gap:clamp(13px,2vw,18px);align-items:start;
   padding:clamp(14px,2.1vh,18px) 0;border-bottom:1px solid var(--bk-hair)}
+/* the rules separate the items, so the last one has nothing left to separate */
+.co-included-row:last-child{border-bottom:0}
 .co-included-n{font-family:var(--f-display);font-weight:600;font-size:clamp(14px,1.6vw,17px);
   line-height:1.35;letter-spacing:.02em;color:var(--gold)}
 .co-included-body{display:block}
@@ -2540,28 +2681,6 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
   line-height:1.3;color:var(--cream)}
 .co-included-d{display:block;font-family:var(--f-body);font-size:clamp(12.5px,1.35vw,14px);line-height:1.55;
   color:rgba(var(--cream-rgb),.62);margin-top:5px}
-
-/* the value moment: the one figure that catches light */
-.co-total{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
-  padding-top:clamp(18px,2.6vh,24px)}
-.co-total-l{font-family:var(--f-mono);font-weight:600;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
-  color:rgba(var(--cream-rgb),.68)}
-.co-total-v{font-family:var(--f-display);font-weight:600;font-size:clamp(32px,5vw,50px);line-height:1;
-  letter-spacing:-.02em;color:var(--gold);background-image:var(--gold-rail-text)}
-
-/* the reschedule policy: the one thing that takes the risk off the click */
-.co-assure{list-style:none;margin:clamp(18px,2.6vh,24px) 0 0;padding:clamp(16px,2.2vh,20px) 0 0;
-  border-top:1px solid var(--bk-hair);display:flex;flex-direction:column;gap:11px}
-.co-assure li{display:flex;align-items:flex-start;gap:10px;font-family:var(--f-body);
-  font-size:clamp(12.5px,1.35vw,14px);line-height:1.5;color:rgba(var(--cream-rgb),.74)}
-/* the real Lucide "info" icon (public/assets/icons/info.svg, ISC), used as a
-   MASK rather than an <img>: an external SVG cannot inherit the page's colour,
-   so masking it lets the gold rail show through and the glyph stays on the same
-   135deg diagonal as every other icon in the funnel. */
-.co-assure-ic{flex:0 0 auto;width:18px;height:18px;margin-top:1px;
-  background:var(--gold-rail);
-  -webkit-mask:url(/assets/icons/info.svg) center/contain no-repeat;
-  mask:url(/assets/icons/info.svg) center/contain no-repeat}
 
 /* the form */
 .co-form{display:flex;flex-direction:column;gap:clamp(13px,1.9vh,17px)}
@@ -2590,47 +2709,35 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .co-btn .arrow{transition:transform .3s var(--ease)}
 .co-btn:hover:not(:disabled) .arrow{transform:translateX(4px)}
 
-/* payment marks: cream tiles so the coloured logos stay legible on the dark
-   stage. The brand FRAMES them, it never recolours them. */
-.co-methods{margin-top:clamp(16px,2.4vh,22px)}
-.co-methods-label{display:block;font-family:var(--f-mono);font-weight:600;font-size:9.5px;letter-spacing:.2em;
-  text-transform:uppercase;color:rgba(var(--cream-rgb),.5);margin-bottom:10px;text-align:center}
-.co-marks{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
-.co-mark{display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  height:29px;padding:0 9px;background:var(--cream);border-radius:var(--r-sm);
-  box-shadow:inset 0 0 0 1px rgba(var(--oxblood-rgb),.1)}
-.co-mark img{height:16px;width:auto;display:block}
-.co-mark--text{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--oxblood)}
-.co-mark--text svg{width:14px;height:14px;flex:0 0 auto}
-
-.co-secure{display:flex;align-items:center;justify-content:center;gap:8px;
-  font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;line-height:1.6;
-  color:rgba(var(--cream-rgb),.46);margin:clamp(12px,1.8vh,16px) 0 0;text-align:center}
-.co-lock{flex:0 0 auto;width:13px;height:13px;color:rgba(var(--cream-rgb),.46)}
-.co-lock svg{width:100%;height:100%;display:block}
-
 .co-back{text-align:center;margin:clamp(26px,4vh,40px) 0 0;
   font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase}
 .co-back a{color:rgba(var(--cream-rgb),.5);text-decoration:none;border-bottom:1px solid transparent;
   transition:color .25s var(--ease),border-color .25s var(--ease)}
 .co-back a:hover{color:var(--cream);border-bottom-color:rgba(var(--cream-rgb),.4)}
 
-@media(max-width:1000px){
-  /* the two panels stop being comfortable side by side before they stack */
-  .co-wrap{max-width:860px}
+/* ---- DESKTOP: everything that argues on the left, the form on the right ----
+   The two columns start at the same top edge, so the form is reachable without
+   scrolling past the case for it. No sticky bar here: the real button is
+   already in view, and a fixed bar on a wide screen is noise. */
+@media(min-width:900px){
+  .co-wrap{max-width:1060px}
+  .co-cols{display:grid;grid-template-columns:1fr 1fr;
+    gap:clamp(24px,3.2vw,44px);align-items:start}
+  /* the right column already starts at the top, so it needs no lead-in gap */
+  .co-pay{margin-top:0}
+  .co-sticky{display:none}
+  /* the ledger is open and is not a control, so it loses its affordances */
+  .co-inc.is-locked .co-inc-sum{cursor:default}
+  .co-inc.is-locked .co-inc-chev{display:none}
+  /* the page no longer has to clear a sticky bar */
+  .co-page{padding-bottom:clamp(48px,7vh,88px)}
 }
-@media(max-width:860px){
-  .co-grid{grid-template-columns:1fr}
-  /* pay first on a phone, the ledger reads as confirmation underneath */
-  .co-panel--pay{order:-1}
-  .co-wrap{max-width:640px}
-}
+
 @media(max-width:520px){
-  .co-panel{padding:22px 17px}
-  .co-total-v{font-size:36px}
-  .co-marks{gap:6px}
-  .co-mark{height:27px;padding:0 8px}
+  .co-pay{padding:22px 17px}
+  /* stays stretched: the photo matching the card height is the point of it */
+  .co-card{padding:13px;gap:12px}
+  .co-inc-sum{font-size:10px;letter-spacing:.12em}
 }
 
 
@@ -2681,8 +2788,8 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
 .hi-h1 .hi-turn,
 .hi-sub .hi-hl,
 .rc-close-turn,
-.co-h1 em,
-.co-total-v,
+.co-stylist-eyebrow,
+.co-card-role,
 .hi-problem .r-panel--dark .pr-plabel{
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -2693,7 +2800,7 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
    one the clip is silently undone and the gradient paints the whole box with
    invisible text on top of it. */
 @supports not ((-webkit-background-clip:text) or (background-clip:text)){
-  .hi-eyebrow,.hi-card-eyebrow,.hi-hero-logos-lbl,.hi-h1 .hi-turn,.hi-sub .hi-hl,.rc-close-turn,.co-h1 em,.co-total-v,.hi-problem .r-panel--dark .pr-plabel{
+  .hi-eyebrow,.hi-card-eyebrow,.hi-hero-logos-lbl,.hi-h1 .hi-turn,.hi-sub .hi-hl,.rc-close-turn,.co-stylist-eyebrow,.co-card-role,.hi-problem .r-panel--dark .pr-plabel{
     background:none;-webkit-text-fill-color:currentColor}
 }
 

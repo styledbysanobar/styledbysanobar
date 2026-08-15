@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { track, OFFER } from "../lib/fbq";
 
@@ -8,6 +8,16 @@ import { track, OFFER } from "../lib/fbq";
 
    Collects the three details Meta matches on, opens Razorpay, verifies the
    signature server side, then sends the payer to /book to pick a slot.
+
+   Event ladder on this page, deliberately two rungs:
+
+     AddToCart        page load. They arrived at the fee page, nothing more.
+     InitiateCheckout the Razorpay sheet is actually opening, which means the
+                      form validated and the order exists.
+
+   These were previously the same event: InitiateCheckout fired on mount, so
+   every arrival counted as a started checkout. Meta optimised toward the
+   cheapest people who would let a page load, which is exactly what it delivered.
 
    Purchase is NOT fired from here. The Razorpay webhook owns that event, so a
    UPI payer who finishes inside their bank app and never comes back is still
@@ -60,11 +70,20 @@ export default function CheckoutForm({ amountLabel }: { amountLabel: string }) {
     document.body.appendChild(s);
   }, []);
 
-  /* Mid funnel signal: reaching the fee page is a real intent step, and it is the
-     browser event that pairs with the server side Purchase. */
+  /* Soft mid funnel signal: they reached the fee page. No checkout has started
+     yet, so this is AddToCart. Guarded because React runs mount effects twice
+     under StrictMode in dev. */
+  const cartFired = useRef(false);
   useEffect(() => {
-    track("InitiateCheckout", { ...OFFER });
+    if (cartFired.current) return;
+    cartFired.current = true;
+    track("AddToCart", { ...OFFER });
   }, []);
+
+  /* Fired once per page when the Razorpay sheet opens. Once, not per click, so
+     a dismiss-and-retry cannot inflate the number the way the old mount-effect
+     version did. */
+  const checkoutFired = useRef(false);
 
   const set = (k: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setF((s) => ({ ...s, [k]: e.target.value }));
@@ -160,6 +179,12 @@ export default function CheckoutForm({ amountLabel }: { amountLabel: string }) {
         setBusy(false);
         setFailed("That payment did not go through. Please try again.");
       });
+
+      /* The real checkout start: form valid, order created, sheet about to open. */
+      if (!checkoutFired.current) {
+        checkoutFired.current = true;
+        track("InitiateCheckout", { ...OFFER });
+      }
 
       rzp.open();
     } catch {

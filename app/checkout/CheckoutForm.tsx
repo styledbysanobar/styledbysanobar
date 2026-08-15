@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { track, OFFER } from "../lib/fbq";
 
@@ -31,24 +31,68 @@ declare global {
 
 const CHECKOUT_JS = "https://checkout.razorpay.com/v1/checkout.js";
 
-/* The methods Razorpay actually presents for this account, shown as the real
-   brand marks rather than a sentence of names. Net banking has no single mark,
-   so it gets a line icon and a label instead. */
-const MARKS: { src: string; alt: string }[] = [
-  { src: "/assets/payments/visa.svg", alt: "Visa" },
-  { src: "/assets/payments/rupay.svg", alt: "RuPay" },
-  { src: "/assets/payments/upi.svg", alt: "UPI" },
-  { src: "/assets/payments/amex.svg", alt: "American Express" },
+/* The three pointers under the CTA. One padlock, one card, one shield, drawn on
+   the same 24 grid at the same stroke so the row reads as one system. */
+const ASSURANCES: { label: string; icon: ReactNode }[] = [
+  {
+    label: "Secure checkout",
+    icon: (
+      <>
+        <rect x="4" y="10.5" width="16" height="9.5" rx="1.6" />
+        <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
+      </>
+    ),
+  },
+  {
+    label: "Razorpay verified",
+    icon: (
+      <>
+        <rect x="2.5" y="5" width="19" height="14" rx="2" />
+        <path d="M2.5 9.8h19" />
+        <path d="M6.5 14.6h3.5" />
+      </>
+    ),
+  },
+  {
+    label: "256 bit SSL secured",
+    icon: (
+      <>
+        <path d="M12 2.8l7.5 3v5.6c0 4.3-3.1 7.8-7.5 9.8-4.4-2-7.5-5.5-7.5-9.8V5.8z" />
+        <path d="M8.9 12.1l2.1 2.1 4.1-4.2" />
+      </>
+    ),
+  },
 ];
 
 type Fields = { name: string; email: string; phone: string };
 
-export default function CheckoutForm({ amountLabel }: { amountLabel: string }) {
+export default function CheckoutForm({
+  amountLabel,
+  testimonial,
+}: {
+  amountLabel: string;
+  /* One short quote, rendered between the fields and the button. Omitted
+     entirely when empty, so the page never ships a hollow proof slot. */
+  testimonial?: { quote: string; name: string };
+}) {
   const [f, setF] = useState<Fields>({ name: "", email: "", phone: "" });
   const [touched, setTouched] = useState(false);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState("");
   const [sdkReady, setSdkReady] = useState(false);
+
+  /* The sticky bar is the same submit button, shown only once the real one has
+     scrolled out of view. Two visible copies of one CTA reads as a bug, so the
+     inline button owns the viewport whenever it is in it. */
+  const btnRef = useRef<HTMLButtonElement | null>(null);
+  const [stuck, setStuck] = useState(false);
+  useEffect(() => {
+    const el = btnRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setStuck(!e.isIntersecting), { threshold: 0 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   /* Load Razorpay's checkout script once. Kept here rather than in the layout so
      it only loads on the page that needs it. */
@@ -247,8 +291,36 @@ export default function CheckoutForm({ amountLabel }: { amountLabel: string }) {
       ) : null}
       {failed ? <p className="co-error">{failed}</p> : null}
 
-      <button className="co-btn" type="submit" disabled={busy}>
-        {busy ? "Opening payment" : `Pay ${amountLabel} and pick your slot`}
+      {/* Last thing read before the button: one voice, not a wall. */}
+      {testimonial ? (
+        <figure className="co-quote">
+          <blockquote className="co-quote-t">{testimonial.quote}</blockquote>
+          <figcaption className="co-quote-n">{testimonial.name}</figcaption>
+        </figure>
+      ) : null}
+
+      {/* The only line between the fields and the button. No refund promise
+          here: that one is parked until the policy is confirmed. */}
+      <p className="co-reschedule">
+        <svg
+          className="co-reschedule-ic"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="3.2" y="5" width="17.6" height="16" rx="2" />
+          <path d="M3.2 9.6h17.6M8 3.2v3.6M16 3.2v3.6" />
+          <path d="M12 12.6v3l2 1.2" />
+        </svg>
+        Reschedule up to 24 hours before your slot.
+      </p>
+
+      <button className="co-btn" type="submit" disabled={busy} ref={btnRef}>
+        {busy ? "Opening payment" : `Pay ${amountLabel} & Book My Slot`}
         {busy ? null : (
           <span className="arrow" aria-hidden="true">
             &rarr;
@@ -256,38 +328,40 @@ export default function CheckoutForm({ amountLabel }: { amountLabel: string }) {
         )}
       </button>
 
-      {/* Payment marks ride on cream tiles so the coloured brand logos stay
-          legible against the dark stage. The brand frames them, it never
-          recolours them. */}
-      <div className="co-methods">
-        <span className="co-methods-label">Pay securely with</span>
-        <ul className="co-marks">
-          {MARKS.map((m) => (
-            <li className="co-mark" key={m.alt}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={m.src} alt={m.alt} height={16} />
-            </li>
-          ))}
-          <li className="co-mark co-mark--text">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M3 9.5L12 4l9 5.5" />
-              <path d="M5 9.5v9M19 9.5v9M9 9.5v9M15 9.5v9" />
-              <path d="M3 20.5h18" />
-            </svg>
-            Net banking
-          </li>
-        </ul>
+      {/* Sticky twin. Same form, same submit, so validation and the Razorpay
+          open path are shared rather than duplicated. */}
+      <div className={`co-sticky${stuck ? " is-on" : ""}`} aria-hidden={!stuck}>
+        <button className="co-btn co-btn--sticky" type="submit" disabled={busy} tabIndex={stuck ? 0 : -1}>
+          {busy ? "Opening payment" : `Pay ${amountLabel} & Book My Slot`}
+          {busy ? null : (
+            <span className="arrow" aria-hidden="true">
+              &rarr;
+            </span>
+          )}
+        </button>
       </div>
 
-      <p className="co-secure">
-        <span className="co-lock" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="4" y="11" width="16" height="9" rx="1" />
-            <path d="M8 11V7.5a4 4 0 0 1 8 0V11" />
-          </svg>
-        </span>
-        Secured by Razorpay. Your details stay between you and Sanobar.
-      </p>
+      {/* Three trust pointers under the CTA. Same icon box and same stroke on
+          all three so they read as one row, not three decisions. */}
+      <ul className="co-assurance">
+        {ASSURANCES.map((a) => (
+          <li className="co-assurance-i" key={a.label}>
+            <svg
+              className="co-assurance-ic"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              {a.icon}
+            </svg>
+            {a.label}
+          </li>
+        ))}
+      </ul>
     </form>
   );
 }

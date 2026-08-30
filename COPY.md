@@ -19,9 +19,9 @@ _The consultation is named the **Celebrity Image Audit**. The **Instant Image Up
 - A straight answer on whether her Instant Image Upgrade is right for you
 - _Foot:_ The same eye behind India's biggest celebrities, now on you.
 
-- **CTA:** Book your Celebrity Image Audit (₹97) →
+- **CTA:** Book your Celebrity Image Audit (₹197) →
 - **Assurance points:** One-on-one with a Celebrity Stylist · 10+ Years Styling India's Stars · Only 8 Audits a Week
-- **Why ₹97:** ₹97 holds the slot. Sanobar takes 8 audits a week, so the time is blocked only for you.
+- **Why ₹197:** ₹197 holds the slot. Sanobar takes 8 audits a week, so the time is blocked only for you.
 - **Soft link:** Not ready to apply? See why the gap exists, and why it was never your fault ↓
 
 **Proof rail (stats + logos, one band):** 10+ Years in fashion · 100+ Campaigns, films & shoots · 200+ Styling appointments at Broadway │ AS SEEN ON — Kotak · Tanishq · Oppo · Myntra · American Tourister · Parachute

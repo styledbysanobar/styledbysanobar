@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import GoldRailDefs from "../GoldRailDefs";
-import { amountRupeesLabel } from "../lib/razorpay";
+import { PRICE_LABEL } from "../lib/price";
 import CheckoutForm from "./CheckoutForm";
 import Included from "./Included";
 
@@ -68,7 +68,7 @@ const INCLUDED: { n: string; t: string; d: string }[] = [
 ];
 
 export default function CheckoutPage() {
-  const rupees = `₹${amountRupeesLabel()}`;
+  const rupees = PRICE_LABEL;
 
   return (
     <main className="co-page">

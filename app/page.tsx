@@ -1,6 +1,7 @@
 import FunnelScripts from "./FunnelScripts";
 import GoldRailDefs from "./GoldRailDefs";
 import Testimonials from "./Testimonials";
+import { PRICE_LABEL } from "./lib/price";
 
 /* SANOBAR — high-ticket single-page funnel ("Instant Image Upgrade").
    One page, one action: apply for a one-to-one Instant Image Upgrade. Structure
@@ -117,7 +118,7 @@ const FAQ: { q: string; a: React.ReactNode; most?: boolean }[] = [
   },
   {
     q: "Is this a sales call in disguise? What does it cost?",
-    a: <>No. It is ₹97 to hold your slot, and that is all the consultation costs. The first conversation is about you, and Sanobar will give you a real, honest read whether or not you ever work with her further. What that leads to afterward is entirely your call.</>,
+    a: <>No. It is {PRICE_LABEL} to hold your slot, and that is all the consultation costs. The first conversation is about you, and Sanobar will give you a real, honest read whether or not you ever work with her further. What that leads to afterward is entirely your call.</>,
   },
   {
     q: "I already own expensive clothes, and someone shops for me. Why do I need this?",
@@ -190,7 +191,7 @@ export default function Page() {
               </ul>
               <p className="hi-card-foot">The same eye behind India&rsquo;s biggest celebrities, now on you.</p>
             </div>
-            <a className="hi-cta-btn" href={BOOK_HREF}>Book your Celebrity Image Audit (₹97) <span className="arrow">&rarr;</span></a>
+            <a className="hi-cta-btn" href={BOOK_HREF}>Book your Celebrity Image Audit ({PRICE_LABEL}) <span className="arrow">&rarr;</span></a>
             <ul className="hi-cta-points">
               <li className="hi-cta-point">
                 <span className="hi-cta-point-ic" aria-hidden="true">{I(<><circle cx="12" cy="8" r="3.2" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>)}</span>
@@ -206,9 +207,9 @@ export default function Page() {
               </li>
             </ul>
             <div className="hi-cta-why">
-              <span className="hi-cta-why-lbl">Why ₹97</span>
+              <span className="hi-cta-why-lbl">Why {PRICE_LABEL}</span>
               <p className="hi-cta-why-txt">
-                <strong>₹97 holds the slot.</strong> Sanobar takes 8 audits a week, so the time is blocked only for you.
+                <strong>{PRICE_LABEL} holds the slot.</strong> Sanobar takes 8 audits a week, so the time is blocked only for you.
               </p>
             </div>
           </div>
@@ -486,7 +487,7 @@ export default function Page() {
             At the next wedding, the next meeting, the next stage, be the one they remember, for exactly the right
             reasons. One conversation, and a plan built only for you.
           </p>
-          <a className="cta-btn" href={BOOK_HREF}>Book your Celebrity Image Audit (₹97) <span className="arrow">&rarr;</span></a>
+          <a className="cta-btn" href={BOOK_HREF}>Book your Celebrity Image Audit ({PRICE_LABEL}) <span className="arrow">&rarr;</span></a>
           <ul className="hi-cta-points r-finale-points">
             <li className="hi-cta-point">
               <span className="hi-cta-point-ic" aria-hidden="true">{I(<><circle cx="12" cy="8" r="3.2" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>)}</span>
@@ -508,7 +509,7 @@ export default function Page() {
       {/* sticky book bar — chrome, appears past the hero, hides at the finale */}
       <div className="hi-sticky" aria-hidden="true">
         <span className="hi-sticky-scarce"><span className="hi-sticky-dot" aria-hidden="true" />Only 8 audits a week</span>
-        <a className="hi-sticky-btn" href={BOOK_HREF}>Book your Celebrity Image Audit (₹97) <span className="arrow">&rarr;</span></a>
+        <a className="hi-sticky-btn" href={BOOK_HREF}>Book your Celebrity Image Audit ({PRICE_LABEL}) <span className="arrow">&rarr;</span></a>
       </div>
 
       <FunnelScripts />

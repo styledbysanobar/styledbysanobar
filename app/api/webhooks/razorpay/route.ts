@@ -1,6 +1,12 @@
 import crypto from "node:crypto";
 
-import { OFFER, purchaseEventId, sendCapiEvent } from "../../../lib/metaCapi";
+import {
+  OFFER,
+  purchaseEventId,
+  sendCapiEvent,
+  WEDDING_OFFER,
+  weddingPurchaseEventId,
+} from "../../../lib/metaCapi";
 
 /* Razorpay webhook -> Meta Conversions API Purchase.
 
@@ -29,6 +35,8 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const FUNNEL_KIND = "sanobar_consult";
+/* The Dulha Edit sends its own custom event, so Instant Image's Purchase stays clean. */
+const WEDDING_KIND = "sanobar_wedding";
 /* At or under Rs 1 is a test payment. It is logged but never sent to Meta, so
    QA runs cannot pollute the dataset the campaigns optimise on. */
 const TEST_MAX_PAISE = 100;
@@ -99,7 +107,8 @@ export async function POST(req: Request) {
   /* Funnel gate. Razorpay delivers every captured payment on the account to this
      URL, so anything not created by our checkout is ignored. */
   const notes = readNotes(payment.notes);
-  if (notes.kind !== FUNNEL_KIND) {
+  const wedding = notes.kind === WEDDING_KIND;
+  if (notes.kind !== FUNNEL_KIND && !wedding) {
     return Response.json({ ok: true, skipped: "other funnel", kind: notes.kind ?? "" });
   }
 
@@ -114,15 +123,17 @@ export async function POST(req: Request) {
   }
 
   const { firstName, lastName } = splitName(notes.name ?? "");
+  const eventName = wedding ? "WeddingPurchase" : "Purchase";
+  const eventId = wedding ? weddingPurchaseEventId(paymentId) : purchaseEventId(paymentId);
 
   try {
     const sent = await sendCapiEvent({
-      eventName: "Purchase",
-      eventId: purchaseEventId(paymentId),
+      eventName,
+      eventId,
       /* payment.created_at is a Unix timestamp in seconds. */
       eventTimeMs: payment.created_at ? payment.created_at * 1000 : Date.now(),
       eventSourceUrl: process.env.NEXT_PUBLIC_SITE_URL
-        ? `${process.env.NEXT_PUBLIC_SITE_URL}/checkout`
+        ? `${process.env.NEXT_PUBLIC_SITE_URL}${wedding ? "/dulha-edit/checkout" : "/checkout"}`
         : undefined,
       person: {
         email: notes.email,
@@ -136,7 +147,7 @@ export async function POST(req: Request) {
         clientUserAgent: notes.ua,
       },
       customData: {
-        ...OFFER,
+        ...(wedding ? WEDDING_OFFER : OFFER),
         value,
         currency,
         payment_id: paymentId,
@@ -158,8 +169,8 @@ export async function POST(req: Request) {
       return Response.json({ ok: false, capi: sent }, { status: 200 });
     }
 
-    console.log(`[rzp-webhook] Purchase sent ${paymentId} value ${value} ${currency}`);
-    return Response.json({ ok: true, event_id: purchaseEventId(paymentId) });
+    console.log(`[rzp-webhook] ${eventName} sent ${paymentId} value ${value} ${currency}`);
+    return Response.json({ ok: true, event_id: eventId });
   } catch (err) {
     console.error("[rzp-webhook] CAPI request failed", err);
     return Response.json({ ok: false }, { status: 200 });

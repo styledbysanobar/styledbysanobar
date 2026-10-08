@@ -1,0 +1,167 @@
+/* /dulha-edit/checkout and /dulha-edit/book. Built on the tokens in
+   wedding.css (.wl), phone first. */
+
+.wc-page{min-height:100vh;padding:0 16px 48px;
+  background:radial-gradient(80% 50% at 50% 0%,#F8EDDF 0%,var(--wl-cream) 60%)}
+
+.wc-eyebrow{display:block;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--wl-gold)}
+
+.wc-card{background:var(--wl-card);border:1px solid var(--wl-gold-line);border-radius:var(--wl-radius);
+  box-shadow:0 1px 0 #fff inset,0 18px 36px -28px rgba(90,16,25,.35)}
+
+/* ---------- progress ---------- */
+.wc-progress{display:flex;align-items:center;justify-content:center;max-width:620px;margin:0 auto;padding:18px 0 6px}
+.wc-progress-item{display:flex;align-items:center;flex:0 1 auto}
+.wc-progress-rail{width:clamp(14px,5vw,48px);height:1px;margin:0 8px;background:var(--wl-gold-line)}
+.wc-step{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.06em;
+  color:var(--wl-text-soft);white-space:nowrap}
+.wc-step-n{width:22px;height:22px;flex:0 0 auto;display:grid;place-items:center;border-radius:50%;
+  border:1px solid var(--wl-gold-line);background:#FDF8F1;font-size:11px;color:var(--wl-gold)}
+.wc-step.active{color:var(--wl-ink)}
+.wc-step.active .wc-step-n{background:var(--wl-ink);border-color:var(--wl-ink);color:#FBE3C6}
+.wc-step.done .wc-step-n{background:#F3E4CF;border-color:var(--wl-gold-lt)}
+
+/* ---------- checkout ---------- */
+.wc-wrap{max-width:1040px;margin:0 auto}
+.wc-cols{display:grid;gap:14px;margin-top:18px}
+.wc-col{display:grid;gap:14px;align-content:start}
+
+.wc-id{display:grid;grid-template-columns:76px minmax(0,1fr);gap:4px 16px;align-items:center;padding:18px}
+.wc-id-photo{width:76px;height:76px;border-radius:50%;object-fit:cover;object-position:50% 20%;
+  box-shadow:0 0 0 1px var(--wl-gold-lt),0 0 0 4px #FDF8F1,0 0 0 5px var(--wl-gold-line)}
+.wc-id-name{margin:4px 0 0;font-family:var(--wl-display),Georgia,serif;font-weight:500;font-size:26px;line-height:1.1;color:var(--wl-ink)}
+.wc-id-role{margin-top:4px;font-size:13px;color:var(--wl-text-soft)}
+.wc-id-cred{grid-column:1 / -1;margin-top:12px;padding-top:12px;border-top:1px solid var(--wl-gold-line);
+  font-size:14.5px;line-height:1.55;color:var(--wl-text)}
+.wc-id-cred strong{font-weight:600;color:var(--wl-ink)}
+
+.wc-live{display:flex;align-items:center;justify-content:center;gap:10px;padding:11px 14px;
+  border:1px solid var(--wl-gold-line);border-radius:var(--wl-radius);background:#F7ECDD;
+  font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--wl-ink);text-align:center}
+.wc-live-dot{width:7px;height:7px;flex:0 0 auto;border-radius:50%;background:var(--wl-ink);animation:wlStickyPulse 2s ease infinite}
+
+.wc-inc{padding:18px}
+.wc-inc-list{list-style:none;margin:12px 0 0;padding:0;display:grid}
+.wc-inc-list li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:baseline;padding:10px 0}
+.wc-inc-list li + li{border-top:1px solid var(--wl-gold-line)}
+.wc-inc-n{font-family:var(--wl-display),Georgia,serif;font-size:15px;color:var(--wl-gold);font-variant-numeric:lining-nums}
+.wc-inc-t{font-size:15.5px;line-height:1.4;color:var(--wl-ink)}
+
+.wc-pay{padding:20px 18px}
+.wc-pay-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-bottom:12px;
+  border-bottom:1px solid var(--wl-gold-line)}
+.wc-pay-title{font-family:var(--wl-display),Georgia,serif;font-weight:500;font-size:22px;color:var(--wl-ink)}
+.wc-pay-price{display:flex;flex-direction:column;align-items:flex-end;font-family:var(--wl-display),Georgia,serif;
+  font-size:26px;line-height:1;color:var(--wl-ink)}
+.wc-pay-price span{margin-top:5px;font-family:var(--f-body);font-size:10.5px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--wl-gold)}
+.wc-pay-sub{margin-top:12px;font-size:14px;line-height:1.5;color:var(--wl-text-soft)}
+
+.wc-form{display:grid;gap:14px;margin-top:16px}
+.wc-field{display:grid;gap:6px}
+.wc-label{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--wl-text)}
+.wc-input{width:100%;min-height:50px;padding:0 14px;border:1px solid var(--wl-gold-line);border-radius:10px;
+  background:#FFFCF7;font:inherit;font-size:16px;color:var(--wl-ink);outline:none;
+  transition:border-color .2s ease,box-shadow .2s ease}
+.wc-input::placeholder{color:#B39C8C}
+.wc-input:focus{border-color:var(--wl-gold-lt);box-shadow:0 0 0 3px rgba(176,138,90,.18)}
+.wc-input.is-bad{border-color:#A3222E}
+/* phone: country code picker + number. The native select sits invisibly over a
+   styled face, so phones get their own wheel or list. */
+.wc-phone{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px}
+.wc-cc{position:relative;display:flex;align-items:center;gap:6px;min-height:50px;padding:0 30px 0 12px;
+  border:1px solid var(--wl-gold-line);border-radius:10px;background:#FFFCF7;
+  font-size:16px;color:var(--wl-ink);white-space:nowrap}
+.wc-cc::after{content:"";position:absolute;right:12px;top:50%;width:7px;height:7px;margin-top:-6px;
+  border:solid var(--wl-gold);border-width:0 1.5px 1.5px 0;transform:rotate(45deg);pointer-events:none}
+.wc-cc-select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px}
+.wc-cc:focus-within{border-color:var(--wl-gold-lt);box-shadow:0 0 0 3px rgba(176,138,90,.18)}
+.wc-phone.is-bad .wc-cc,.wc-phone.is-bad .wc-input{border-color:#A3222E}
+.wc-error{font-size:13.5px;line-height:1.45;color:#A3222E}
+
+.wc-reschedule{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--wl-text)}
+.wc-reschedule svg{width:18px;height:18px;flex:0 0 auto;color:var(--wl-gold)}
+
+.wc-btn{display:flex;align-items:center;justify-content:center;gap:14px;width:100%;min-height:54px;padding:0 18px;
+  border:0;border-radius:var(--wl-radius);cursor:pointer;text-decoration:none;
+  background:linear-gradient(180deg,#6B1822 0%,#4C0D15 100%);color:#FBE3C6;
+  font:inherit;font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  box-shadow:0 1px 0 rgba(255,255,255,.14) inset,0 16px 30px -16px rgba(78,15,24,.6);
+  transition:filter .2s ease,transform .2s ease}
+.wc-btn svg{width:24px;height:11px;flex:0 0 auto;transition:transform .2s ease}
+.wc-btn:hover{filter:brightness(1.08)}
+.wc-btn:hover svg{transform:translateX(3px)}
+.wc-btn:disabled{cursor:progress;filter:saturate(.7) brightness(.95)}
+
+.wc-sticky{position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));
+  background:rgba(251,244,234,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-top:1px solid var(--wl-gold-line);box-shadow:0 -14px 30px -18px rgba(90,16,25,.35);
+  transform:translateY(120%);transition:transform .35s ease;pointer-events:none}
+.wc-sticky.is-on{transform:none;pointer-events:auto}
+
+.wc-assurance{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px}
+.wc-assurance li{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--wl-text-soft)}
+.wc-assurance svg{width:15px;height:15px;color:var(--wl-gold)}
+
+.wc-back{margin-top:22px;text-align:center;font-size:13px}
+.wc-back a{color:var(--wl-text-soft);text-decoration:underline;text-underline-offset:3px}
+
+@media (min-width:900px){
+  .wc-page{padding:0 32px 72px}
+  .wc-progress{padding-top:28px}
+  .wc-step{font-size:12px}
+  .wc-cols{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:24px;margin-top:32px}
+  .wc-col{gap:16px}
+  .wc-id{grid-template-columns:96px minmax(0,1fr);padding:24px}
+  .wc-id-photo{width:96px;height:96px}
+  .wc-id-name{font-size:30px}
+  .wc-inc,.wc-pay{padding:24px}
+  .wc-pay{position:sticky;top:24px}
+  .wc-sticky{display:none}
+}
+
+/* ---------- booking ---------- */
+.wb-wrap{max-width:760px;margin:0 auto;display:grid;gap:14px}
+.wb-head{margin:22px 0 4px;text-align:center}
+.wb-h1{margin:8px 0 0;font-family:var(--wl-display),Georgia,serif;font-weight:500;font-size:clamp(30px,6vw,44px);
+  line-height:1.12;color:var(--wl-ink)}
+.wb-h1 em{font-style:italic;color:var(--wl-gold)}
+
+.wb-step{padding:18px 14px}
+.wb-step-head{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding:0 4px}
+.wb-step-n{width:40px;height:40px;flex:0 0 auto;display:grid;place-items:center;border-radius:50%;
+  background:var(--wl-ink);color:#FBE3C6;font-family:var(--wl-display),Georgia,serif;font-size:18px;
+  box-shadow:0 0 0 4px #FDF8F1,0 0 0 5px var(--wl-gold-line)}
+.wb-step-title{margin:4px 0 0;font-family:var(--wl-display),Georgia,serif;font-weight:500;font-size:21px;
+  line-height:1.2;color:var(--wl-ink)}
+
+.wb-cal{position:relative;min-height:520px;border-radius:10px;background:#FFFCF7;border:1px solid var(--wl-gold-line);overflow:hidden}
+.wb-cal-loading{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--wl-gold)}
+.wb-cal-inline{position:relative;width:100%;min-height:520px;overflow:auto}
+
+.wb-ig{display:grid;gap:16px;padding:0 4px}
+.wb-ig-photo{margin:0;position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--wl-gold-line);aspect-ratio:4/3}
+.wb-ig-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 25%}
+.wb-ig-photo figcaption{position:absolute;left:10px;bottom:10px;padding:5px 10px;border-radius:999px;
+  background:rgba(251,244,234,.92);font-size:12px;font-weight:600;color:var(--wl-ink)}
+.wb-ig-copy{display:grid;gap:14px}
+.wb-ig-copy p{font-size:15.5px;line-height:1.55;color:var(--wl-text)}
+.wb-ig-copy b{color:var(--wl-ink)}
+.wb-dm{white-space:nowrap}
+
+.wb-crit{padding:18px;border-color:#D9A9A0;background:#FBEFEA}
+.wb-crit-label{color:#A3222E}
+.wb-crit-list{margin:10px 0 0;padding-left:18px;display:grid;gap:10px}
+.wb-crit-list li{font-size:15px;line-height:1.5;color:var(--wl-text)}
+.wb-crit-list b{color:var(--wl-ink)}
+
+.wb-foot{margin-top:28px;text-align:center;font-family:var(--wl-display),Georgia,serif;font-style:italic;
+  font-size:15px;color:var(--wl-text-soft)}
+
+@media (min-width:760px){
+  .wb-step{padding:24px}
+  .wb-ig{grid-template-columns:220px minmax(0,1fr);align-items:center}
+  .wb-ig-photo{aspect-ratio:1}
+  .wb-ig-btn{width:auto;justify-self:start;padding:0 24px}
+}

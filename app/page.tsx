@@ -174,7 +174,10 @@ export default function Page() {
           <figure className="hi-hero-media">
             <span className="hi-hero-glow" aria-hidden="true" />
             <span className="hi-hero-imgclip">
-              <img className="hi-hero-img" src="/images/hero_photo.png" alt="Sanobar Samir" />
+              <picture>
+                <source media="(max-width: 820px)" srcSet="/images/hero_photo_mobile.webp" />
+                <img className="hi-hero-img" src="/images/hero_photo.png" alt="Sanobar Samir" />
+              </picture>
             </span>
           </figure>
 

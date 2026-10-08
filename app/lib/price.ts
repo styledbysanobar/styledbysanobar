@@ -50,3 +50,14 @@ export function amountRupeesLabel(paise = amountPaise()): string {
  *  The flip side is that changing the variable on Vercel needs a redeploy to
  *  take effect — editing it in the dashboard alone will not move the page. */
 export const PRICE_LABEL = `₹${amountRupeesLabel()}`;
+
+/* The Dulha Edit's Wedding Look Audit fee. Its own variable, so moving the
+   Instant Image fee never moves this one. */
+export const WEDDING_FALLBACK_PAISE = 19700; // Rs 197
+
+export function weddingAmountPaise(): number {
+  const n = Number(process.env.NEXT_PUBLIC_WEDDING_AMOUNT_PAISE);
+  return Number.isFinite(n) && n > 0 ? Math.round(n) : WEDDING_FALLBACK_PAISE;
+}
+
+export const WEDDING_PRICE_LABEL = `₹${amountRupeesLabel(weddingAmountPaise())}`;

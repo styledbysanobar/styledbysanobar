@@ -79,9 +79,16 @@ export function track(
   });
 }
 
-/** Fire a custom (non-standard) event. */
-export function trackCustom(event: string, params?: Record<string, unknown>) {
-  send((fbq) => fbq("trackCustom", event, params));
+/** Fire a custom (non-standard) event. eventID works as it does for track(). */
+export function trackCustom(
+  event: string,
+  params?: Record<string, unknown>,
+  eventID?: string
+) {
+  send((fbq) => {
+    if (eventID) fbq("trackCustom", event, params, { eventID });
+    else fbq("trackCustom", event, params);
+  });
 }
 
 /* The one offer this funnel sells, so every event carries the same labels and
@@ -97,4 +104,16 @@ export const OFFER = {
  *  is built from Cal's booking uid and nothing else. */
 export function leadEventId(bookingUid: string) {
   return `cal_lead_${bookingUid}`;
+}
+
+/* The Dulha Edit. Custom events only (WeddingAddToCart, WeddingInitiateCheckout,
+   WeddingLead, plus WeddingPurchase from the Razorpay webhook), so the Instant
+   Image standard events stay clean. Kept in sync with app/lib/metaCapi.ts. */
+export const WEDDING_OFFER = {
+  content_name: "Wedding Look Audit",
+  content_category: "wedding_booking",
+} as const;
+
+export function weddingLeadEventId(bookingUid: string) {
+  return `cal_wedding_lead_${bookingUid}`;
 }

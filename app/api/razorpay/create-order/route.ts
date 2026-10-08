@@ -1,4 +1,4 @@
-import { amountPaise, basicAuthHeader, RAZORPAY_ORDERS_URL } from "../../../lib/razorpay";
+import { amountPaise, basicAuthHeader, RAZORPAY_ORDERS_URL, weddingAmountPaise } from "../../../lib/razorpay";
 
 /* Creates the Razorpay order for the consultation fee.
 
@@ -18,6 +18,7 @@ const NOTE_MAX = 256;
 /* Sentinel the webhook checks before doing anything. If this Razorpay account
    ever serves a second funnel, the webhook must be able to tell them apart. */
 const FUNNEL_KIND = "sanobar_consult";
+const WEDDING_KIND = "sanobar_wedding";
 
 function truncate(value: string | undefined | null): string {
   if (!value) return "";
@@ -56,11 +57,12 @@ export async function POST(req: Request) {
     "";
   const clientUserAgent = req.headers.get("user-agent") || "";
 
-  /* The price is read from env on the server. The client is never asked. */
-  const amount = amountPaise();
+  /* The price is read from env on the server. The client only names the funnel. */
+  const wedding = body?.funnel === "wedding";
+  const amount = wedding ? weddingAmountPaise() : amountPaise();
 
   const notes: Record<string, string> = {
-    kind: FUNNEL_KIND,
+    kind: wedding ? WEDDING_KIND : FUNNEL_KIND,
     name: truncate(body?.name),
     email: truncate(body?.email),
     phone: truncate(body?.phone),
@@ -77,7 +79,7 @@ export async function POST(req: Request) {
   };
 
   /* Receipt is capped at 40 characters by Razorpay. */
-  const receipt = `sscon_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`.slice(0, 40);
+  const receipt = `${wedding ? "sswed" : "sscon"}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`.slice(0, 40);
 
   try {
     const res = await fetch(RAZORPAY_ORDERS_URL, {

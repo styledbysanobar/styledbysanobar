@@ -31,6 +31,18 @@ const OFFER = {
   content_category: "booking",
 };
 
+/* The Dulha Edit books through its own Cal event type and reports WeddingLead
+   instead of Lead. Must equal WEDDING_CAL_LINK's event slug in
+   app/dulha-edit/book/WeddingCalEmbed.tsx. */
+const WEDDING_CAL_SLUG = "wedding-style-upgrade";
+/* Fallback match if payload.type is ever missing. [PENDING] the number in
+   app.cal.com/event-types/<id> when the wedding event is open in Cal's editor. */
+const WEDDING_CAL_EVENT_TYPE_ID: number | null = null;
+const WEDDING_OFFER = {
+  content_name: "Wedding Look Audit",
+  content_category: "wedding_booking",
+};
+
 /* Application-form answers. Cal keys payload.responses by the question text,
    slugified, so these strings must match the questions in Cal EXACTLY. If a
    question is reworded in Cal, its key changes and the answer silently stops
@@ -188,6 +200,13 @@ export async function POST(req: Request) {
     return Response.json({ ok: true, skipped: "no uid" });
   }
 
+  /* payload.type is the booked event type's slug. */
+  const calType: string | undefined = payload?.type;
+  const calTypeId = Number(payload?.eventTypeId);
+  const wedding =
+    calType === WEDDING_CAL_SLUG ||
+    (WEDDING_CAL_EVENT_TYPE_ID !== null && calTypeId === WEDDING_CAL_EVENT_TYPE_ID);
+
   /* Cal gives firstName/lastName on the attendee directly (confirmed against a
      real BOOKING_CREATED payload), so prefer those. Splitting the display name
      on whitespace is only a fallback: it mangles "Priya Raj Sharma" and every
@@ -222,7 +241,7 @@ export async function POST(req: Request) {
   const value = budgetToValue(budgetAnswer);
 
   const customData: Record<string, unknown> = {
-    ...OFFER,
+    ...(wedding ? WEDDING_OFFER : OFFER),
     booking_uid: uid,
     budget_band: budgetAnswer,
     profession: answer(payload?.responses, Q.profession),
@@ -237,15 +256,15 @@ export async function POST(req: Request) {
   }
 
   const event = {
-    event_name: "Lead",
+    event_name: wedding ? "WeddingLead" : "Lead",
     /* Seconds, and Meta rejects anything older than 7 days. Cal puts an ISO
        createdAt at the top level on some triggers and on the payload on others,
        so try both before falling back to now. */
     event_time: Math.floor(eventTimeMs(body?.createdAt ?? payload?.createdAt) / 1000),
-    event_id: `cal_lead_${uid}`,
+    event_id: wedding ? `cal_wedding_lead_${uid}` : `cal_lead_${uid}`,
     action_source: "website",
     event_source_url: process.env.NEXT_PUBLIC_SITE_URL
-      ? `${process.env.NEXT_PUBLIC_SITE_URL}/book`
+      ? `${process.env.NEXT_PUBLIC_SITE_URL}${wedding ? "/dulha-edit/book" : "/book"}`
       : undefined,
     user_data: userData,
     custom_data: customData,
@@ -279,9 +298,14 @@ export async function POST(req: Request) {
        budget_band with no value next to it means BUDGET_VALUE needs that label
        (or the parser could not find a number in it). */
     console.log(
-      "[cal-webhook] Lead sent",
+      `[cal-webhook] ${event.event_name} sent`,
       uid,
-      JSON.stringify({ value: value ?? null, budget_band: budgetAnswer ?? null }),
+      JSON.stringify({
+        cal_type: calType ?? null,
+        cal_event_type_id: payload?.eventTypeId ?? null,
+        value: value ?? null,
+        budget_band: budgetAnswer ?? null,
+      }),
       JSON.stringify(result)
     );
     return Response.json({ ok: true, event_id: event.event_id });

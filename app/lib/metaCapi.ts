@@ -19,6 +19,12 @@ export const OFFER = {
   content_category: "booking",
 } as const;
 
+/* The Dulha Edit. Kept in sync with WEDDING_OFFER in app/lib/fbq.ts. */
+export const WEDDING_OFFER = {
+  content_name: "Wedding Look Audit",
+  content_category: "wedding_booking",
+} as const;
+
 /** Meta requires every PII field lowercased, trimmed, then SHA-256 hex. */
 export function hash(value: string | undefined | null): string | undefined {
   if (!value) return undefined;
@@ -130,4 +136,8 @@ export async function sendCapiEvent(input: CapiEventInput) {
  *  and nothing else, so any resend of the same payment collapses into one. */
 export function purchaseEventId(paymentId: string) {
   return `rzp_purchase_${paymentId}`;
+}
+
+export function weddingPurchaseEventId(paymentId: string) {
+  return `rzp_wedding_purchase_${paymentId}`;
 }

@@ -11,7 +11,7 @@
 
 /* Re-exported so the order route keeps its single import line, and so there is
    still exactly one name for the amount no matter which module you reach for. */
-export { amountPaise, amountRupeesLabel } from "./price";
+export { amountPaise, amountRupeesLabel, weddingAmountPaise } from "./price";
 
 export const RAZORPAY_ORDERS_URL = "https://api.razorpay.com/v1/orders";
 

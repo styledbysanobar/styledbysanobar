@@ -2850,3 +2850,17 @@ body.dimming .dim-veil{opacity:1;pointer-events:all}
   .rc-close{padding:clamp(24px,7vw,32px) clamp(18px,5vw,24px)}
   .rc-close-line{max-width:22ch}
 }
+
+/* phone hero: a tight crop of Sanobar (hero_photo_mobile.webp) shown at its own
+   shape, fading into the ground instead of a zoomed 5:4 box with a hard cut */
+@media(max-width:820px){
+  .hi-hero-media{aspect-ratio:auto;max-width:440px;clip-path:none;overflow:visible}
+  .hi-hero-imgclip{position:relative;inset:auto;overflow:visible;border-radius:0}
+  .hi-hero-img{width:100%;height:auto;transform:none;object-fit:contain;
+    -webkit-mask-image:linear-gradient(180deg,#000 80%,transparent);mask-image:linear-gradient(180deg,#000 80%,transparent)}
+  .hi-hero-media::after{display:none}
+  .hi-hero-glow{width:74%;height:60%;left:50%;top:36%;transform:translate(-50%,-50%);filter:blur(48px);
+    background:radial-gradient(ellipse,rgba(var(--gold-rgb),.42) 0%,transparent 70%)}
+}
+.hi-hero-imgclip picture{display:block;width:100%;height:100%}
+@media(max-width:820px){.hi-hero-imgclip picture{height:auto}}

@@ -8,7 +8,7 @@ import "./wedding.css";
 export const metadata: Metadata = {
   title: "The Dulha Edit · Wedding styling for grooms by Sanobar Samir",
   description:
-    "Your wedding is weeks away. In a private 30-minute Wedding Look Audit, celebrity stylist Sanobar Samir maps your timeline and tells you honestly what's still possible.",
+    "Your wedding is weeks away. In a private 30-minute Wedding Look Audit, celebrity stylist Sanobar Samir tells you what to do and by when, and honestly what's still possible.",
 };
 
 /* The wedding funnel's own fee step. Never /checkout: that page fires the
@@ -65,7 +65,7 @@ const AUDIT: { icon: React.ReactNode; text: string }[] = [
         <path d="M7.5 13h2M11 13h2M14.5 13h2M7.5 16.5h2M11 16.5h2" />
       </Icon>
     ),
-    text: "Your wedding timeline mapped backwards",
+    text: "What to do for every function, and by when",
   },
   {
     icon: (
@@ -74,7 +74,7 @@ const AUDIT: { icon: React.ReactNode; text: string }[] = [
         <path d="M12 11.7 3.5 17.8h17z" />
       </Icon>
     ),
-    text: "Which of your looks can still go custom, and what should be ready-to-wear",
+    text: "Which of your looks can go custom, and what should be ready-to-wear",
   },
   {
     icon: (
@@ -82,7 +82,7 @@ const AUDIT: { icon: React.ReactNode; text: string }[] = [
         <path d="m12 3.6 2.5 5.3 5.8.7-4.3 4 1.1 5.7L12 16.5l-5.1 2.8L8 13.6l-4.3-4 5.8-.7z" />
       </Icon>
     ),
-    text: "A celebrity stylist's first direction for your looks, from haldi to reception",
+    text: "A celebrity stylist's first ideas for your looks, from haldi to reception",
   },
   {
     icon: (
@@ -90,7 +90,7 @@ const AUDIT: { icon: React.ReactNode; text: string }[] = [
         <path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm-1.2 12.6-3.5-3.5 1.4-1.4 2.1 2.1 4.8-4.8 1.4 1.4z" />
       </Icon>
     ),
-    text: "A straight answer on whether the Dulha Edit is right for your wedding",
+    text: "An honest answer on whether the Dulha Edit is right for you",
   },
 ];
 
@@ -212,7 +212,7 @@ const COMPARE = [
   },
   {
     who: "You",
-    items: ["One store", "One afternoon", "Whatever's ready", "Never tested on camera"],
+    items: ["One store", "One afternoon", "Whatever's ready", "No fittings"],
     icon: (
       <svg className="wl-vs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M17.549 15a99 99 0 0 1 .021 4.09c-.016 1.362-.024 2.044-.464 2.477c-.439.433-1.13.433-2.512.433H9.406c-1.382 0-2.073 0-2.512-.433s-.448-1.115-.464-2.478A99 99 0 0 1 6.451 15m11.098 0c-.104-3.21-.393-6.638-1.039-9m1.039 9h1.867c.765 0 1.147 0 1.384-.251c.238-.252.216-.617.172-1.349c-.239-4.027-1.338-7.241-2.245-9.118c-.266-.552-.4-.828-.727-1.104c-.328-.275-.685-.377-1.4-.58L14.506 2C14.004 3 13.002 3.5 12 3.5S9.996 3 9.494 2L7.4 2.597c-.715.204-1.072.306-1.4.581c-.327.276-.46.552-.727 1.104c-.907 1.877-2.006 5.091-2.245 9.119c-.044.73-.066 1.096.172 1.348c.237.251.62.251 1.384.251H6.45m0 0c.104-3.21.393-6.638 1.039-9M17.5 12h3m-17 0h3M12 4v5" />
@@ -236,8 +236,8 @@ const Badge = ({ n }: { n: string }) => (
    Hugeicons + Phosphor (MIT) in /images/wedding/icons, safa drawn in-house. */
 const FUNCTIONS = ["haldi", "mehndi", "sangeet", "cocktail", "shaadi", "reception"];
 const TESTS = [
-  { img: "ed-move", label: "Move", text: "Dance. Sit. Get on the ghodi." },
-  { img: "ed-camera", label: "Camera", text: "Shoot in venue light. Check every angle." },
+  { img: "ed-move", label: "Move", text: "Sit, walk and dance in it." },
+  { img: "ed-camera", label: "Fit", text: "Collar, length, safa. Altered till it sits right." },
   { img: "ed-coordinate", label: "Next to her", text: "Stand beside her look. Match the décor and family." },
 ];
 const ON_THE_DAY: [string, string][] = [
@@ -359,8 +359,8 @@ export default function WeddingStylingPage() {
           </p>
           <p className="wl-sub">
             With the Dulha Edit, she plans and sources every look of your wedding and styles you on the day, from
-            haldi to reception. In a private 30-minute <strong>Wedding Look Audit</strong>, she maps your timeline and
-            tells you honestly what&rsquo;s still possible.
+            haldi to reception. In a private 30-minute <strong>Wedding Look Audit</strong>, she tells you what to do and
+            by when, and honestly what&rsquo;s still possible.
           </p>
 
           <div className="wl-card">
@@ -613,7 +613,7 @@ export default function WeddingStylingPage() {
           <h2 className="wl-pb-h">
             Every function planned.
             <br />
-            Every look tested on camera.
+            Every look tried and fitted.
             <br />
             <em>Sanobar with you on the day.</em>
           </h2>
@@ -662,7 +662,7 @@ export default function WeddingStylingPage() {
             <div className="wl-ed-head">
               <span className="wl-pb-num">03</span>
               <div>
-                <h3>Test it.</h3>
+                <h3>Try it.</h3>
                 <p>Nothing gets approved until it works on you.</p>
               </div>
             </div>
@@ -676,7 +676,7 @@ export default function WeddingStylingPage() {
                 </li>
               ))}
             </ul>
-            <CardFoot>Tested on camera, so you look right next to her.</CardFoot>
+            <CardFoot>Tried on you, fitted, and matched to her outfits.</CardFoot>
           </li>
 
           <li className="wl-ed-card">

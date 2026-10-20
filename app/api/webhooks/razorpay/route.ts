@@ -152,12 +152,9 @@ export async function POST(req: Request) {
         currency,
         payment_id: paymentId,
         payment_method: typeof payment.method === "string" ? payment.method : undefined,
-        utm_source: notes.utm_source || undefined,
-        utm_medium: notes.utm_medium || undefined,
-        utm_campaign: notes.utm_campaign || undefined,
-        utm_content: notes.utm_content || undefined,
-        utm_term: notes.utm_term || undefined,
-        fbclid: notes.fbclid || undefined,
+        /* UTMs and fbclid stay in the Razorpay notes for reporting and are NOT
+           sent here: Meta optimises on the match keys above, and the click id
+           already reaches it as `fbc`. */
       },
     });
 

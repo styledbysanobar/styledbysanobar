@@ -57,6 +57,18 @@ export async function POST(req: Request) {
     "";
   const clientUserAgent = req.headers.get("user-agent") || "";
 
+  /* fbclid + UTMs saved by middleware.ts on the visitor's landing page. The
+     checkout's own query string (sent in the body) is only the fallback, for a
+     browser that refused the cookie. */
+  let attr: Record<string, string> = {};
+  try {
+    attr = JSON.parse(readCookie(cookieHeader, "ss_attr") || "{}");
+  } catch {
+    attr = {};
+  }
+  const pick = (cookieKey: string, bodyValue: string | undefined): string | undefined =>
+    (typeof attr[cookieKey] === "string" && attr[cookieKey]) || bodyValue;
+
   /* The price is read from env on the server. The client only names the funnel. */
   const wedding = body?.funnel === "wedding";
   const amount = wedding ? weddingAmountPaise() : amountPaise();
@@ -68,14 +80,14 @@ export async function POST(req: Request) {
     phone: truncate(body?.phone),
     fbc: truncate(fbc),
     fbp: truncate(fbp),
-    fbclid: truncate(body?.fbclid),
+    fbclid: truncate(pick("fbclid", body?.fbclid)),
     ip: truncate(clientIp),
     ua: truncate(clientUserAgent),
-    utm_source: truncate(body?.utm?.source),
-    utm_medium: truncate(body?.utm?.medium),
-    utm_campaign: truncate(body?.utm?.campaign),
-    utm_content: truncate(body?.utm?.content),
-    utm_term: truncate(body?.utm?.term),
+    utm_source: truncate(pick("utm_source", body?.utm?.source)),
+    utm_medium: truncate(pick("utm_medium", body?.utm?.medium)),
+    utm_campaign: truncate(pick("utm_campaign", body?.utm?.campaign)),
+    utm_content: truncate(pick("utm_content", body?.utm?.content)),
+    utm_term: truncate(pick("utm_term", body?.utm?.term)),
   };
 
   /* Receipt is capped at 40 characters by Razorpay. */

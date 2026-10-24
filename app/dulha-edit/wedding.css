@@ -35,9 +35,14 @@
 .wl-col{position:relative;z-index:2;width:min(45vw,740px);
   margin-left:clamp(28px,8vw,136px)}
 
-/* desktop: the scene sits on the right half, full hero height */
-.wl-scene{position:absolute;z-index:1;margin:0;top:0;right:0;bottom:0;width:52%;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 12%);mask-image:linear-gradient(90deg,transparent 0%,#000 12%)}
+/* desktop: the scene sits on the right half at a fixed height (the live site's
+   scale), so hero content changes never rescale the photo; the bottom fades out. */
+.wl-scene{position:absolute;z-index:1;margin:0;top:0;right:0;width:52%;
+  height:clamp(895px,calc(23.2vw + 658px),1047px);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 12%),linear-gradient(180deg,#000 88%,transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent 0%,#000 12%),linear-gradient(180deg,#000 88%,transparent);
+  mask-composite:intersect}
 .wl-scene img{display:block;width:100%;height:100%;object-fit:cover;object-position:60% 0}
 
 /* eyebrow */
@@ -72,23 +77,30 @@
 .wl-sub strong{color:var(--wl-ink-strong);font-weight:600}
 
 /* audit card */
-.wl-card{margin-top:clamp(22px,2.2vw,30px);padding:clamp(16px,1.5vw,22px) clamp(10px,1.2vw,18px) clamp(18px,1.7vw,24px);
+.wl-card{margin-top:clamp(18px,1.8vw,24px);padding:clamp(12px,1.1vw,16px) clamp(14px,1.3vw,18px) clamp(8px,.8vw,10px);
   background:rgba(253,249,242,.86);
   border:1px solid var(--wl-gold-line);border-radius:var(--wl-radius);
   box-shadow:0 1px 0 #fff inset,0 18px 40px -26px rgba(90,16,25,.28),0 4px 14px -8px rgba(143,98,48,.18)}
 .wl-card-title{text-align:center;font-size:clamp(10.5px,.82vw,12px);font-weight:600;letter-spacing:.2em;
   text-transform:uppercase;color:var(--wl-gold)}
-.wl-card-rule{width:92px;margin:10px auto 0}
-.wl-items{list-style:none;margin:clamp(14px,1.4vw,20px) 0 0;padding:0;
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
-.wl-item{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;
-  padding:0 clamp(8px,1vw,16px);text-align:center}
-.wl-item + .wl-item::before{content:"";position:absolute;left:0;top:44px;bottom:2px;width:1px;background:var(--wl-gold-line)}
-.wl-item-ic{width:clamp(44px,3.6vw,52px);height:clamp(44px,3.6vw,52px);border-radius:50%;
+.wl-card-rule{width:92px;margin:8px auto 0}
+.wl-items{list-style:none;margin:6px 0 0;padding:0;
+  display:grid;grid-template-columns:minmax(0,1fr)}
+.wl-item{position:relative;display:flex;align-items:center;gap:12px;
+  padding:8px 0;text-align:left}
+.wl-item + .wl-item::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--wl-gold-line)}
+.wl-item-ic{width:32px;height:32px;border-radius:50%;
   border:1px solid var(--wl-gold-line);background:#FDF8F1;
-  display:grid;place-items:center;color:var(--wl-gold)}
-.wl-item-ic svg{width:44%;height:44%}
-.wl-item-txt{font-size:clamp(12.5px,.92vw,14.5px);line-height:1.3;color:var(--wl-text-soft)}
+  display:grid;place-items:center;color:var(--wl-gold);flex:0 0 auto}
+.wl-item-ic svg{width:50%;height:50%}
+.wl-item-txt{font-size:clamp(13.5px,.92vw,14.5px);line-height:1.35;color:var(--wl-text-soft)}
+.wl-why-note{margin:clamp(12px,1.2vw,16px) clamp(0px,1.2vw,20px) 0;padding:11px 14px 12px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;
+  background:rgba(253,249,242,.86);border:1px solid var(--wl-gold-line);border-radius:var(--wl-radius)}
+.wl-why-note-lbl{font-size:clamp(10px,.8vw,11px);font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--wl-gold)}
+.wl-why-note-txt{font-size:clamp(13px,.92vw,14px);line-height:1.45;color:var(--wl-text-soft)}
+.wl-why-note-txt strong{color:var(--wl-ink-strong);font-weight:600}
 
 /* button */
 .wl-btn{display:flex;align-items:center;justify-content:center;gap:16px;
@@ -113,15 +125,44 @@
 .wl-trust-ic svg{width:100%;height:100%}
 .wl-trust-txt{font-size:clamp(12px,.88vw,14px);line-height:1.3;color:var(--wl-text)}
 
-/* ---------- why band ---------- */
-.wl-why{position:relative;text-align:center;
-  padding:clamp(18px,1.6vw,24px) 20px clamp(20px,1.8vw,26px);
+/* hero proof rail: stats, then the "As seen on" logo strip (Instant Image's rail,
+   in the Dulha palette). Logos sit on cream, so they take grayscale + multiply. */
+.wl-rail{margin-top:clamp(22px,2.4vw,32px);padding-top:clamp(18px,2vw,26px);
+  border-top:1px solid var(--wl-gold-line);display:grid;gap:clamp(16px,1.8vw,24px)}
+.wl-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2vw,32px)}
+.wl-stat{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+.wl-stat + .wl-stat::before{content:"";position:absolute;top:50%;left:calc(-1 * clamp(6px,1vw,16px));
+  transform:translateY(-50%);width:1px;height:56%;background:var(--wl-gold-line)}
+.wl-stat-n{font-family:var(--wl-display),Georgia,serif;font-weight:500;font-size:clamp(30px,3vw,44px);
+  line-height:.9;color:var(--wl-ink)}
+.wl-stat-l{font-size:clamp(10px,.78vw,11px);letter-spacing:.16em;text-transform:uppercase;line-height:1.5;
+  color:var(--wl-gold);max-width:15em;text-wrap:balance}
+.wl-logos{min-width:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.wl-logos-lbl{font-size:clamp(10px,.8vw,11px);font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--wl-gold)}
+.wl-marquee{width:100%;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.wl-marquee-track{display:flex;align-items:center;width:max-content;animation:wlMarquee 55s linear infinite}
+.wl-logo{display:inline-flex;align-items:center;justify-content:center;
+  height:clamp(54px,5vw,66px);padding:0 clamp(20px,2.6vw,38px);isolation:isolate}
+.wl-logo-img{height:calc(clamp(28px,2.8vw,36px) * var(--logo-scale,1));width:auto;max-width:240px;
+  object-fit:contain;display:block;filter:grayscale(1) contrast(1.1);mix-blend-mode:multiply;opacity:.78}
+@keyframes wlMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){
+  .wl-marquee-track{animation:none;flex-wrap:wrap;justify-content:center;width:auto}
+}
+/* ---------- credibility band: maroon, between hero and About ---------- */
+.wl-cred{position:relative;padding:clamp(22px,2.2vw,30px) 20px;
   background:var(--wl-band) url("/images/wedding/why-band.webp") center/auto 100% no-repeat;
   border-top:1px solid rgba(210,174,138,.35)}
-.wl-why-title{font-size:clamp(11px,.85vw,13px);letter-spacing:.32em;text-transform:uppercase;color:var(--wl-band-gold)}
-.wl-why-rule{width:110px;margin:8px auto 0;color:var(--wl-band-gold)}
-.wl-why-txt{margin:12px auto 0;max-width:680px;font-size:clamp(14px,1vw,16px);line-height:1.5;
-  letter-spacing:.01em;color:var(--wl-band-ink)}
+.wl-cred .wl-rail{max-width:1180px;margin:0 auto;padding:0;border:0;
+  grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:center;gap:clamp(20px,3vw,48px)}
+.wl-cred .wl-logos{border-left:1px solid rgba(210,174,138,.35);padding-left:clamp(20px,3vw,48px)}
+.wl-cred .wl-stat + .wl-stat::before{background:rgba(210,174,138,.35)}
+.wl-cred .wl-stat-n{color:var(--wl-band-gold)}
+.wl-cred .wl-stat-l,.wl-cred .wl-logos-lbl{color:var(--wl-band-ink)}
+.wl-cred .wl-logo-img{filter:url(#monoIvory);mix-blend-mode:normal;opacity:.88}
 
 /* ---------- about ----------
    Phone: a stacked flow. Desktop: an exact-proportion canvas over
@@ -363,7 +404,10 @@
   text-transform:uppercase;color:var(--wl-gold)}
 .wl-call-num{font-family:var(--wl-display),Georgia,serif;font-size:15px;font-weight:500;letter-spacing:.04em;
   font-variant-numeric:lining-nums;color:var(--wl-ink)}
-.wl-call-sep{width:1px;height:14px;background:var(--wl-gold-lt)}
+.wl-call-pill{display:inline-flex;align-items:center;padding:5px 12px 4px;border-radius:999px;
+  background:linear-gradient(180deg,#5E1520 0%,var(--wl-band) 100%);border:1px solid rgba(210,174,138,.55);
+  color:var(--wl-band-ink);font-size:10.5px;font-weight:600;letter-spacing:.18em;line-height:1.2;
+  box-shadow:0 1px 0 rgba(255,255,255,.12) inset,0 4px 10px -6px rgba(78,15,24,.5)}
 .wl-call-body h3{margin:5px 0 0;font-family:var(--wl-display),Georgia,serif;font-weight:500;
   font-size:clamp(19px,1.5vw,23px);line-height:1.25;color:var(--wl-ink)}
 .wl-call-desc{margin-top:6px;font-size:clamp(14.5px,1vw,16px);line-height:1.6;color:var(--wl-text-soft)}
@@ -423,21 +467,31 @@
   .wl-florals{display:none}
   .wl-col{display:contents}
   .wl-hero .wl-eyebrow{order:1}.wl-h1{order:2}.wl-sub{order:3}.wl-scene{order:4}
-  .wl-hero .wl-card{order:5}.wl-hero .wl-btn{order:6}.wl-hero .wl-trust{order:7}
+  .wl-hero .wl-card{order:5}.wl-hero .wl-btn{order:6}.wl-hero .wl-why-note{order:7}.wl-hero .wl-trust{order:8}
   .wl-eyebrow{align-self:center;letter-spacing:.16em;text-wrap:balance;padding:8px 12px}
   .wl-h1{margin-top:12px;font-size:clamp(28px,7.4vw,40px)}
   .wl-h1 br{display:none}
   .wl-h1 em{display:block;margin-top:.15em}
   .wl-sub{margin-inline:auto}
-  .wl-scene{position:relative;inset:auto;width:auto;margin:22px -20px 0;
+  .wl-scene{position:relative;inset:auto;width:auto;height:auto;margin:22px -20px 0;
     aspect-ratio:800/805;
     -webkit-mask-image:linear-gradient(180deg,#000 85%,transparent);mask-image:linear-gradient(180deg,#000 85%,transparent)}
   .wl-scene img{object-position:50% 0}
   .wl-card{margin-top:0;position:relative;z-index:2}
-  .wl-items{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:20px}
-  .wl-item:nth-child(3)::before{display:none}
-  .wl-item + .wl-item::before{top:0}
   .wl-btn{margin-inline:0;letter-spacing:.14em;padding:0 18px;gap:12px}
+  .wl-why-note{margin-inline:0}
+  /* the strip's florals live at its ends, which a narrow band never reaches, so
+     phones paint each end into a corner. The strip carries a hairline on its top
+     edge: the bottom corner oversizes the image so that line falls outside the box. */
+  .wl-cred{background:var(--wl-band);isolation:isolate;overflow:hidden;padding:26px 20px 28px}
+  .wl-cred::before,.wl-cred::after{content:"";position:absolute;z-index:-1;width:40%;height:64px;pointer-events:none;
+    opacity:.55}
+  .wl-cred::before{left:0;top:0;background:url("/images/wedding/why-band.webp") left top/auto 100% no-repeat;
+    -webkit-mask-image:linear-gradient(90deg,#000 45%,transparent);mask-image:linear-gradient(90deg,#000 45%,transparent)}
+  .wl-cred::after{right:0;bottom:0;background:url("/images/wedding/why-band.webp") right bottom/auto 112% no-repeat;
+    -webkit-mask-image:linear-gradient(270deg,#000 45%,transparent);mask-image:linear-gradient(270deg,#000 45%,transparent)}
+  .wl-cred .wl-rail{grid-template-columns:minmax(0,1fr);gap:18px}
+  .wl-cred .wl-logos{border-left:0;padding-left:0;padding-top:16px;border-top:1px solid rgba(210,174,138,.35)}
   .wl-trust{margin-inline:0;grid-template-columns:repeat(3,minmax(0,1fr));justify-content:stretch}
   .wl-trust-i,.wl-trust-i:first-child{flex-direction:column;gap:8px;padding:0 6px;text-align:center}
   .wl-br-desk{display:none}

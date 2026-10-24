@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import GoldRailDefs from "../GoldRailDefs";
 import { WEDDING_PRICE_LABEL as PRICE_LABEL } from "../lib/price";
 import { display } from "./font";
 import WeddingSticky from "./WeddingSticky";
@@ -59,13 +60,11 @@ const Divider = ({ className = "", flower = false }: { className?: string; flowe
 const AUDIT: { icon: React.ReactNode; text: string }[] = [
   {
     icon: (
-      <Icon>
-        <rect x="3.5" y="5" width="17" height="15" rx="1.5" />
-        <path d="M3.5 9.5h17M8 3v4M16 3v4" />
-        <path d="M7.5 13h2M11 13h2M14.5 13h2M7.5 16.5h2M11 16.5h2" />
+      <Icon fill>
+        <path d="m12 3.6 2.5 5.3 5.8.7-4.3 4 1.1 5.7L12 16.5l-5.1 2.8L8 13.6l-4.3-4 5.8-.7z" />
       </Icon>
     ),
-    text: "What to do for every function, and by when",
+    text: "A celebrity stylist's first ideas for how you look your best at every function, from haldi to reception",
   },
   {
     icon: (
@@ -74,15 +73,16 @@ const AUDIT: { icon: React.ReactNode; text: string }[] = [
         <path d="M12 11.7 3.5 17.8h17z" />
       </Icon>
     ),
-    text: "Which of your looks can go custom, and what should be ready-to-wear",
+    text: "Exactly which of your looks to get custom-made and which to buy ready, so every look is the best it can be in the time you have",
   },
   {
     icon: (
-      <Icon fill>
-        <path d="m12 3.6 2.5 5.3 5.8.7-4.3 4 1.1 5.7L12 16.5l-5.1 2.8L8 13.6l-4.3-4 5.8-.7z" />
+      <Icon>
+        <path d="M12 3.2 19.5 6v5.6c0 4.3-3.1 7.8-7.5 9.8-4.4-2-7.5-5.5-7.5-9.8V6z" />
+        <path d="m8.9 12.1 2.1 2.1 4.1-4.2" />
       </Icon>
     ),
-    text: "A celebrity stylist's first ideas for your looks, from haldi to reception",
+    text: "How she handles every look from start to finish, so you don't have to take any tension before your wedding",
   },
   {
     icon: (
@@ -90,7 +90,7 @@ const AUDIT: { icon: React.ReactNode; text: string }[] = [
         <path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm-1.2 12.6-3.5-3.5 1.4-1.4 2.1 2.1 4.8-4.8 1.4 1.4z" />
       </Icon>
     ),
-    text: "An honest answer on whether the Dulha Edit is right for you",
+    text: "A straight answer on whether you are a perfect fit for the Dulha Edit",
   },
 ];
 
@@ -133,7 +133,7 @@ const BIG_NAMES = [
   "Jim Sarbh", "Pankaj Tripathi", "Ajay Devgn", "Huma Qureshi", "Madhuri Dixit",
   "Virat Kohli", "Anushka Sharma", "Arijit Singh",
   "Parachute", "Kotak Mahindra", "Oppo", "American Tourister", "Santoor",
-  "Gangubai Kathiawadi", "Mimi",
+  "Gangubai Kathiawadi", "Mimi", "Wedding Look Audit",
 ];
 function highlightNames(text: string): React.ReactNode {
   const escaped = [...BIG_NAMES].sort((a, b) => b.length - a.length).map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
@@ -170,8 +170,8 @@ const TRACK: { icon: React.ReactNode; head: string; body: string }[] = [
         <path d="M3.5 12h17M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5c-2.4-2.3-3.6-5.1-3.6-8.5S9.6 5.8 12 3.5z" />
       </Icon>
     ),
-    head: "A national first",
-    body: "Launched India's first nationwide personal-shopper program, running on her own diagnostic system, fully booked out in 15 days.",
+    head: "A national first, then weddings",
+    body: "Launched India's first nationwide personal-shopper program, running on her own diagnostic system, fully booked out in 15 days. And its clients kept asking her for one thing: their wedding looks.",
   },
   {
     icon: (
@@ -181,7 +181,7 @@ const TRACK: { icon: React.ReactNode; head: string; body: string }[] = [
       </Icon>
     ),
     head: "And now, you",
-    body: "And now that same system reads you, one to one, in a private 30-minute consultation.",
+    body: "And now that same system styles you for your wedding, starting with a private 30-minute Wedding Look Audit, one to one.",
   },
 ];
 
@@ -273,10 +273,10 @@ const CALL_STEPS = [
     desc: "She asks about your dates, venues, family traditions and your bride's outfits.",
   },
   {
-    tag: "Timeline",
+    tag: "No tension",
     icon: "call-timeline",
-    title: "What to do, and by when",
-    desc: "She tells you what must happen this week, this month and before the day.",
+    title: "She handles every look",
+    desc: "She handles every step, week by week, so you don't take any tension.",
   },
   {
     tag: "What's possible",
@@ -287,31 +287,42 @@ const CALL_STEPS = [
   {
     tag: "Your plan",
     icon: "call-plan",
-    title: "Her first ideas for your looks",
-    desc: "You leave with Sanobar's first ideas for your looks, even if you don't go ahead.",
+    title: "Her first ideas for your best looks",
+    desc: "She checks your colours and body shape. You keep her ideas even if you don't go ahead.",
   },
   {
     tag: "Fit check",
     icon: "call-fit",
-    title: "An honest answer",
-    desc: "This is not a sales pitch. If the Dulha Edit is not right for you, Sanobar will tell you.",
+    title: "A straight answer",
+    desc: "This is not a sales pitch. If the Dulha Edit is not a perfect fit for you, Sanobar will tell you.",
   },
+];
+
+/* Hero proof rail: the same stats and logo files as the Instant Image hero. */
+const HERO_STATS: { n: string; l: string }[] = [
+  { n: "10+", l: "Years in fashion" },
+  { n: "100+", l: "Campaigns, films & shoots" },
+  { n: "200+", l: "Wedding styling appointments" },
+];
+const HERO_LOGOS: { name: string; src: string; scale?: number }[] = [
+  { name: "Kotak Mahindra", src: "/images/logos/kotak.svg" },
+  { name: "Tanishq", src: "/images/logos/tanishq.webp" },
+  { name: "Oppo", src: "/images/logos/oppo.png" },
+  { name: "Myntra", src: "/images/logos/myntra.png", scale: 1.45 },
+  { name: "American Tourister", src: "/images/logos/american-tourister.svg" },
+  { name: "Parachute", src: "/images/logos/parachute.png", scale: 1.55 },
 ];
 
 const WEDDING_FAQ: { q: string; a: string; open?: boolean }[] = [
   {
-    q: "My first function is about 4 weeks away. Is that enough time?",
-    a: "Yes, it is tight but workable. With 4 weeks, your looks are built mainly from ready-to-wear and quick-alteration pieces. On the call, Sanobar tells you honestly what can still go custom and what can't.",
+    q: "My first function is only a few weeks away. Is that enough time?",
+    a: "It can be, depending on your dates. The less time you have, the more your looks are built from ready-to-wear and quick-alteration pieces. On the call, Sanobar tells you honestly what can still go custom and what can't.",
     open: true,
   },
   { q: "What does the call cost?", a: "₹197 holds your 30-minute slot, and that is all the call costs." },
   {
     q: "Why isn't the Dulha Edit's price on this page?",
     a: "It depends on your wedding: how many functions, which city, and how many days Sanobar is on set. On the call, she tells you exactly what fits and what it costs.",
-  },
-  {
-    q: "Are outfits and accessories included?",
-    a: "No. You buy them directly, at whatever budget you choose. Sanobar's job is to make sure every rupee goes into pieces that fit, suit you and look right in photos.",
   },
   {
     q: "I already have a designer. Can Sanobar still help?",
@@ -321,16 +332,12 @@ const WEDDING_FAQ: { q: string; a: string; open?: boolean }[] = [
     q: "Can I book this for him?",
     a: "Yes. A fiancée, sister, brother or parent can book the call. You can join it together.",
   },
-  { q: "Our wedding is in another city.", a: "Sanobar travels for weddings. Travel and stay are planned on the call." },
-  {
-    q: "Can my father and brothers be styled too?",
-    a: "Yes, as an add-on. They get looks from the same palette, so the family photos match. Sanobar covers it on the call.",
-  },
 ];
 
 export default function WeddingStylingPage() {
   return (
     <main className={`wl ${display.variable}`}>
+      <GoldRailDefs />
       <section className="wl-hero">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="wl-florals" src="/images/wedding/hero-florals-left.webp" alt="" aria-hidden="true" />
@@ -346,9 +353,9 @@ export default function WeddingStylingPage() {
           <p className="wl-eyebrow">For grooms whose wedding is just weeks away</p>
 
           <h1 className="wl-h1">
-            4 weeks to the wedding.
+            The wedding is almost here.{" "}
             <br />
-            Every vendor is booked and paid.
+            Every vendor is booked and paid.{" "}
             <br />
             <em>The groom&rsquo;s look hasn&rsquo;t even started.</em>
           </h1>
@@ -382,6 +389,13 @@ export default function WeddingStylingPage() {
               <path d="M1 6h25M21 1.5 26 6l-5 4.5" />
             </svg>
           </a>
+          <div className="wl-why-note">
+            <span className="wl-why-note-lbl">Why {PRICE_LABEL}</span>
+            <p className="wl-why-note-txt">
+              <strong>{PRICE_LABEL} holds your slot.</strong> Sanobar takes only 3 grooms a month, so your call time is
+              blocked only for you. You leave with her first ideas even if you don&rsquo;t go ahead.
+            </p>
+          </div>
 
           <ul className="wl-trust">
             {TRUST.map((t) => (
@@ -399,14 +413,40 @@ export default function WeddingStylingPage() {
       </section>
       <span data-sticky-start aria-hidden="true" />
 
-      <section className="wl-why">
-        <p className="wl-why-title">Why {PRICE_LABEL}?</p>
-        <Divider className="wl-why-rule" />
-        <p className="wl-why-txt">
-          {PRICE_LABEL} holds your slot. Wedding dates cluster around the same muhurats,
-          <br className="wl-br-desk" /> and Sanobar takes only 3 grooms a month, so your call time is blocked only for
-          you.
-        </p>
+      {/* Maroon band between hero and About: her credibility, stats then logos. */}
+      <section className="wl-cred" aria-label="Her credibility">
+        <div className="wl-rail">
+          <div className="wl-stats">
+            {HERO_STATS.map((s) => (
+              <div className="wl-stat" key={s.l}>
+                <span className="wl-stat-n">{s.n}</span>
+                <span className="wl-stat-l">{s.l}</span>
+              </div>
+            ))}
+          </div>
+          <div className="wl-logos">
+            <span className="wl-logos-lbl">As seen on</span>
+            {/* The list repeats 6x and the track travels -50%, so the loop is
+                seamless. Copies past the third are hidden from screen readers. */}
+            <div className="wl-marquee">
+              <div className="wl-marquee-track">
+                {Array.from({ length: 6 }).flatMap((_, g) =>
+                  HERO_LOGOS.map((l, i) => (
+                    <span className="wl-logo" key={`${g}-${i}`} aria-hidden={g >= 3}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        className="wl-logo-img"
+                        src={l.src}
+                        alt={l.name}
+                        style={{ "--logo-scale": l.scale ?? 1 } as React.CSSProperties}
+                      />
+                    </span>
+                  )),
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="wl-about" aria-label="Who is doing this">
@@ -421,24 +461,24 @@ export default function WeddingStylingPage() {
           <div className="wl-about-copy">
             <p className="wl-eyebrow wl-eyebrow--flower">
               <Flower className="wl-eyebrow-flower" />
-              The person behind your consultation
+              The stylist behind your wedding looks
             </p>
             <h2 className="wl-h2">
               From Bhansali&rsquo;s sets to India&rsquo;s
               <br className="wl-br-desk" /> leading actors. Now that eye is
-              <br className="wl-br-desk" /> on <em>your image.</em>
+              <br className="wl-br-desk" /> on <em>you, for your wedding.</em>
             </h2>
             <Divider className="wl-about-rule wl-divider--lead" flower />
             <p className="wl-about-lead">
-              The eye reading your image belongs to Sanobar Samir, one of the most trusted and sought-after styling
-              actors in the Indian film industry. With over 10+ years of experience, she has personally styled leading
-              actors and worked on films and campaigns featuring{" "}
+              The eye planning your wedding looks belongs to Sanobar Samir, one of the most trusted stylists in the
+              Indian film industry. In 10+ years, she has personally styled leading actors and worked on films and
+              campaigns featuring{" "}
               <strong>Shah Rukh Khan, Deepika Padukone, Martin Garrix</strong> and many more of India&rsquo;s biggest
               names.
             </p>
             <p className="wl-about-lead">
-              With her deep understanding of style, personality and energy, Sanobar brings a rare blend of fashion
-              expertise and intuitive insight to help you see yourself the way the world sees you, and even better.
+              Now she brings that same film-set eye to your wedding. She starts with your colour analysis and body
+              shape analysis, so every look is made for you, not picked off a rack.
             </p>
           </div>
         </div>
@@ -466,7 +506,7 @@ export default function WeddingStylingPage() {
         <div className="wl-close">
           <Divider className="wl-close-rule" />
           <p className="wl-close-line">
-            If Bollywood&rsquo;s superstars trust her with how they look,
+            If Bollywood&rsquo;s superstars trust her with how they look,{" "}
             <br />
             <em>imagine how she&rsquo;ll make you look.</em>
           </p>
@@ -491,11 +531,11 @@ export default function WeddingStylingPage() {
             Why the groom&rsquo;s look comes last
           </p>
           <h2 className="wl-pb-h">
-            You&rsquo;ve planned the wedding.
+            You&rsquo;ve planned the wedding.{" "}
             <br />
-            Your own look is still waiting.
+            Your own look is still waiting.{" "}
             <br />
-            <em>And now you&rsquo;re 4 weeks out.</em>
+            <em>And the date is getting closer every day.</em>
           </h2>
           <Divider className="wl-pb-rule" flower />
         </div>
@@ -546,7 +586,7 @@ export default function WeddingStylingPage() {
                 ))}
                 <li className="wl-cal-col wl-cal-col--now">
                   <span className="wl-cal-when">This week</span>
-                  <span className="wl-cal-note">4 weeks to go. Nothing started yet.</span>
+                  <span className="wl-cal-note">The date is close. Nothing started yet.</span>
                 </li>
               </ol>
               <Divider className="wl-cal-rule" flower />
@@ -590,8 +630,52 @@ export default function WeddingStylingPage() {
             <em>The photos stay forever.</em>
           </p>
           <Divider className="wl-pb-close-rule" flower />
-          <p className="wl-s3-bridge">4 weeks is tight. It&rsquo;s not too late, if you start this week.</p>
+          <p className="wl-s3-bridge">The sooner you start, the more can still be made for you. It&rsquo;s not too late, if you start this week.</p>
         </div>
+      </section>
+
+      <section className="wl-call" aria-label="What happens on the call">
+        {/* phone-only small corner ornaments */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="wl-m-corner wl-m-corner--tl" src="/images/wedding/corner-s5.webp" alt="" aria-hidden="true" loading="lazy" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="wl-m-corner wl-m-corner--br" src="/images/wedding/corner-s5.webp" alt="" aria-hidden="true" loading="lazy" />
+        <div className="wl-pb-head">
+          <p className="wl-eyebrow wl-eyebrow--flower">
+            <Flower className="wl-eyebrow-flower" />
+            Your 30-minute call
+          </p>
+          <h2 className="wl-pb-h wl-call-h">
+            What Sanobar covers in your <em>Wedding Look Audit.</em>
+          </h2>
+          <Divider className="wl-pb-rule" flower />
+          <p className="wl-edit-intro">
+            30 minutes, one to one with Sanobar. Just bring your function dates and venues. Booking for him? You can
+            book it on his behalf.
+          </p>
+        </div>
+
+        <ol className="wl-call-steps">
+          {CALL_STEPS.map((st, i) => (
+            <li className="wl-call-step" key={st.tag}>
+              <span className="wl-call-n">
+                <WIcon name={st.icon} />
+              </span>
+              <div className="wl-call-body">
+                <p className="wl-call-tag">
+                  <span className="wl-call-num">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="wl-call-pill">{st.tag}</span>
+                </p>
+                <h3>{st.title}</h3>
+                <p className="wl-call-desc">{st.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p className="wl-ed-close">
+          One 30-minute call with Sanobar.
+          <em>A clear plan from today to your wedding day.</em>
+        </p>
       </section>
 
       <section className="wl-edit" aria-label="What happens in the Dulha Edit">
@@ -611,14 +695,14 @@ export default function WeddingStylingPage() {
             What happens in the Dulha Edit
           </p>
           <h2 className="wl-pb-h">
-            Every function planned.
+            Every function planned.{" "}
             <br />
-            Every look tried and fitted.
+            Every look tried and fitted.{" "}
             <br />
             <em>Sanobar with you on the day.</em>
           </h2>
           <p className="wl-edit-intro">
-            Your look gets the same care as hers. Every function, haldi to reception. Done for you in 4 weeks.
+            Your look gets the same care as hers. Every function, haldi to reception. Done for you, in the time you have.
           </p>
         </div>
 
@@ -706,51 +790,6 @@ export default function WeddingStylingPage() {
           <em>All you have to do is book your Wedding Look Audit today.</em>
         </p>
 
-      </section>
-
-      <section className="wl-call" aria-label="What happens on the call">
-        {/* phone-only small corner ornaments */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="wl-m-corner wl-m-corner--tl" src="/images/wedding/corner-s5.webp" alt="" aria-hidden="true" loading="lazy" />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="wl-m-corner wl-m-corner--br" src="/images/wedding/corner-s5.webp" alt="" aria-hidden="true" loading="lazy" />
-        <div className="wl-pb-head">
-          <p className="wl-eyebrow wl-eyebrow--flower">
-            <Flower className="wl-eyebrow-flower" />
-            Your 30-minute call
-          </p>
-          <h2 className="wl-pb-h wl-call-h">
-            What Sanobar covers in your <em>Wedding Look Audit.</em>
-          </h2>
-          <Divider className="wl-pb-rule" flower />
-          <p className="wl-edit-intro">
-            30 minutes, one to one with Sanobar. Just bring your function dates and venues. Booking for him? You can
-            book it on his behalf.
-          </p>
-        </div>
-
-        <ol className="wl-call-steps">
-          {CALL_STEPS.map((st, i) => (
-            <li className="wl-call-step" key={st.tag}>
-              <span className="wl-call-n">
-                <WIcon name={st.icon} />
-              </span>
-              <div className="wl-call-body">
-                <p className="wl-call-tag">
-                  <span className="wl-call-num">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="wl-call-sep" aria-hidden="true" />
-                  {st.tag}
-                </p>
-                <h3>{st.title}</h3>
-                <p className="wl-call-desc">{st.desc}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-        <p className="wl-ed-close">
-          One 30-minute call with Sanobar.
-          <em>A clear plan for your next 4 weeks.</em>
-        </p>
       </section>
 
       <section className="wl-faq" aria-label="Questions grooms ask">

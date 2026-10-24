@@ -17,10 +17,10 @@ export const metadata: Metadata = {
    the form. The lines in INCLUDED are the call steps from the landing page. */
 const INCLUDED = [
   "Every function, from haldi to reception",
-  "What to do, and by when",
+  "She handles every look",
   "What can be made in time, and what to buy readymade",
-  "Her first ideas for your looks",
-  "An honest answer on whether the Dulha Edit is right for you",
+  "Her first ideas for your best looks",
+  "A straight answer on whether the Dulha Edit is a perfect fit for you",
 ];
 
 export default function WeddingCheckoutPage() {
